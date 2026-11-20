@@ -1,0 +1,11 @@
+{
+  "name": "C Lab",
+  "short_name": "C Lab",
+  "description": "Write, compile and run C programs in your browser, with input and output files and plots.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f2ed",
+  "theme_color": "#1f3f8f",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -1,7 +1,7 @@
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
-import { indentWithTab } from '@codemirror/commands';
+import { indentWithTab, undo, redo } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import { setDiagnostics } from '@codemirror/lint';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -19,7 +19,10 @@ const baseTheme = EditorView.theme({
 
 function themeFor(dark) { return dark ? oneDark : []; }
 
-export function createEditor(parent, doc, onRun) {
+const sizeSlot = new Compartment();
+const sizeTheme = (px) => EditorView.theme({ '&': { fontSize: px + 'px' } });
+
+export function createEditor(parent, doc, onRun, fontPx) {
   const view = new EditorView({
     parent,
     state: EditorState.create({
@@ -33,7 +36,9 @@ export function createEditor(parent, doc, onRun) {
         ]),
         EditorState.tabSize.of(4),
         baseTheme,
-        themeSlot.of(themeFor(mq.matches))
+        themeSlot.of(themeFor(mq.matches)),
+        sizeSlot.of(sizeTheme(fontPx || 14.5)),
+        EditorView.lineWrapping
       ]
     })
   });
@@ -47,6 +52,14 @@ export function createEditor(parent, doc, onRun) {
       view.dispatch(setDiagnostics(view.state, []));
     },
     focus: () => view.focus(),
+    insert: (text) => {
+      const r = view.state.selection.main;
+      view.dispatch({ changes: { from: r.from, to: r.to, insert: text }, selection: { anchor: r.from + text.length }, scrollIntoView: true });
+      view.focus();
+    },
+    undo: () => { undo(view); view.focus(); },
+    redo: () => { redo(view); view.focus(); },
+    fontSize: (px) => view.dispatch({ effects: sizeSlot.reconfigure(sizeTheme(px)) }),
     markers: (list) => {
       const doc = view.state.doc;
       const ds = [];

@@ -1,32 +1,107 @@
 // Runs the compiler off the main thread so the page stays responsive.
-importScripts('vendor/clang-wasm.global.js');
+// It uses the low-level toolchain so that a program can be given a virtual folder of files
+// (for fopen) and the files it writes can be read back afterwards.
+importScripts('vendor/clang-wasm-toolchain.global.js');
 
-let compilerPromise = null;
+const T = self.clangWasmToolchain;
+let toolchainPromise = null;
 
-function getCompiler() {
-  if (!compilerPromise) {
+function getToolchain() {
+  if (!toolchainPromise) {
     const baseUrl = new URL('clang/', self.location.href).href;
-    compilerPromise = self.clangWasm.createCompiler('c', {
+    toolchainPromise = T.createToolchain({
       baseUrl,
-      std: 'gnu17',
       onProgress: (value) => self.postMessage({ type: 'progress', value })
     });
-    compilerPromise.catch(() => { compilerPromise = null; });
+    toolchainPromise.catch(() => { toolchainPromise = null; });
   }
-  return compilerPromise;
+  return toolchainPromise;
+}
+
+const ansi = /\u001b\[[0-9;]*[A-Za-z]/g;
+
+// Program output is sent in batches so a program that prints a great deal does not flood the page.
+let buf = '', bufErr = false, lastFlush = 0;
+function flush() {
+  if (buf) self.postMessage({ type: 'out', text: buf, err: bufErr });
+  buf = '';
+  lastFlush = Date.now();
+}
+function emit(text, err) {
+  if (buf && err !== bufErr) flush();
+  bufErr = err;
+  buf += text.replace(ansi, '');
+  if (buf.length > 4096 || Date.now() - lastFlush > 60) flush();
+}
+
+// Collects every file in the program's folder (not /tmp) as { path, bytes }.
+function collect(dir, prefix, out) {
+  for (const [name, node] of dir.contents) {
+    const p = prefix + '/' + name;
+    if (node && node.contents instanceof Map) {
+      if (p !== '/tmp') collect(node, p, out);
+    } else if (node && node.data) {
+      out.push({ path: p, bytes: new Uint8Array(node.data) });
+    }
+  }
+}
+
+async function runProgram(msg) {
+  const tc = await getToolchain();
+  self.postMessage({ type: 'ready' });
+  return tc.lock(async () => {
+    const started = performance.now();
+    const compiled = await tc.captureCompilerOutput(() =>
+      tc.runtime.compileArtifact(msg.code, {
+        language: 'C',
+        fileName: 'main.c',
+        compileArgs: [...T.CLANG_DRIVER_DEFAULT_ARGS, ...msg.flags]
+      })
+    );
+    const compileMs = Math.round(performance.now() - started);
+    if (compiled.error) {
+      const errors = T.compilerDiagnostics(compiled.raw);
+      if (!errors.length) errors.push(String((compiled.error && compiled.error.message) || compiled.error));
+      return { errors, compileMs, exitCode: null, files: [] };
+    }
+    self.postMessage({ type: 'running', compileMs });
+
+    let host = null;
+    let input = msg.input || '';
+    const files = (msg.files || []).map((f) => ({ path: '/' + f.name, contents: new Uint8Array(f.bytes) }));
+    const runStarted = performance.now();
+    let exitCode = null, crash = '';
+    try {
+      const r = await tc.execute(compiled.result, {
+        args: msg.args || [],
+        files,
+        stdin: () => { if (input === null) return null; const s = input; input = null; return s.length ? s : null; },
+        stdout: (c) => emit(c, false),
+        stderr: (c) => emit(c, true),
+        extraImports: (ctx) => { host = ctx.host; return {}; }
+      });
+      exitCode = r.exitCode;
+    } catch (e) {
+      crash = String((e && e.message) || e);
+    }
+    flush();
+    const runMs = Math.round(performance.now() - runStarted);
+    const out = [];
+    if (host) collect(host.rootDirectory, '', out);
+    return { errors: [], compileMs, runMs, exitCode, crash, files: out };
+  });
 }
 
 self.onmessage = async (event) => {
   const msg = event.data;
   try {
     if (msg.type === 'load') {
-      await getCompiler();
+      await getToolchain();
       self.postMessage({ type: 'ready' });
     } else if (msg.type === 'run') {
-      const compiler = await getCompiler();
-      self.postMessage({ type: 'ready' });
-      const result = await compiler.run(msg.code, msg.input, { compileArgs: msg.flags });
-      self.postMessage({ type: 'result', result });
+      const result = await runProgram(msg);
+      const transfer = result.files.map((f) => f.bytes.buffer);
+      self.postMessage({ type: 'result', result }, transfer);
     }
   } catch (error) {
     self.postMessage({ type: 'failure', message: String((error && error.message) || error) });
