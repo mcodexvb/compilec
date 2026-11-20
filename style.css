@@ -160,8 +160,8 @@ dialog form .dhead{margin:0 -22px 12px}
 .dbody p{margin:0 0 8px;max-width:64ch}
 .dbody a{color:var(--acc)}
 .dbody .small{font-size:.9rem;color:var(--mute)}
-.hero{display:flex;gap:18px;align-items:flex-start;margin-top:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.hero img{flex:none;border-radius:16px}
+.hero{display:flex;flex-direction:column;gap:14px;margin-top:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.hero .wordmark{display:block;width:min(100%,420px);height:auto;margin:0 auto 4px}
 .hero .lead{font-size:1.15rem;font-weight:600;margin-bottom:6px}
 .steps{margin:0;padding-left:1.3em}
 .steps li{margin:0 0 8px;max-width:64ch}

@@ -1,9 +1,9 @@
 // Keeps C Lab working offline after the first visit.
 // Small files are refreshed from the network when possible; the compiler files never change
 // for a given version, so they are served from the cache once stored.
-const VERSION = 'clab-v6';
+const VERSION = 'clab-v7';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'worker.js', 'vendor/editor.js',
-  'vendor/clang-wasm-toolchain.global.js', 'manifest.webmanifest', 'icon.svg', 'examples/examples.json'];
+  'vendor/clang-wasm-toolchain.global.js', 'manifest.webmanifest', 'icon.svg', 'brand/favicon-v2.svg', 'brand/logo-wordmark.svg', 'examples/examples.json'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
