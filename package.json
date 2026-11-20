@@ -4,7 +4,7 @@
   "private": true,
   "description": "Compile and run C programs in the browser with Clang compiled to WebAssembly.",
   "scripts": {
-    "build": "node build.mjs"
+    "update-assets": "node update-assets.mjs"
   },
   "dependencies": {
     "@live-codes/clang-wasm": "0.3.0"
