@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C Lab: compile and run C in your browser</title>
+<meta name="description" content="Write, compile and run C programs in the browser. Clang runs inside your browser as WebAssembly, so nothing is sent to a server.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231f3f8f%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27Georgia,serif%27 font-size=%2722%27 font-weight=%27bold%27 text-anchor=%27middle%27 fill=%27white%27%3EC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>C Lab</h1>
+<p>Write, compile and run C programs in your browser. By <a href="https://mainul.pages.dev/">Mainul Hossain</a>.</p>
+</header>
+
+<div class="bar">
+<label class="sel">Example
+<select id="example" aria-label="Choose an example program"></select></label>
+<button class="run" id="run" type="button">Run</button>
+<button id="stop" type="button" disabled>Stop</button>
+</div>
+
+<p class="note" id="note">The first time you press Run, your browser downloads the C compiler (about 29 MB) and keeps it for later visits. The program is compiled and run on your own device, and nothing is uploaded.</p>
+<div class="prog" id="prog"><progress id="bar" max="1" value="0"></progress><span id="proglabel">Downloading the compiler</span></div>
+
+<h2>Program</h2>
+<textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="C source code"></textarea>
+
+<h2>Input for scanf</h2>
+<textarea id="stdin" spellcheck="false" aria-label="Standard input"></textarea>
+
+<h2>Output</h2>
+<pre id="out" aria-live="polite"></pre>
+<p class="status" id="status"></p>
+
+<footer>
+Compiled with Clang 22 and wasi-libc using <a href="https://www.npmjs.com/package/@live-codes/clang-wasm">@live-codes/clang-wasm</a> (MIT). Programs run in a sandbox with standard input and output, and no file or network access. Press Ctrl+Enter (or Cmd+Enter) to run.
+</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

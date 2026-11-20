@@ -1,0 +1,13 @@
+{
+  "name": "compilec",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Compile and run C programs in the browser with Clang compiled to WebAssembly.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@live-codes/clang-wasm": "0.3.0"
+  },
+  "license": "MIT"
+}
