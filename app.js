@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
-  var code = $('code'), stdin = $('stdin'), out = $('out'), statusEl = $('status');
+  var stdin = $('stdin'), outp = $('outp'), statusEl = $('status'), problems = $('problems');
   var runBtn = $('run'), stopBtn = $('stop'), select = $('example');
   var prog = $('prog'), bar = $('bar'), progLabel = $('proglabel');
   var worker = null, running = false, examples = [], loaded = false;
@@ -9,15 +9,14 @@
   var HELLO = '#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    printf("Its square is %d\\n", n * n);\n    return 0;\n}\n';
 
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function fetchStore(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  var editor = CEditor.createEditor($('code'), load('compilec.code') || HELLO, run);
+  stdin.value = load('compilec.stdin') || '7\n';
 
   function setStatus(text, cls) { statusEl.textContent = text; statusEl.className = 'status' + (cls ? ' ' + cls : ''); }
-
-  function setRunning(on) {
-    running = on;
-    runBtn.disabled = on;
-    stopBtn.disabled = !on;
-  }
+  function setRunning(on) { running = on; runBtn.disabled = on; stopBtn.disabled = !on; }
+  function finish() { setRunning(false); prog.classList.remove('on'); }
 
   function startWorker() {
     if (worker) worker.terminate();
@@ -25,8 +24,6 @@
     worker.onmessage = onMessage;
     worker.onerror = function (e) { finish(); setStatus('The compiler could not start: ' + (e.message || 'unknown error'), 'err'); };
   }
-
-  function finish() { setRunning(false); prog.classList.remove('on'); }
 
   function onMessage(ev) {
     var m = ev.data;
@@ -46,17 +43,43 @@
     }
   }
 
+  function clearProblems() { problems.hidden = true; problems.textContent = ''; editor.markers([]); }
+
+  function showProblems(lines) {
+    var re = /^[^:\s]+:(\d+):(\d+): (error|warning|note): (.*)$/;
+    var list = [];
+    lines.forEach(function (l) {
+      var m = re.exec(l);
+      if (m && m[3] !== 'note') list.push({ line: +m[1], col: +m[2], severity: m[3], message: m[4] });
+    });
+    editor.markers(list);
+    problems.textContent = '';
+    list.forEach(function (p) {
+      var li = document.createElement('li');
+      if (p.severity === 'warning') li.className = 'w';
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = 'Line ' + p.line + ', column ' + p.col + ': ' + p.message;
+      b.addEventListener('click', function () { editor.goTo(p.line, p.col); });
+      li.appendChild(b);
+      problems.appendChild(li);
+    });
+    problems.hidden = list.length === 0;
+  }
+
   function showResult(r) {
-    out.textContent = '';
+    outp.textContent = '';
+    clearProblems();
     if (r.errors && r.errors.length) {
       var span = document.createElement('span');
       span.className = 'e';
       span.textContent = r.errors.join('\n');
-      out.appendChild(span);
+      outp.appendChild(span);
+      showProblems(r.errors);
       setStatus('Compilation failed.', 'err');
       return;
     }
-    out.textContent = r.output || '';
+    outp.textContent = r.output || '';
     var t = 'Compiled in ' + Math.round(r.compileMs) + ' ms';
     if (r.runMs != null) t += ', ran in ' + Math.round(r.runMs) + ' ms';
     t += '. Exit status ' + r.exitCode + '.';
@@ -65,9 +88,11 @@
 
   function run() {
     if (running) return;
-    store('compilec.code', code.value);
+    var src = editor.get();
+    store('compilec.code', src);
     store('compilec.stdin', stdin.value);
-    out.textContent = '';
+    outp.textContent = '';
+    clearProblems();
     setRunning(true);
     if (!worker) startWorker();
     if (!loaded) {
@@ -78,7 +103,10 @@
     } else {
       setStatus('Compiling and running...');
     }
-    worker.postMessage({ type: 'run', code: code.value, input: stdin.value, flags: ['-O1', '-Wall'] });
+    worker.postMessage({
+      type: 'run', code: src, input: stdin.value,
+      flags: [$('opt').value, '-Wall', '-std=' + $('std').value]
+    });
   }
 
   function stop() {
@@ -93,51 +121,50 @@
     var e = examples.filter(function (x) { return x.id === id; })[0];
     if (!e) return;
     fetch('examples/' + e.id + '.c').then(function (r) { return r.text(); }).then(function (text) {
-      code.value = text;
+      editor.set(text);
       stdin.value = e.input;
-      out.textContent = '';
+      outp.textContent = '';
+      clearProblems();
       setStatus('');
     });
   }
 
   runBtn.addEventListener('click', run);
   stopBtn.addEventListener('click', stop);
-  document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); run(); }
-  });
-  code.addEventListener('keydown', function (e) {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      var s = code.selectionStart, t = code.selectionEnd;
-      code.value = code.value.slice(0, s) + '    ' + code.value.slice(t);
-      code.selectionStart = code.selectionEnd = s + 4;
-    }
-  });
   select.addEventListener('change', function () {
-    if (select.value === '') { code.value = HELLO; stdin.value = '7\n'; out.textContent = ''; setStatus(''); return; }
+    if (select.value === '') { editor.set(HELLO); stdin.value = '7\n'; outp.textContent = ''; clearProblems(); setStatus(''); return; }
     useExample(select.value);
   });
 
+  $('open').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function () {
+    var f = this.files[0];
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () { editor.set(String(rd.result)); select.value = ''; clearProblems(); setStatus('Opened ' + f.name + '.'); };
+    rd.readAsText(f);
+    this.value = '';
+  });
+  $('save').addEventListener('click', function () {
+    var blob = new Blob([editor.get()], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'main.c';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  var blank = document.createElement('option');
+  blank.value = ''; blank.textContent = 'Blank program';
+  select.appendChild(blank);
   fetch('examples/examples.json').then(function (r) { return r.json(); }).then(function (list) {
     examples = list;
-    var blank = document.createElement('option');
-    blank.value = ''; blank.textContent = 'A small program';
-    select.appendChild(blank);
     list.forEach(function (x, i) {
       var o = document.createElement('option');
       o.value = x.id; o.textContent = (i + 1) + '. ' + x.title;
       select.appendChild(o);
     });
     var want = new URLSearchParams(location.search).get('example');
-    if (want && list.some(function (x) { return x.id === want; })) {
-      select.value = want; useExample(want);
-    } else if (fetchStore('compilec.code')) {
-      code.value = fetchStore('compilec.code');
-      stdin.value = fetchStore('compilec.stdin') || '';
-    } else {
-      code.value = HELLO; stdin.value = '7\n';
-    }
-  }).catch(function () {
-    code.value = HELLO; stdin.value = '7\n';
-  });
+    if (want && list.some(function (x) { return x.id === want; })) { select.value = want; useExample(want); }
+  }).catch(function () {});
 })();
