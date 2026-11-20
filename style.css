@@ -9,9 +9,10 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.45 "Libertinus Serif",Georgia,serif;-webkit-text-size-adjust:100%;overscroll-behavior:none}
 .ide{display:flex;flex-direction:column;height:100vh;height:var(--vh,100dvh);min-height:0}
 .top{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--pane)}
-.brand{display:flex;align-items:baseline;gap:10px}
+.brand{display:flex;align-items:center;gap:9px}
+.brand .logo{display:block;flex:none;border-radius:6px}
 .brand strong{font-size:1.3rem;font-weight:600}
-.by{color:var(--mute);font-size:.92rem}
+.by{color:var(--mute);font-size:.92rem;align-self:baseline;padding-top:4px}
 .by a,footer a{color:var(--acc)}
 .hdr{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
 .f{display:flex;align-items:center;gap:6px;color:var(--mute);font-size:.95rem}

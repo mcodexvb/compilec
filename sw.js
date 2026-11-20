@@ -1,7 +1,7 @@
 // Keeps C Lab working offline after the first visit.
 // Small files are refreshed from the network when possible; the compiler files never change
 // for a given version, so they are served from the cache once stored.
-const VERSION = 'clab-v3';
+const VERSION = 'clab-v4';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'worker.js', 'vendor/editor.js',
   'vendor/clang-wasm-toolchain.global.js', 'manifest.webmanifest', 'icon.svg', 'examples/examples.json'];
 

@@ -1,3 +1,5 @@
+<p><img src="brand/logo-wordmark.svg" alt="C Lab" height="72"></p>
+
 # compilec
 
 C Lab: an online C editor and compiler. Clang 22 runs inside the page as WebAssembly (through [`@live-codes/clang-wasm`](https://www.npmjs.com/package/@live-codes/clang-wasm), MIT), so nothing is sent to a server.
@@ -32,6 +34,10 @@ The site is plain static files at the repository root.
 To rebuild the editor bundle after changing `src/editor.js`: `npm install`, then `npm run build-editor`.
 
 To update the compiler later: `npm install`, then `npm run update-assets`, and commit the result.
+
+## Logo
+
+The mark is a C whose opening holds a Run button, in the page's blue (#1f3f8f) with amber (#f2b632). `icon.svg` is the app icon and favicon; `brand/` has the wordmark and PNG sizes (32, 180, 192, 512).
 
 ## Licence
 
