@@ -1,4 +1,4 @@
-<p><img src="brand/logo-wordmark.svg" alt="C Lab" height="72"></p>
+<p><img src="brand/logo-wordmark.svg" alt="C Lab" height="110"></p>
 
 # compilec
 
@@ -37,7 +37,7 @@ To update the compiler later: `npm install`, then `npm run update-assets`, and c
 
 ## Logo
 
-The mark is a C whose opening holds a Run button, in the page's blue (#1f3f8f) with amber (#f2b632). `icon.svg` is the app icon and favicon; `brand/` has the wordmark and PNG sizes (32, 180, 192, 512).
+A hexagonal C in a blue-to-cyan gradient holding `</>`, with the CLab wordmark set in Montserrat ExtraBold (converted to outlines, so no font is needed). `icon.svg` is the mark and favicon and switches its dark parts to light grey in dark mode; `brand/` has the full wordmark with tagline, the header lockup, a white-tile app icon, and PNG sizes 32, 180, 192 and 512.
 
 ## Licence
 
