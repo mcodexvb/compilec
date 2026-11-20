@@ -1,7 +1,7 @@
 @font-face{font-family:"Libertinus Serif";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/libertinus-serif-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Libertinus Serif";font-style:italic;font-weight:400;font-display:swap;src:url(fonts/libertinus-serif-latin-400-italic.woff2) format("woff2")}
 @font-face{font-family:"Libertinus Serif";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/libertinus-serif-latin-600-normal.woff2) format("woff2")}
-:root{--bg:#f4f2ed;--fg:#1d1d1f;--mute:#5d5d63;--line:#d4d1c9;--pane:#ffffff;--acc:#1f3f8f;--accfg:#fff;--err:#a3231c;--ok:#25683f;--code:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+:root{color-scheme:light dark;--bg:#f4f2ed;--fg:#1d1d1f;--mute:#5d5d63;--line:#d4d1c9;--pane:#ffffff;--acc:#1f3f8f;--accfg:#fff;--err:#a3231c;--ok:#25683f;--code:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
 @media (prefers-color-scheme:dark){:root{--bg:#101217;--fg:#e8e6e1;--mute:#a4a29b;--line:#30333b;--pane:#1b1e25;--acc:#7da2ff;--accfg:#10131a;--err:#ff8f86;--ok:#7fd49c}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -144,18 +144,36 @@ pre .se{color:var(--err)}
 .mpop button:hover .sc,.mpop button:focus-visible .sc{color:inherit}
 .mpop .ck{width:1em;margin-right:-14px;flex:none}
 .mpop hr{border:0;border-top:1px solid var(--line);margin:4px 0}
-dialog{border:1px solid var(--line);border-radius:8px;background:var(--pane);color:var(--fg);padding:0;width:min(92vw,520px);max-height:88vh}
-dialog::backdrop{background:rgba(0,0,0,.45)}
-dialog form{display:flex;flex-direction:column;max-height:88vh;padding:16px 18px}
-dialog h2{margin:0 0 10px;font-size:1.25rem;font-weight:600}
-dialog h3{margin:14px 0 4px;font-size:1.02rem}
-.drow{display:flex;align-items:center;gap:10px;margin:6px 0;color:var(--mute)}
-.drow select,.drow input{flex:1;max-width:none}
-.dbody{overflow:auto;font-size:.98rem}
-.dbody p{margin:4px 0}
+dialog{border:1px solid var(--line);border-radius:10px;background:var(--pane);color:var(--fg);padding:0;width:min(94vw,520px);max-height:88vh;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+dialog.big{width:min(94vw,720px);display:none;flex-direction:column}
+dialog.big[open]{display:flex}
+dialog::backdrop{background:rgba(10,12,18,.55)}
+dialog form{display:flex;flex-direction:column;padding:0 22px 18px}
+.dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 12px 22px;border-bottom:1px solid var(--line);flex:none}
+dialog form .dhead{margin:0 -22px 12px}
+.dhead h2{margin:0;font-size:1.35rem;font-weight:600}
+.dx{border:0;background:none;font-size:1.6rem;line-height:1;padding:2px 10px;color:var(--mute)}
+.dx:hover{color:var(--fg)}
+.dbody{overflow:auto;padding:6px 26px 24px;font-size:1rem;line-height:1.55;outline:none}
+.dbody section{margin-top:18px}
+.dbody h3{margin:0 0 6px;font-size:1.08rem;font-weight:600;color:var(--acc)}
+.dbody p{margin:0 0 8px;max-width:64ch}
 .dbody a{color:var(--acc)}
-.keytab{border-collapse:collapse;width:100%;font-size:.95rem}
-.keytab td{padding:3px 8px 3px 0;border-bottom:1px solid var(--line);vertical-align:top}
-.keytab td:first-child{font-family:var(--code);font-size:.88rem;white-space:nowrap}
+.dbody .small{font-size:.9rem;color:var(--mute)}
+.hero{display:flex;gap:18px;align-items:flex-start;margin-top:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.hero img{flex:none;border-radius:16px}
+.hero .lead{font-size:1.15rem;font-weight:600;margin-bottom:6px}
+.steps{margin:0;padding-left:1.3em}
+.steps li{margin:0 0 8px;max-width:64ch}
+.parts{display:grid;grid-template-columns:max-content 1fr;gap:10px 18px;margin:0}
+.parts dt{font-weight:600;padding-top:1px}
+.parts dd{margin:0;max-width:60ch}
+.keys2{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:0 0 8px}
+.keys2 dt{white-space:nowrap}
+.keys2 dd{margin:0;color:var(--mute)}
+kbd{font:.82rem var(--code);padding:1px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--bg)}
+.drow{display:flex;align-items:center;gap:10px;margin:8px 0;color:var(--mute)}
+.drow select,.drow input{flex:1;max-width:none}
 .dbtn{display:flex;justify-content:flex-end;margin-top:14px}
+@media (max-width:560px){.parts,.keys2{grid-template-columns:1fr;gap:2px}.parts dd,.keys2 dd{margin-bottom:8px}.hero{flex-direction:column}.dbody{padding:4px 18px 20px}}
 @media (max-width:860px){.menubar>button{min-height:40px;padding:6px 14px}.mpop button{min-height:42px}}

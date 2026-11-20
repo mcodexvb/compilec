@@ -653,7 +653,7 @@
     ]; } },
     { label: 'Help', items: function () { return [
       { t: 'Help and shortcuts...', f: function () { $('dlgHelp').showModal(); } },
-      { t: 'About C Lab', f: function () { $('dlgHelp').showModal(); $('dlgHelp').querySelector('.dbody').scrollTop = 99999; } }
+      { t: 'About C Lab...', f: function () { $('dlgAbout').showModal(); } }
     ]; } }
   ];
 
@@ -724,8 +724,10 @@
     else if (mod && !e.shiftKey && !e.altKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); $('file').click(); }
   });
   $('dlgOpts').addEventListener('close', saveSettings);
-  [$('dlgOpts'), $('dlgHelp')].forEach(function (d) {
+  [$('dlgOpts'), $('dlgHelp'), $('dlgAbout')].forEach(function (d) {
     d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { d.close(); }); });
+    d.addEventListener('close', function () { var bd = d.querySelector('.dbody'); if (bd) bd.scrollTop = 0; });
   });
 
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
