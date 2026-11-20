@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#1f3f8f">
 <title>C Lab: an online C editor and compiler</title>
-<meta name="description" content="A C editor and compiler that runs entirely in your browser. Clang runs as WebAssembly on your own device, so nothing is uploaded. Supports input and output files and plotting.">
+<meta name="description" content="A C editor and compiler that runs entirely in your browser. Clang runs as WebAssembly on your own device, so nothing is uploaded.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -16,29 +16,12 @@
   <header class="top">
     <div class="brand"><strong>C Lab</strong><span class="by">by <a href="https://mainul.pages.dev/">Mainul Hossain</a></span></div>
     <div class="hdr">
-      <span id="exslot"><label class="f" id="exwrap">Example <select id="example" aria-label="Choose an example program"></select></label></span>
-      <button type="button" id="menubtn" aria-expanded="false" aria-controls="menu">Options</button>
       <button class="run" id="run" type="button">Run</button>
       <button id="stop" type="button" disabled>Stop</button>
     </div>
   </header>
-
-  <div class="menu" id="menu" hidden>
-    <div class="mrow"><label class="f">Optimisation <select id="opt" aria-label="Optimisation level"><option value="-O0">O0</option><option value="-O1" selected>O1</option><option value="-O2">O2</option></select></label>
-      <label class="f">Standard <select id="std" aria-label="C standard"><option>gnu11</option><option selected>gnu17</option><option>gnu23</option></select></label></div>
-    <div class="mrow"><label class="f grow">Arguments <input id="args" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="passed to main as argv[1], argv[2], ..." aria-label="Command-line arguments"></label></div>
-    <div class="mrow">
-      <span class="f">Text size <button type="button" id="fsm" aria-label="Smaller text">A&minus;</button><button type="button" id="fbg" aria-label="Larger text">A+</button></span>
-      <label class="f" id="layoutwrap">Layout <select id="layout" aria-label="Panel layout"><option value="side">Side by side</option><option value="stack">Stacked</option></select></label>
-      <button type="button" id="resetlayout">Reset sizes</button>
-    </div>
-    <div class="mrow" id="filebtns">
-      <button type="button" id="open">Open .c file</button>
-      <button type="button" id="save">Save .c</button>
-      <button type="button" id="share">Share link</button>
-      <input type="file" id="file" accept=".c,.h,.txt,text/plain" hidden>
-    </div>
-  </div>
+  <nav class="menubar" id="menubar" role="menubar" aria-label="Menu"></nav>
+  <input type="file" id="file" accept=".c,.h,.txt,text/plain" hidden>
 
   <div class="prog" id="prog"><progress id="bar" max="1" value="0"></progress><span id="proglabel">Downloading the compiler</span></div>
 
@@ -82,7 +65,6 @@
       <div class="panel out" id="pOut">
         <div class="ph tabs" role="tablist" aria-label="Output">
           <button type="button" role="tab" data-t="output" aria-selected="true">Output</button>
-          <button type="button" role="tab" data-t="plot" aria-selected="false">Plot</button>
           <span class="acts"><button type="button" id="copyout">Copy</button><button type="button" id="saveout">Save</button><button type="button" class="max" data-max="out" aria-label="Enlarge the output panel" title="Enlarge or restore">&#x2922;</button></span>
         </div>
         <div class="tp" id="tp-output">
@@ -94,27 +76,6 @@
             <pre id="ofview" hidden></pre>
           </div>
         </div>
-        <div class="tp" id="tp-plot" hidden>
-          <div class="pformula">
-            <label class="f grow">Formula y = <input id="pfn" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="sin(x); x^2/10; exp(-x)*cos(3x)" aria-label="Formula in x"></label>
-            <label class="f">x from <input id="pxmin" type="text" inputmode="decimal" value="-10" size="4"></label>
-            <label class="f">to <input id="pxmax" type="text" inputmode="decimal" value="10" size="4"></label>
-          </div>
-          <p class="perr" id="perr" hidden></p>
-          <details class="plotbar" id="plotbar">
-            <summary>Data, columns and style</summary>
-            <div class="pgrid">
-              <label class="f">Data <select id="pdata" aria-label="Data to plot"></select></label>
-              <label class="f">x <select id="px" aria-label="Column for the x axis"></select></label>
-              <label class="f">Style <select id="pstyle" aria-label="Plot style"><option value="both">Lines and points</option><option value="lines">Lines</option><option value="points">Points</option></select></label>
-              <fieldset class="ys" id="pys"><legend>y columns</legend></fieldset>
-              <label class="f"><input type="checkbox" id="pgrid" checked> Grid</label>
-            </div>
-          </details>
-          <div class="plotwrap" id="plotwrap"><canvas id="plot" aria-label="Plot of the data and formulas"></canvas></div>
-          <div class="tip" id="ptip" hidden></div>
-          <div class="pfoot"><p class="hint" id="phint">Drag to pan, scroll or pinch to zoom, tap a point to read its value, double-click to fit.</p><span class="pbtns"><button type="button" id="pfit">Fit</button><button type="button" id="ppng">Save PNG</button></span></div>
-        </div>
       </div>
     </section>
   </main>
@@ -125,16 +86,51 @@
     <button type="button" data-page="code" aria-current="page">Code</button>
     <button type="button" data-page="input">Input</button>
     <button type="button" data-page="output">Output</button>
-    <button type="button" data-page="plot">Plot</button>
   </nav>
 
   <footer class="bottom">
     <span id="status" class="status">The compiler (about 29 MB) is downloaded once, when you first press Run, and your browser keeps it. Programs are compiled and run on your device and nothing is uploaded.</span>
-    <span class="keys">Ctrl+Enter or Cmd+Enter runs the program</span>
+    <span class="keys"><span id="pos">Ln 1, Col 1</span> &nbsp;|&nbsp; F10 or Ctrl+Enter compiles and runs</span>
   </footer>
 </div>
+<dialog id="dlgOpts" aria-labelledby="dOptsT">
+  <form method="dialog">
+    <h2 id="dOptsT">Compiler options</h2>
+    <label class="drow">Optimisation <select id="opt"><option value="-O0">O0, none (fastest to compile)</option><option value="-O1" selected>O1, some</option><option value="-O2">O2, more</option></select></label>
+    <label class="drow">C standard <select id="std"><option>gnu11</option><option selected>gnu17</option><option>gnu23</option></select></label>
+    <label class="drow">Warnings <select id="warn"><option value="none">None</option><option value="all" selected>Common (-Wall)</option><option value="extra">Many (-Wall -Wextra)</option></select></label>
+    <label class="drow">Arguments <input id="args" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="passed to main as argv[1], argv[2], ..."></label>
+    <div class="dbtn"><button value="close" class="run">Done</button></div>
+  </form>
+</dialog>
+<dialog id="dlgHelp" aria-labelledby="dHelpT">
+  <form method="dialog">
+    <h2 id="dHelpT">Help</h2>
+    <div class="dbody">
+      <h3>Running a program</h3>
+      <p>Type your program and press <strong>Run</strong> (or F10). Anything the program reads with <code>scanf</code> must be typed into the <strong>Input</strong> box first, because the program cannot pause for the keyboard while it runs. <strong>Compile</strong> (F9) only checks the program and lists errors and warnings.</p>
+      <h3>Files</h3>
+      <p>Add data files under <strong>Files</strong> (File menu, Add input files) and open them in the program with <code>fopen("data.txt", "r")</code>. Files your program writes appear under Output, where you can view, download, or use them as input for the next run.</p>
+      <h3>Keyboard shortcuts</h3>
+      <table class="keytab"><tbody>
+        <tr><td>F10, Ctrl+Enter</td><td>Compile and run</td></tr>
+        <tr><td>F9</td><td>Compile only</td></tr>
+        <tr><td>Ctrl+S</td><td>Save as a .c file</td></tr>
+        <tr><td>Ctrl+O</td><td>Open a .c file</td></tr>
+        <tr><td>Ctrl+F</td><td>Find and replace</td></tr>
+        <tr><td>F3 or Ctrl+G</td><td>Find next</td></tr>
+        <tr><td>Ctrl+Alt+G</td><td>Go to line</td></tr>
+        <tr><td>Ctrl+/</td><td>Comment or uncomment lines</td></tr>
+        <tr><td>Ctrl+Z, Ctrl+Y</td><td>Undo, Redo</td></tr>
+        <tr><td>Esc</td><td>Close a menu, or restore an enlarged panel</td></tr>
+      </tbody></table>
+      <h3>About</h3>
+      <p>C Lab by <a href="https://mainul.pages.dev/">Mainul Hossain</a>. Clang runs as WebAssembly inside this page, so programs are compiled and run on your own device and nothing is uploaded. The compiler is built on LLVM and wasi-libc; see <a href="THIRD-PARTY-NOTICES.md">the notices</a>.</p>
+    </div>
+    <div class="dbtn"><button value="close" class="run">Close</button></div>
+  </form>
+</dialog>
 <script src="vendor/editor.js"></script>
-<script src="plot.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

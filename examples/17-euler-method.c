@@ -1,5 +1,5 @@
 /* Euler's method for y' = y, y(0) = 1, compared with the exact solution e^x.
-   The program prints a table of numbers. Open the Plot tab to draw it. */
+   The program prints a table comparing the two. */
 #include <stdio.h>
 #include <math.h>
 

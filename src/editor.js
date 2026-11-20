@@ -1,7 +1,8 @@
 import { EditorView, basicSetup } from 'codemirror';
 import { EditorState, Compartment } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
-import { indentWithTab, undo, redo } from '@codemirror/commands';
+import { indentWithTab, undo, redo, selectAll, toggleComment, indentSelection } from '@codemirror/commands';
+import { openSearchPanel, gotoLine } from '@codemirror/search';
 import { cpp } from '@codemirror/lang-cpp';
 import { setDiagnostics } from '@codemirror/lint';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -22,7 +23,8 @@ function themeFor(dark) { return dark ? oneDark : []; }
 const sizeSlot = new Compartment();
 const sizeTheme = (px) => EditorView.theme({ '&': { fontSize: px + 'px' } });
 
-export function createEditor(parent, doc, onRun, fontPx) {
+export function createEditor(parent, doc, onRun, fontPx, hooks) {
+  hooks = hooks || {};
   const view = new EditorView({
     parent,
     state: EditorState.create({
@@ -38,7 +40,14 @@ export function createEditor(parent, doc, onRun, fontPx) {
         baseTheme,
         themeSlot.of(themeFor(mq.matches)),
         sizeSlot.of(sizeTheme(fontPx || 14.5)),
-        EditorView.lineWrapping
+        EditorView.lineWrapping,
+        EditorView.updateListener.of((u) => {
+          if (u.docChanged && hooks.change) hooks.change();
+          if ((u.selectionSet || u.docChanged) && hooks.cursor) {
+            const h = u.state.selection.main.head, ln = u.state.doc.lineAt(h);
+            hooks.cursor(ln.number, h - ln.from + 1);
+          }
+        })
       ]
     })
   });
@@ -57,6 +66,13 @@ export function createEditor(parent, doc, onRun, fontPx) {
       view.dispatch({ changes: { from: r.from, to: r.to, insert: text }, selection: { anchor: r.from + text.length }, scrollIntoView: true });
       view.focus();
     },
+    selectAll: () => { selectAll(view); view.focus(); },
+    selected: () => { const r = view.state.selection.main; return view.state.sliceDoc(r.from, r.to); },
+    replaceSelection: (text) => { const r = view.state.selection.main; view.dispatch({ changes: { from: r.from, to: r.to, insert: text }, selection: { anchor: r.from + text.length }, scrollIntoView: true }); view.focus(); },
+    find: () => { openSearchPanel(view); },
+    gotoLine: () => { gotoLine(view); },
+    comment: () => { toggleComment(view); view.focus(); },
+    indent: () => { selectAll(view); indentSelection(view); view.focus(); },
     undo: () => { undo(view); view.focus(); },
     redo: () => { redo(view); view.focus(); },
     fontSize: (px) => view.dispatch({ effects: sizeSlot.reconfigure(sizeTheme(px)) }),

@@ -1,6 +1,6 @@
 /* Reading a file and writing a file.
    Reads numbers from data.txt (add it under Files), then writes statistics to results.txt.
-   The written file appears under Output, where you can view, download or plot it. */
+   The written file appears under Output, where you can view or download it. */
 #include <stdio.h>
 
 int main(void)

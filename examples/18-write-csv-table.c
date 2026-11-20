@@ -1,5 +1,5 @@
 /* Writes a table of values to table.csv, then prints it.
-   table.csv appears under Output, where you can download it or plot it. */
+   table.csv appears under Output, where you can view or download it. */
 #include <stdio.h>
 #include <math.h>
 

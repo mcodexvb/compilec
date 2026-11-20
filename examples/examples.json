@@ -86,15 +86,13 @@
   ]
  },
  {
-  "id": "17-euler-and-plot",
-  "title": "Euler's method, with a plot",
-  "input": "0.25 8\n",
-  "plot": true
+  "id": "17-euler-method",
+  "title": "Euler's method for y' = y",
+  "input": "0.25 8\n"
  },
  {
   "id": "18-write-csv-table",
-  "title": "Writing a CSV table to plot",
-  "input": "",
-  "plot": "table.csv"
+  "title": "Writing a CSV table to a file",
+  "input": ""
  }
 ]

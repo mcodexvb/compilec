@@ -2,7 +2,7 @@
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var ide = $('ide'), stdin = $('stdin'), outp = $('outp'), statusEl = $('status'), problems = $('problems');
-  var runBtn = $('run'), stopBtn = $('stop'), select = $('example');
+  var runBtn = $('run'), stopBtn = $('stop');
   var prog = $('prog'), bar = $('bar'), progLabel = $('proglabel');
   var mqMobile = window.matchMedia('(max-width:860px)');
   var worker = null, running = false, examples = [], loaded = false, currentExample = null;
@@ -19,36 +19,33 @@
   /* ---------- editor, text size ---------- */
   var fontPx = +load('compilec.fs') || (mqMobile.matches ? 16 : 14.5);
   document.documentElement.style.setProperty('--fs', fontPx + 'px');
-  var editor = CEditor.createEditor($('code'), load('compilec.code') || HELLO, run, fontPx);
+  var dirty = false, fileName = load('compilec.name') || 'main.c';
+  var editor = CEditor.createEditor($('code'), load('compilec.code') || HELLO, function () { run(false); }, fontPx, {
+    change: function () { dirty = true; },
+    cursor: function (l, c) { var p = document.getElementById('pos'); if (p) p.textContent = 'Ln ' + l + ', Col ' + c; }
+  });
+  document.querySelector('#pEditor .ttl').textContent = fileName;
+  function setProgram(text, name) {
+    editor.set(text);
+    fileName = name || 'main.c';
+    dirty = false;
+    document.querySelector('#pEditor .ttl').textContent = fileName;
+    store('compilec.name', fileName);
+  }
+  function okToReplace() { return !dirty || window.confirm('Replace the program in the editor? Changes since you last saved will be lost.'); }
   stdin.value = load('compilec.stdin') || '7\n';
   $('args').value = load('compilec.args') || '';
   if (load('compilec.opt')) $('opt').value = load('compilec.opt');
   if (load('compilec.std')) $('std').value = load('compilec.std');
+  if (load('compilec.warn')) $('warn').value = load('compilec.warn');
   function setFont(px) {
     fontPx = clamp(px, 11, 28);
     document.documentElement.style.setProperty('--fs', fontPx + 'px');
     editor.fontSize(fontPx);
     store('compilec.fs', String(fontPx));
   }
-  $('fsm').addEventListener('click', function () { setFont(fontPx - 1); });
-  $('fbg').addEventListener('click', function () { setFont(fontPx + 1); });
   $('undo').addEventListener('click', function () { editor.undo(); });
   $('redo').addEventListener('click', function () { editor.redo(); });
-
-  /* ---------- menu and header layout ---------- */
-  var menu = $('menu'), menuBtn = $('menubtn');
-  menuBtn.addEventListener('click', function () {
-    var open = menu.hidden;
-    menu.hidden = !open;
-    menuBtn.setAttribute('aria-expanded', String(open));
-  });
-  var exRow = document.createElement('div');
-  exRow.className = 'mrow';
-  function placeExample() {
-    if (mqMobile.matches) { exRow.appendChild($('exwrap')); menu.insertBefore(exRow, menu.firstChild); }
-    else { $('exslot').appendChild($('exwrap')); if (exRow.parentNode) exRow.remove(); }
-  }
-  placeExample();
 
   /* ---------- pages (phones) and tabs ---------- */
   var tabs = { 'in': 'stdin', out: 'output' };
@@ -61,14 +58,13 @@
       var tp = $('tp-' + b.getAttribute('data-t'));
       if (tp) tp.hidden = !on;
     });
-    if (group === 'out' && mqMobile.matches && ide.dataset.page !== 'code') setPage(name === 'plot' ? 'plot' : 'output', true);
+    if (group === 'out' && mqMobile.matches && ide.dataset.page !== 'code') setPage('output', true);
     if (group === 'in' && mqMobile.matches && ide.dataset.page !== 'code') setPage('input', true);
-    if (name === 'plot') plotShow();
   }
   document.querySelectorAll('.tabs [role=tab]').forEach(function (b) {
     b.addEventListener('click', function () {
       selectTab(b.closest('#pIn') ? 'in' : 'out', b.getAttribute('data-t'));
-      if (mqMobile.matches) setPage(b.closest('#pIn') ? 'input' : (b.getAttribute('data-t') === 'plot' ? 'plot' : 'output'), true);
+      if (mqMobile.matches) setPage(b.closest('#pIn') ? 'input' : 'output', true);
     });
   });
   function setPage(p, quiet) {
@@ -79,12 +75,11 @@
     if (quiet) return;
     if (p === 'input') selectTab('in', tabs['in']);
     else if (p === 'output') selectTab('out', 'output');
-    else if (p === 'plot') selectTab('out', 'plot');
   }
   document.querySelectorAll('#nav button').forEach(function (b) {
     b.addEventListener('click', function () { setPage(b.getAttribute('data-page')); });
   });
-  mqMobile.addEventListener('change', function () { placeExample(); if (ide.dataset.max) delete ide.dataset.max; plotShow(); });
+  mqMobile.addEventListener('change', function () { if (ide.dataset.max) delete ide.dataset.max; });
 
   // The visible height shrinks when a phone keyboard opens; follow it so the bars stay on screen.
   if (window.visualViewport) {
@@ -101,7 +96,6 @@
   var DEF = { sideA: 60, sideB: 34, stackA: 55, stackB: 40 };
   var sizes = loadJSON('compilec.sizes', {});
   ide.dataset.layout = load('compilec.layout') === 'stack' ? 'stack' : 'side';
-  $('layout').value = ide.dataset.layout;
   function sizeOf(key) { var k = ide.dataset.layout + key; return sizes[k] != null ? sizes[k] : DEF[k]; }
   function applySizes() {
     ide.style.setProperty('--a', sizeOf('A') + '%');
@@ -147,23 +141,24 @@
   makeSplit($('splitA'), 'A');
   makeSplit($('splitB'), 'B');
   applySizes();
-  $('layout').addEventListener('change', function () {
-    ide.dataset.layout = this.value === 'stack' ? 'stack' : 'side';
+  function setLayout(v) {
+    ide.dataset.layout = v === 'stack' ? 'stack' : 'side';
     store('compilec.layout', ide.dataset.layout);
     applySizes();
-  });
-  $('resetlayout').addEventListener('click', function () {
+  }
+  function resetSizes() {
     sizes = {}; store('compilec.sizes', '{}'); delete ide.dataset.max; applySizes();
-  });
+  }
+  function toggleMax(m) { if (ide.dataset.max === m) delete ide.dataset.max; else ide.dataset.max = m; }
   document.querySelectorAll('.max').forEach(function (b) {
     b.addEventListener('click', function () {
-      var m = b.getAttribute('data-max');
-      if (ide.dataset.max === m) delete ide.dataset.max; else ide.dataset.max = m;
-      if (m === 'out') plotShow();
+      toggleMax(b.getAttribute('data-max'));
     });
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && ide.dataset.max) { delete ide.dataset.max; plotShow(); }
+    if (e.key !== 'Escape') return;
+    if (pop) { closeMenu(true); return; }
+    if (ide.dataset.max) delete ide.dataset.max;
   });
 
   /* ---------- symbol bar for typing on a phone ---------- */
@@ -226,7 +221,7 @@
       li.appendChild(btn('Remove', function () {
         files = files.filter(function (x) { return x !== f; });
         if (editing === f) closeEditor();
-        renderFiles(); persistFiles(); refreshPlotData();
+        renderFiles(); persistFiles();
       }, 'Remove ' + f.name));
       ul.appendChild(li);
     });
@@ -243,14 +238,14 @@
   function closeEditor() { editing = null; $('fedit').hidden = true; }
   $('fesave').addEventListener('click', function () {
     if (editing) { editing.bytes = new TextEncoder().encode($('fetext').value); editing.text = true; }
-    closeEditor(); renderFiles(); persistFiles(); refreshPlotData();
+    closeEditor(); renderFiles(); persistFiles();
   });
   $('addfiles').addEventListener('click', function () { $('filesin').click(); });
   $('filesin').addEventListener('change', function () {
     var list = Array.from(this.files || []);
     this.value = '';
     Promise.all(list.map(function (f) { return f.arrayBuffer().then(function (b) { addFile(f.name, new Uint8Array(b)); }); })).then(function () {
-      renderFiles(); persistFiles(); refreshPlotData();
+      renderFiles(); persistFiles();
       setStatus('Added ' + list.length + (list.length === 1 ? ' file.' : ' files.'));
     });
   });
@@ -273,7 +268,7 @@
       f.arrayBuffer().then(function (b) {
         var bytes = new Uint8Array(b);
         if (/\.c$/i.test(f.name)) { editor.set(new TextDecoder().decode(bytes)); setStatus('Opened ' + f.name + '.'); }
-        else { addFile(f.name, bytes); renderFiles(); persistFiles(); refreshPlotData(); setStatus('Added ' + f.name + ' to Files.'); }
+        else { addFile(f.name, bytes); renderFiles(); persistFiles(); setStatus('Added ' + f.name + ' to Files.'); }
       });
     });
   });
@@ -318,10 +313,9 @@
       li.appendChild(btn('Download', function () { download(f.name, f.bytes); }, 'Download ' + f.name));
       if (f.text) {
         li.appendChild(btn('Use as input', function () {
-          addFile(f.name, new Uint8Array(f.bytes)); renderFiles(); persistFiles(); refreshPlotData();
+          addFile(f.name, new Uint8Array(f.bytes)); renderFiles(); persistFiles();
           setStatus(f.name + ' is now an input file.');
         }, 'Use ' + f.name + ' as an input file'));
-        li.appendChild(btn('Plot', function () { selectTab('out', 'plot'); plotPick('w:' + f.name); }, 'Plot ' + f.name));
       }
       ul.appendChild(li);
     });
@@ -414,6 +408,16 @@
       setStatus('Compilation failed.', 'err');
       return;
     }
+    if (r.warnings && r.warnings.length) showProblems(r.warnings);
+    if (r.compileOnly) {
+      outp.textContent = '';
+      var ok = document.createElement('span');
+      ok.textContent = 'Compiled successfully' + (r.warnings && r.warnings.length ? ', with warnings (listed above).' : ', with no errors or warnings.') + '\n';
+      outp.appendChild(ok);
+      selectTab('out', 'output');
+      setStatus('Compiled in ' + Math.round(r.compileMs) + ' ms. Nothing was run.', 'ok');
+      return;
+    }
     if (r.crash) {
       var why = /unreachable|out of bounds|memory access|stack/i.test(r.crash)
         ? 'The program crashed (for example an array index outside its bounds, or too deep a recursion).'
@@ -426,13 +430,7 @@
     t += r.exitCode == null ? '.' : '. Exit status ' + r.exitCode + '.';
     if (outFiles.length) t += ' ' + outFiles.length + (outFiles.length === 1 ? ' file' : ' files') + ' written.';
     setStatus(t, r.exitCode === 0 ? 'ok' : 'err');
-    refreshPlotData(true);
-    if (currentExample && currentExample.plot) {
-      if (typeof currentExample.plot === 'string') plotPick('w:' + currentExample.plot);
-      selectTab('out', 'plot');
-      currentExample = null;
-    }
-  }
+      }
 
   function splitArgs(s) {
     var out = [], re = /"([^"]*)"|'([^']*)'|(\S+)/g, m;
@@ -446,9 +444,11 @@
     store('compilec.args', $('args').value);
     store('compilec.opt', $('opt').value);
     store('compilec.std', $('std').value);
+    store('compilec.warn', $('warn').value);
   }
 
-  function run() {
+  function run(compileOnly) {
+    compileOnly = compileOnly === true;
     if (running) return;
     saveSettings();
     if (editing) { editing.bytes = new TextEncoder().encode($('fetext').value); }
@@ -456,7 +456,7 @@
     clearProblems();
     setRunning(true);
     if (mqMobile.matches) { selectTab('out', 'output'); setPage('output', true); }
-    else if (tabs.out !== 'plot') selectTab('out', 'output');
+    else selectTab('out', 'output');
     if (!worker) startWorker();
     if (!loaded) {
       bar.value = 0;
@@ -468,7 +468,8 @@
     }
     worker.postMessage({
       type: 'run', code: editor.get(), input: stdin.value, args: splitArgs($('args').value),
-      flags: [$('opt').value, '-Wall', '-std=' + $('std').value],
+      compileOnly: compileOnly,
+      flags: [$('opt').value].concat(warnFlags(), ['-std=' + $('std').value]),
       files: files.map(function (f) { return { name: f.name, bytes: f.bytes.slice().buffer }; })
     });
   }
@@ -480,106 +481,11 @@
     finish();
     setStatus('Stopped. The output so far is kept above.');
   }
-  runBtn.addEventListener('click', run);
+  function warnFlags() { var w = $('warn').value; return w === 'none' ? [] : w === 'extra' ? ['-Wall', '-Wextra'] : ['-Wall']; }
+  runBtn.addEventListener('click', function () { run(false); });
   stopBtn.addEventListener('click', stop);
   window.addEventListener('pagehide', saveSettings);
   document.addEventListener('visibilitychange', function () { if (document.hidden) saveSettings(); });
-
-  /* ---------- plotting (independent of the C compiler) ---------- */
-  var plot = Plot.create({
-    canvas: $('plot'), wrap: $('plotwrap'), tip: $('ptip'),
-    grid: function () { return $('pgrid').checked; },
-    xlabel: function () { var x = +$('px').value; return x < 0 ? 'row number' : (curTable.names[x] || ''); }
-  });
-  var curTable = { names: [], rows: [] }, plotSources = [], rangeEdited = false;
-  $('pfn').value = load('compilec.formula') || '';
-
-  function sourceList() {
-    var list = [{ id: 'stdout', label: 'Program output', text: out.std }];
-    outFiles.forEach(function (f) { if (f.text) list.push({ id: 'w:' + f.name, label: f.name + ' (written)', text: new TextDecoder().decode(f.bytes) }); });
-    files.forEach(function (f) { if (f.text) list.push({ id: 'i:' + f.name, label: f.name + ' (input)', text: new TextDecoder().decode(f.bytes) }); });
-    return list;
-  }
-  function plotVisible() { var tp = $('tp-plot'); return !tp.hidden && tp.offsetParent !== null; }
-  function plotShow() {
-    if (!plotVisible()) return;
-    refreshPlotData();
-    window.requestAnimationFrame(function () { plot.resize(); });
-  }
-
-  function refreshPlotData(auto) {
-    var sel = $('pdata'), prev = sel.value;
-    plotSources = sourceList();
-    sel.textContent = '';
-    plotSources.forEach(function (s) {
-      var o = document.createElement('option'); o.value = s.id; o.textContent = s.label; sel.appendChild(o);
-    });
-    var pick = plotSources.some(function (s) { return s.id === prev; }) ? prev : 'stdout';
-    if (auto) {
-      var withData = plotSources.filter(function (s) { return Plot.parseTable(s.text).rows.length >= 2; });
-      if (withData.length) pick = withData.some(function (s) { return s.id === 'stdout'; }) ? 'stdout' : withData[0].id;
-    }
-    sel.value = pick;
-    loadTable();
-  }
-  function plotPick(id) {
-    refreshPlotData();
-    if (plotSources.some(function (s) { return s.id === id; })) { $('pdata').value = id; loadTable(); }
-  }
-
-  function loadTable() {
-    var src = plotSources.filter(function (s) { return s.id === $('pdata').value; })[0];
-    curTable = Plot.parseTable(src ? src.text : '');
-    var px = $('px'), ys = $('pys');
-    px.textContent = '';
-    var o0 = document.createElement('option'); o0.value = '-1'; o0.textContent = 'row number'; px.appendChild(o0);
-    curTable.names.forEach(function (n, i) { var o = document.createElement('option'); o.value = String(i); o.textContent = n; px.appendChild(o); });
-    ys.querySelectorAll('label').forEach(function (l) { l.remove(); });
-    curTable.names.forEach(function (n, i) {
-      var l = document.createElement('label'), c = document.createElement('input');
-      c.type = 'checkbox'; c.value = String(i);
-      c.addEventListener('change', applyPlot);
-      l.appendChild(c); l.appendChild(document.createTextNode(n));
-      ys.appendChild(l);
-    });
-    var cols = curTable.names.length;
-    px.value = cols >= 2 ? '0' : '-1';
-    ys.querySelectorAll('input').forEach(function (c) {
-      var i = +c.value;
-      c.checked = cols >= 2 ? (i !== 0 && i <= 6) : i === 0;
-    });
-    plot.setTable(curTable);
-    $('phint').textContent = cols
-      ? curTable.rows.length + ' rows and ' + cols + ' columns found. Drag to pan, scroll or pinch to zoom, tap a point to read its value, double-click to fit.'
-      : 'No table of numbers found here. Print numbers in rows (for example x and y separated by a space), or type a formula above.';
-    applyPlot();
-  }
-
-  function applyPlot() {
-    var ycols = [];
-    $('pys').querySelectorAll('input').forEach(function (c) { if (c.checked) ycols.push(+c.value); });
-    plot.setStyle($('pstyle').value);
-    plot.setColumns(+$('px').value, ycols);
-    var err = plot.setFunctions($('pfn').value);
-    plot.setRange(parseFloat($('pxmin').value), parseFloat($('pxmax').value), rangeEdited);
-    var pe = $('perr');
-    pe.hidden = !err;
-    pe.textContent = err ? 'Formula problem: ' + err : '';
-    if (plotVisible()) plot.draw();
-  }
-  var fnTimer = 0;
-  $('pfn').addEventListener('input', function () {
-    window.clearTimeout(fnTimer);
-    fnTimer = window.setTimeout(function () { store('compilec.formula', $('pfn').value); applyPlot(); }, 250);
-  });
-  ['pxmin', 'pxmax'].forEach(function (id) { $(id).addEventListener('input', function () { rangeEdited = true; applyPlot(); }); });
-  $('pdata').addEventListener('change', loadTable);
-  $('px').addEventListener('change', applyPlot);
-  $('pstyle').addEventListener('change', function () { plot.setStyle(this.value); if (plotVisible()) plot.draw(); });
-  $('pgrid').addEventListener('change', function () { if (plotVisible()) plot.draw(); });
-  $('pfit').addEventListener('click', function () { rangeEdited = false; applyPlot(); plot.fit(); });
-  $('ppng').addEventListener('click', function () { plot.png(function (blob) { if (blob) download('plot.png', blob, 'image/png'); }); });
-  refreshPlotData();
 
   /* ---------- sharing ---------- */
   function toB64(bytes) {
@@ -607,7 +513,7 @@
     var p = kind === 'z' ? pipe(bytes, new DecompressionStream('deflate-raw')) : Promise.resolve(bytes);
     return p.then(function (b) { return JSON.parse(new TextDecoder().decode(b)); });
   }
-  $('share').addEventListener('click', function () {
+  function shareLink() {
     encodeShare().then(function (code) {
       var url = location.origin + location.pathname + '#s=' + code;
       if (url.length > 12000) { setStatus('This program is too long to share as a link. Use Save .c instead.', 'err'); return; }
@@ -615,10 +521,10 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function () { setStatus('Link copied. It holds your code and input; the files in the Files tab are not included.'); }, function () { window.prompt('Copy this link', url); });
       else window.prompt('Copy this link', url);
     });
-  });
+  }
   if (/^#s=/.test(location.hash)) {
     decodeShare(location.hash.slice(3)).then(function (d) {
-      editor.set(String(d.c || '')); stdin.value = d.i || ''; $('args').value = d.a || '';
+      setProgram(String(d.c || ''), 'main.c'); stdin.value = d.i || ''; $('args').value = d.a || '';
       if (d.o) $('opt').value = d.o;
       if (d.s) $('std').value = d.s;
       history.replaceState(null, '', location.pathname + location.search);
@@ -631,44 +537,196 @@
     var e = examples.filter(function (x) { return x.id === id; })[0];
     if (!e) return;
     fetch('examples/' + e.id + '.c').then(function (r) { return r.text(); }).then(function (text) {
-      editor.set(text);
+      setProgram(text, e.id + '.c');
       stdin.value = e.input;
       (e.files || []).forEach(function (f) { addFile(f.name, new TextEncoder().encode(f.text)); });
       if (e.files) { renderFiles(); persistFiles(); }
-      currentExample = e.plot ? e : null;
-      resetOutput(); clearProblems(); refreshPlotData();
+      resetOutput(); clearProblems();
       setStatus(e.files ? 'The input file ' + e.files.map(function (f) { return f.name; }).join(', ') + ' was added under Files.' : '');
     });
   }
-  select.addEventListener('change', function () {
-    if (select.value === '') { editor.set(HELLO); stdin.value = '7\n'; currentExample = null; resetOutput(); clearProblems(); setStatus(''); return; }
-    useExample(select.value);
-  });
-
-  $('open').addEventListener('click', function () { $('file').click(); });
+  function newProgram() {
+    if (!okToReplace()) return;
+    setProgram(HELLO, 'main.c'); stdin.value = '7\n'; resetOutput(); clearProblems(); setStatus('');
+  }
+  function saveC(askName) {
+    var name = fileName;
+    if (askName === true) {
+      name = window.prompt('Save as', fileName);
+      if (!name) return;
+      name = cleanName(name);
+      if (!/\.[A-Za-z]+$/.test(name)) name += '.c';
+    }
+    fileName = name;
+    document.querySelector('#pEditor .ttl').textContent = name;
+    store('compilec.name', name);
+    download(name, new TextEncoder().encode(editor.get()), 'text/plain');
+    dirty = false;
+    setStatus('Saved ' + name + ' to your downloads.');
+  }
   $('file').addEventListener('change', function () {
     var f = this.files[0];
-    if (!f) return;
-    var rd = new FileReader();
-    rd.onload = function () { editor.set(String(rd.result)); select.value = ''; clearProblems(); setStatus('Opened ' + f.name + '.'); };
-    rd.readAsText(f);
     this.value = '';
+    if (!f || !okToReplace()) return;
+    var rd = new FileReader();
+    rd.onload = function () { setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
+    rd.readAsText(f);
   });
-  $('save').addEventListener('click', function () { download('main.c', new TextEncoder().encode(editor.get()), 'text/plain'); });
-
-  var blank = document.createElement('option');
-  blank.value = ''; blank.textContent = 'Blank program';
-  select.appendChild(blank);
   fetch('examples/examples.json').then(function (r) { return r.json(); }).then(function (list) {
     examples = list;
-    list.forEach(function (x, i) {
-      var o = document.createElement('option');
-      o.value = x.id; o.textContent = (i + 1) + '. ' + x.title;
-      select.appendChild(o);
-    });
     var want = new URLSearchParams(location.search).get('example');
-    if (want && list.some(function (x) { return x.id === want; })) { select.value = want; useExample(want); }
+    if (want && list.some(function (x) { return x.id === want; })) useExample(want);
   }).catch(function () {});
+
+  /* ---------- menu bar ---------- */
+  function clip(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return Promise.reject();
+  }
+  var MENUS = [
+    { label: 'File', items: function () { return [
+      { t: 'New program', f: newProgram },
+      { t: 'Open .c file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
+      { t: 'Save', k: 'Ctrl+S', f: function () { saveC(false); } },
+      { t: 'Save as...', f: function () { saveC(true); } },
+      '-',
+      { t: 'Add input files...', f: function () { selectTab('in', 'files'); if (mqMobile.matches) setPage('input'); $('filesin').click(); } },
+      { t: 'New input file...', f: function () { selectTab('in', 'files'); if (mqMobile.matches) setPage('input'); $('newfile').click(); } },
+      '-',
+      { t: 'Share link', f: shareLink }
+    ]; } },
+    { label: 'Edit', items: function () { return [
+      { t: 'Undo', k: 'Ctrl+Z', f: function () { editor.undo(); } },
+      { t: 'Redo', k: 'Ctrl+Y', f: function () { editor.redo(); } },
+      '-',
+      { t: 'Cut', k: 'Ctrl+X', f: function () { var t = editor.selected(); if (t) clip(t).then(function () { editor.replaceSelection(''); }, function () { setStatus('Use Ctrl+X to cut.'); }); } },
+      { t: 'Copy', k: 'Ctrl+C', f: function () { var t = editor.selected(); if (t) clip(t).catch(function () { setStatus('Use Ctrl+C to copy.'); }); } },
+      { t: 'Paste', k: 'Ctrl+V', f: function () {
+        if (navigator.clipboard && navigator.clipboard.readText) navigator.clipboard.readText().then(function (t) { editor.replaceSelection(t); }, function () { setStatus('Your browser did not allow pasting from the menu. Use Ctrl+V.'); });
+        else setStatus('Use Ctrl+V to paste.');
+      } },
+      { t: 'Select all', k: 'Ctrl+A', f: function () { editor.selectAll(); } },
+      '-',
+      { t: 'Comment or uncomment lines', k: 'Ctrl+/', f: function () { editor.comment(); } },
+      { t: 'Auto-indent the program', f: function () { editor.indent(); } }
+    ]; } },
+    { label: 'Search', items: function () { return [
+      { t: 'Find and replace...', k: 'Ctrl+F', f: function () { if (mqMobile.matches) setPage('code'); editor.find(); } },
+      { t: 'Go to line...', k: 'Ctrl+Alt+G', f: function () { if (mqMobile.matches) setPage('code'); editor.gotoLine(); } }
+    ]; } },
+    { label: 'View', items: function () {
+      var stack = ide.dataset.layout === 'stack', mob = mqMobile.matches;
+      var list = [
+        { t: 'Larger text', f: function () { setFont(fontPx + 1); } },
+        { t: 'Smaller text', f: function () { setFont(fontPx - 1); } },
+        { t: 'Reset text size', f: function () { setFont(mob ? 16 : 14.5); } }
+      ];
+      if (!mob) list.push('-',
+        { t: 'Side by side', checked: !stack, f: function () { setLayout('side'); } },
+        { t: 'Stacked', checked: stack, f: function () { setLayout('stack'); } },
+        { t: 'Reset panel sizes', f: resetSizes },
+        '-',
+        { t: 'Enlarge the editor', checked: ide.dataset.max === 'editor', f: function () { toggleMax('editor'); } },
+        { t: 'Enlarge the input panel', checked: ide.dataset.max === 'in', f: function () { toggleMax('in'); } },
+        { t: 'Enlarge the output panel', checked: ide.dataset.max === 'out', f: function () { toggleMax('out'); } });
+      return list;
+    } },
+    { label: 'Execute', items: function () { return [
+      { t: 'Compile and run', k: 'F10', f: function () { run(false); }, disabled: running },
+      { t: 'Compile only', k: 'F9', f: function () { run(true); }, disabled: running },
+      { t: 'Stop', f: stop, disabled: !running }
+    ]; } },
+    { label: 'Examples', items: function () {
+      var list = [{ t: 'Blank program', f: newProgram }];
+      examples.forEach(function (x, i) { list.push({ t: (i + 1) + '. ' + x.title, f: function () { if (okToReplace()) useExample(x.id); } }); });
+      return list;
+    } },
+    { label: 'Tools', items: function () { return [
+      { t: 'Compiler options...', f: function () { $('dlgOpts').showModal(); } },
+      '-',
+      { t: 'Clear output', f: function () { resetOutput(); clearProblems(); setStatus(''); } },
+      { t: 'Clear saved program, files and settings', f: function () {
+        if (!window.confirm('Remove the saved program, input files and settings from this browser?')) return;
+        Object.keys(localStorage).forEach(function (k) { if (k.indexOf('compilec.') === 0) localStorage.removeItem(k); });
+        location.href = location.pathname;
+      } }
+    ]; } },
+    { label: 'Help', items: function () { return [
+      { t: 'Help and shortcuts...', f: function () { $('dlgHelp').showModal(); } },
+      { t: 'About C Lab', f: function () { $('dlgHelp').showModal(); $('dlgHelp').querySelector('.dbody').scrollTop = 99999; } }
+    ]; } }
+  ];
+
+  var bar = $('menubar'), pop = null, openIdx = -1, hoverOpened = -1, barBtns = [];
+  MENUS.forEach(function (m, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = m.label; b.setAttribute('role', 'menuitem');
+    b.setAttribute('aria-haspopup', 'menu'); b.setAttribute('aria-expanded', 'false');
+    b.addEventListener('click', function (e) { e.stopPropagation(); if (openIdx === i && hoverOpened !== i) closeMenu(true); else openMenu(i, false); hoverOpened = -1; });
+    b.addEventListener('mouseenter', function () { if (openIdx >= 0 && openIdx !== i && !mqMobile.matches) { openMenu(i, false); hoverOpened = i; } });
+    b.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMenu(i, true); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); barBtns[(i + 1) % barBtns.length].focus(); if (openIdx >= 0) openMenu((i + 1) % barBtns.length, true); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); var j = (i + barBtns.length - 1) % barBtns.length; barBtns[j].focus(); if (openIdx >= 0) openMenu(j, true); }
+    });
+    barBtns.push(b); bar.appendChild(b);
+  });
+  function closeMenu(refocus) {
+    if (pop) { pop.remove(); pop = null; }
+    if (openIdx >= 0) { barBtns[openIdx].setAttribute('aria-expanded', 'false'); if (refocus) barBtns[openIdx].focus(); }
+    openIdx = -1;
+  }
+  function openMenu(i, focusFirst) {
+    closeMenu(false);
+    openIdx = i;
+    var btn = barBtns[i];
+    btn.setAttribute('aria-expanded', 'true');
+    pop = document.createElement('div');
+    pop.className = 'mpop'; pop.setAttribute('role', 'menu'); pop.setAttribute('aria-label', MENUS[i].label);
+    MENUS[i].items().forEach(function (it) {
+      if (it === '-') { pop.appendChild(document.createElement('hr')); return; }
+      var b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('role', it.checked === undefined ? 'menuitem' : 'menuitemradio');
+      if (it.checked !== undefined) b.setAttribute('aria-checked', String(!!it.checked));
+      if (it.checked) b.classList.add('on');
+      b.disabled = !!it.disabled;
+      if (it.checked !== undefined) { var ck = document.createElement('span'); ck.className = 'ck'; ck.textContent = it.checked ? '\u2713' : ''; b.appendChild(ck); }
+      var l = document.createElement('span'); l.textContent = it.t; l.style.flex = '1'; b.appendChild(l);
+      if (it.k) { var k = document.createElement('span'); k.className = 'sc'; k.textContent = it.k; b.appendChild(k); }
+      b.addEventListener('click', function () { closeMenu(false); it.f(); });
+      pop.appendChild(b);
+    });
+    document.body.appendChild(pop);
+    var r = btn.getBoundingClientRect(), w = pop.offsetWidth;
+    pop.style.left = Math.max(4, Math.min(r.left, window.innerWidth - w - 4)) + 'px';
+    pop.style.top = r.bottom + 'px';
+    pop.style.maxHeight = Math.max(160, window.innerHeight - r.bottom - 8) + 'px';
+    if (focusFirst) { var f = pop.querySelector('button:not(:disabled)'); if (f) f.focus(); }
+    pop.addEventListener('keydown', function (e) {
+      var items = Array.from(pop.querySelectorAll('button:not(:disabled)')), at = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); items[(at + 1) % items.length].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); items[(at + items.length - 1) % items.length].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); items[items.length - 1].focus(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); openMenu((openIdx + 1) % barBtns.length, true); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); openMenu((openIdx + barBtns.length - 1) % barBtns.length, true); }
+      else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeMenu(true); }
+      else if (e.key === 'Tab') { closeMenu(false); }
+    });
+  }
+  document.addEventListener('click', function (e) { if (pop && !pop.contains(e.target)) closeMenu(false); });
+  window.addEventListener('resize', function () { closeMenu(false); });
+  document.addEventListener('keydown', function (e) {
+    var mod = e.ctrlKey || e.metaKey;
+    if (e.key === 'F9') { e.preventDefault(); run(true); }
+    else if (e.key === 'F10') { e.preventDefault(); run(false); }
+    else if (mod && !e.shiftKey && !e.altKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); saveC(false); }
+    else if (mod && !e.shiftKey && !e.altKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); $('file').click(); }
+  });
+  $('dlgOpts').addEventListener('close', saveSettings);
+  [$('dlgOpts'), $('dlgHelp')].forEach(function (d) {
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+  });
 
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });

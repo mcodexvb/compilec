@@ -59,11 +59,13 @@ async function runProgram(msg) {
       })
     );
     const compileMs = Math.round(performance.now() - started);
+    const warnings = T.compilerDiagnostics(compiled.raw || '');
     if (compiled.error) {
       const errors = T.compilerDiagnostics(compiled.raw);
       if (!errors.length) errors.push(String((compiled.error && compiled.error.message) || compiled.error));
       return { errors, compileMs, exitCode: null, files: [] };
     }
+    if (msg.compileOnly) return { errors: [], warnings, compileOnly: true, compileMs, exitCode: null, files: [] };
     self.postMessage({ type: 'running', compileMs });
 
     let host = null;
@@ -88,7 +90,7 @@ async function runProgram(msg) {
     const runMs = Math.round(performance.now() - runStarted);
     const out = [];
     if (host) collect(host.rootDirectory, '', out);
-    return { errors: [], compileMs, runMs, exitCode, crash, files: out };
+    return { errors: [], warnings, compileMs, runMs, exitCode, crash, files: out };
   });
 }
 
