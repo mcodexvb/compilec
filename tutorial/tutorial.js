@@ -12,6 +12,19 @@
   markLesson();
   window.addEventListener('hashchange', markLesson);
 
+  document.querySelectorAll('.lesson-quiz').forEach(function (quiz) {
+    var feedback = quiz.querySelector('.quiz-feedback');
+    quiz.querySelector('button').hidden = false;
+    quiz.addEventListener('change', function () { feedback.textContent = ''; });
+    quiz.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var choice = new FormData(quiz).get('choice');
+      var correct = choice === quiz.dataset.correct;
+      feedback.textContent = correct ? 'Correct!' : 'Try again, or show the answer below.';
+      if (correct) quiz.querySelector('details').open = true;
+    });
+  });
+
   document.querySelectorAll('.example').forEach(function (example) {
     var source = example.querySelector('.source');
     var link = example.querySelector('.source-link');

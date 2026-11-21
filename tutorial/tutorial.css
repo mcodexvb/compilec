@@ -117,3 +117,69 @@
   }
   .course-sidebar h2 { position: sticky; top: -.7rem; background: var(--pane); padding: .35rem 0; margin: 0; }
 }
+
+.lesson-diagram {
+  margin: 1.15rem 0;
+  padding: .85rem;
+  background: var(--pane);
+  border: 1px solid var(--line);
+  border-radius: .55rem;
+}
+.lesson-diagram figcaption { font-weight: 600; margin-bottom: .65rem; }
+.run-flow, .variable-parts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.run-flow li, .variable-parts > div {
+  position: relative;
+  padding: .6rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+}
+.run-flow li:not(:last-child)::after {
+  content: "→" / "";
+  position: absolute;
+  left: calc(100% + .12rem);
+  top: .6rem;
+  color: var(--acc);
+}
+.run-flow strong, .run-flow span { display: block; }
+.run-flow span, .variable-parts dt { color: var(--mute); font-size: .94rem; }
+.variable-parts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+.variable-parts dd { margin: .2rem 0 0; }
+.first-run-steps { padding-inline-start: 1.4rem; }
+.first-run-steps li + li { margin-top: .35rem; }
+
+@media (max-width: 37rem) {
+  .run-flow { grid-template-columns: 1fr; }
+  .run-flow li:not(:last-child)::after {
+    content: "↓" / "";
+    top: 100%;
+    left: .6rem;
+    line-height: 1rem;
+  }
+}
+
+.lesson-quiz {
+  margin: 1rem 0 0;
+  padding: clamp(.85rem, 3vw, 1.25rem);
+  border-radius: .55rem;
+  border: 1px solid var(--line);
+  background: var(--pane);
+}
+.lesson-quiz fieldset { border: 0; margin: .6rem 0; padding: 0; min-width: 0; }
+.lesson-quiz legend { margin-bottom: .35rem; padding: 0; }
+.lesson-quiz label { display: flex; align-items: baseline; gap: .4rem; padding: .18rem 0; cursor: pointer; }
+.lesson-quiz input { flex: none; accent-color: var(--acc); }
+.lesson-quiz button { margin-right: .5rem; }
+.lesson-quiz details { margin-top: .55rem; }
+.lesson-quiz summary { color: var(--acc); cursor: pointer; }
+.lesson-quiz p { margin-bottom: 0; }

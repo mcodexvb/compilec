@@ -22,7 +22,7 @@ C Lab: an online C editor and compiler. Clang 22 runs inside the page as WebAsse
 - Compilation and execution happen in a Web Worker, so the page stays responsive. Output is streamed as the program prints. The Stop button ends a runaway program.
 - Programs run in a private in-memory folder: the files you add are placed there before the run and the files the program writes are read back afterwards. Nothing leaves the device.
 - Leave **Prepared input** empty and a line editor appears under Output whenever the program requests input. **Send EOF** ends the input stream. For a repeatable run, supply the complete input before pressing Run. The 18 numerical and file examples still open directly, for example with `?example=07-bisection`.
-- The [C programming tutorial](tutorial/) covers C17 with examples, exercises and a data summary project. **Try it in CLab** opens a temporary practice workspace. Download a practice program to keep your edits.
+- The [C programming tutorial](tutorial/) starts with a first program and builds toward tables, number patterns, and a data summary project. Every C17 lesson includes a coding task and a short quiz. **Try it in CLab** opens a temporary practice workspace. Download a practice program to keep your edits.
 - The compiler files (`clang/`, `vendor/`, about 29 MB) are committed, so the repository root is the whole site and needs no build step.
 
 ## Hosting

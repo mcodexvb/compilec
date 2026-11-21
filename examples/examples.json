@@ -96,13 +96,33 @@
   "input": ""
  },
  {
+  "id": "learn-getting-started",
+  "title": "Start here: run your first program",
+  "input": ""
+ },
+ {
   "id": "learn-first-program",
-  "title": "Your first C program",
+  "title": "Read a C program line by line",
+  "input": ""
+ },
+ {
+  "id": "learn-printing",
+  "title": "Print words and start new lines",
+  "input": ""
+ },
+ {
+  "id": "learn-first-errors",
+  "title": "Fix your first mistake",
   "input": ""
  },
  {
   "id": "learn-types-output",
-  "title": "Variables, types and formatted output",
+  "title": "Variables and values",
+  "input": ""
+ },
+ {
+  "id": "learn-more-types",
+  "title": "Whole numbers, decimals and characters",
   "input": ""
  },
  {
@@ -123,6 +143,16 @@
  {
   "id": "learn-loops",
   "title": "Loops with for and while",
+  "input": ""
+ },
+ {
+  "id": "learn-number-tables",
+  "title": "Make a multiplication table",
+  "input": ""
+ },
+ {
+  "id": "learn-number-pyramid",
+  "title": "Build a number pyramid",
   "input": ""
  },
  {

@@ -20,14 +20,23 @@
   <aside class="course-sidebar">
     <nav aria-labelledby="lesson-list">
       <h2 id="lesson-list">Lessons</h2>
-      <h3>Foundations</h3>
+      <h3>Start here</h3>
       <ul>
-        <li><a href="#first-program">Your first C program</a></li>
-        <li><a href="#types-output">Variables, types and formatted output</a></li>
+        <li><a href="#getting-started">Start here: run your first program</a></li>
+        <li><a href="#first-program">Read a C program line by line</a></li>
+        <li><a href="#printing">Print words and start new lines</a></li>
+        <li><a href="#first-errors">Fix your first mistake</a></li>
+      </ul>
+      <h3>Numbers, decisions and loops</h3>
+      <ul>
+        <li><a href="#types-output">Variables and values</a></li>
+        <li><a href="#more-types">Whole numbers, decimals and characters</a></li>
         <li><a href="#operators">Arithmetic and conversions</a></li>
         <li><a href="#decisions">Decisions with if and else</a></li>
         <li><a href="#switch">Multiple choices with switch</a></li>
         <li><a href="#loops">Loops with for and while</a></li>
+        <li><a href="#number-tables">Make a multiplication table</a></li>
+        <li><a href="#number-pyramid">Build a number pyramid</a></li>
       </ul>
       <h3>Working with data</h3>
       <ul>
@@ -51,14 +60,71 @@
   <main class="course-main" id="main" tabindex="-1">
     <header class="course-intro">
       <h1>C Programming Tutorial</h1>
-      <p class="course-lead">Learn C one program at a time, from your first line of output to a project that summarizes a data set.</p>
-      <p>These lessons use ISO C17. Each example opens in a separate CLab practice tab with the sample input or files already loaded. Press <strong>Run</strong> to compare the result with the expected output. To keep changes from a practice tab, download the program with <strong>File → Save</strong>.</p>
-      <a class="try-it" href="#first-program">Start learning C</a>
+      <p class="course-lead">Never written a program before? Start by making the computer say hello.</p>
+      <p>You can do every lesson in your browser. Run a short example, change one thing, and see what happens. Later, you’ll use C to count, make choices, and work with a list of game scores.</p>
+      <a class="try-it" href="#getting-started">Run your first program</a>
     </header>
+    <section class="lesson" id="getting-started" aria-labelledby="getting-started-title" tabindex="-1">
+      <h2 id="getting-started-title">Start here: run your first program</h2>
+      <p>A program is a set of instructions a computer can follow. C is one language for writing those instructions. The words and symbols you type in the editor are called <strong>source code</strong>.</p>
+      <p>When you press <strong>Run</strong>, CLab first uses a <strong>compiler</strong> to turn your C code into a program it can run. The program prints a message in the <strong>Output</strong> panel. That message is the result you see.</p>
+      <figure class="lesson-diagram">
+        <figcaption>What happens when you press Run?</figcaption>
+        <ol class="run-flow">
+          <li><strong>Editor</strong><span>You write the C code.</span></li>
+          <li><strong>Compiler</strong><span>CLab turns the code into a program.</span></li>
+          <li><strong>Run</strong><span>CLab runs the program.</span></li>
+          <li><strong>Output</strong><span>You see what it printed.</span></li>
+        </ol>
+      </figure>
+      <ol class="first-run-steps">
+        <li>Select <strong>Try it in CLab</strong> to open the example in a new tab.</li>
+        <li>Press <strong>Run</strong>. The first run may take a little longer while CLab loads the compiler.</li>
+        <li>Look for <code>Hello!</code> in <strong>Output</strong>. On a phone, the Output tab opens when you run the program.</li>
+      </ol>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-getting-started" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-getting-started.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Hello!
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make the program say <code>Hello, Sam!</code> or use your own name.</p>
+        <details><summary>Hint</summary><p>Change only the words between the two quotation marks. Keep the marks in place.</p></details>
+        <details><summary>Answer</summary><p>Change the line to <code>puts("Hello, Sam!");</code> and press <strong>Run</strong> again.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="getting-started-quiz">
+        <h3 id="getting-started-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Where do you look for the message after pressing Run?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>In the Output panel</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>In the code editor</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>In the Prepared input box</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>In the Output panel. The Output panel shows what your program prints.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Start here: run your first program navigation">
+        <a href="#main">↑ Course overview</a>
+        <a rel="next" href="#first-program">Read a C program line by line →</a>
+      </nav>
+    </section>
+
     <section class="lesson" id="first-program" aria-labelledby="first-program-title" tabindex="-1">
-      <h2 id="first-program-title">Your first C program</h2>
-      <p>In a hosted C program, execution starts in <code>main</code>. Write <code>int main(void)</code> for a program that takes no command-line parameters. The braces enclose the function body.</p>
-      <p><code>#include &lt;stdio.h&gt;</code> provides the declaration of <code>puts</code>. <code>puts</code> writes a string followed by a newline. <code>return 0;</code> reports successful completion. Comments such as <code>// A short note</code> explain the source and are ignored by the compiler.</p>
+      <h2 id="first-program-title">Read a C program line by line</h2>
+      <p>A <strong>function</strong> is a named group of instructions. In the programs we run here, <code>main</code> is where the program starts. The line <code>int main(void)</code> starts that function. The curly braces <code>{</code> and <code>}</code> mark the start and end of its instructions.</p>
+      <p><code>#include &lt;stdio.h&gt;</code> gives the compiler information about tools for reading and writing, including <code>puts</code>. Each <code>puts</code> line prints the text in quotation marks and then starts a new line. A semicolon ends each <code>puts</code> and <code>return</code> statement. <code>return 0;</code> says the program finished successfully.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -71,25 +137,133 @@
           <span class="copy-status" role="status"></span>
         </div>
         <h4>Expected output</h4>
-        <pre><code>Hello, C!
+        <pre><code>Ready?
+Go!
 </code></pre>
       </div>
       <div class="practice">
         <h3>Exercise</h3>
-        <p>Print your name on a second line.</p>
-        <details><summary>Hint</summary><p>Call <code>puts</code> twice.</p></details>
-        <details><summary>Answer</summary><p>Add <code>puts("My name is Ada.");</code> before <code>return 0;</code>.</p></details>
+        <p>Swap the two <code>puts</code> lines. Predict what will print first. Then change the comment and run again.</p>
+        <details><summary>Hint</summary><p>The instructions inside <code>main</code> here run in order. A comment begins with <code>//</code> and continues to the end of its line.</p></details>
+        <details><summary>Answer</summary><p>The program prints <code>Go!</code> first. The comment is for the reader, so changing it leaves the result the same.</p></details>
       </div>
-      <nav class="lesson-nav" aria-label="Your first C program navigation">
-        <a href="#main">↑ Course overview</a>
-        <a rel="next" href="#types-output">Variables, types and formatted output →</a>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="first-program-quiz">
+        <h3 id="first-program-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Where do the instructions inside main go?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Inside quotation marks</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Between the curly braces</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>After the final curly brace</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Between the curly braces. The curly braces surround the instructions in main.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Read a C program line by line navigation">
+        <a rel="prev" href="#getting-started">← Start here: run your first program</a>
+        <a rel="next" href="#printing">Print words and start new lines →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="printing" aria-labelledby="printing-title" tabindex="-1">
+      <h2 id="printing-title">Print words and start new lines</h2>
+      <p>Use <code>printf</code> when you want to choose exactly where a line ends. Write <code>\n</code> inside the quotation marks to start a new line. C calls this a <strong>newline</strong>.</p>
+      <p>The first two <code>printf</code> calls below work together. The first prints <code>Red</code> and a space. The second prints <code>blue</code> and moves to the next line. The last call prints <code>Green</code> there.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-printing" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-printing.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Red blue
+Green
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make <code>Red</code>, <code>Blue</code>, and <code>Green</code> appear on three separate lines.</p>
+        <details><summary>Hint</summary><p>Put a <code>\n</code> at the end of each message.</p></details>
+        <details><summary>Answer</summary><p>Use <code>printf("Red\n");</code>, <code>printf("Blue\n");</code>, and <code>printf("Green\n");</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="printing-quiz">
+        <h3 id="printing-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>\n</code> do inside a message?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>It prints the letter n</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>It adds one space</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>It starts a new line</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>It starts a new line. C treats the backslash and n together as a newline.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Print words and start new lines navigation">
+        <a rel="prev" href="#first-program">← Read a C program line by line</a>
+        <a rel="next" href="#first-errors">Fix your first mistake →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="first-errors" aria-labelledby="first-errors-title" tabindex="-1">
+      <h2 id="first-errors-title">Fix your first mistake</h2>
+      <p>C has rules for how instructions are written. These rules are called <strong>syntax</strong>. If a line breaks one of the rules, the compiler can show an error in CLab’s <strong>Output</strong> panel.</p>
+      <p>Read the first error and look at the line it points to. Sometimes the cause is on the line just above it. Fix one thing at a time and press <strong>Run</strong> again.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-first-errors" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-first-errors.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Ready to play!
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Remove the semicolon at the end of the <code>puts</code> line and press <strong>Run</strong>. Read the error. Put the semicolon back and run again.</p>
+        <details><summary>Hint</summary><p>Look for a message about an expected <code>;</code>. Check the end of the line that prints the message.</p></details>
+        <details><summary>Answer</summary><p>The line should end with <code>);</code>. With the semicolon back in place, CLab prints <code>Ready to play!</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="first-errors-quiz">
+        <h3 id="first-errors-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>You see an error about an expected <code>;</code>. What should you check first?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The end of the line near the error</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>The color of the text</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The size of the Output panel</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>The end of the line near the error. Look at the end of the line the compiler points to and the one just above it.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Fix your first mistake navigation">
+        <a rel="prev" href="#printing">← Print words and start new lines</a>
+        <a rel="next" href="#types-output">Variables and values →</a>
       </nav>
     </section>
 
     <section class="lesson" id="types-output" aria-labelledby="types-output-title" tabindex="-1">
-      <h2 id="types-output-title">Variables, types and formatted output</h2>
-      <p>Choose a type when you declare a variable. Use <code>int</code> for whole numbers within its range, <code>double</code> for floating-point values, and <code>char</code> for a character such as <code>'A'</code>. Initialize local variables before reading their values.</p>
-      <p>In <code>printf</code>, <code>%d</code> expects an <code>int</code>, <code>%.2f</code> prints a <code>double</code> with two digits after the decimal point, and <code>%c</code> prints a character passed as an <code>int</code>. Match the format to the argument type. Use <code>\n</code> to end a line.</p>
+      <h2 id="types-output-title">Variables and values</h2>
+      <p>Imagine you have four stickers. You can give that number a name in your program. In <code>int stickers = 4;</code>, <code>stickers</code> is a <strong>variable</strong>. It has a name, a type and a starting value. Here <code>int</code> is a type for whole numbers within a fixed range.</p>
+      <p>You can change the value later with <code>stickers = stickers + 2;</code>. C first adds 2 to the old value, then stores the result in <code>stickers</code>. In <code>printf</code>, write <code>%d</code> where you want an <code>int</code> value to appear.</p>
+      <figure class="lesson-diagram">
+        <figcaption>Read <code>int stickers = 4;</code> from left to right</figcaption>
+        <dl class="variable-parts">
+          <div><dt>Type</dt><dd><code>int</code></dd></div>
+          <div><dt>Name</dt><dd><code>stickers</code></dd></div>
+          <div><dt>Starting value</dt><dd><code>4</code></dd></div>
+        </dl>
+      </figure>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -102,26 +276,83 @@
           <span class="copy-status" role="status"></span>
         </div>
         <h4>Expected output</h4>
-        <pre><code>Section A: 4 items
-Total: 50.00
+        <pre><code>I have 4 stickers.
+Now I have 6 stickers.
 </code></pre>
       </div>
       <div class="practice">
         <h3>Exercise</h3>
-        <p>Change the quantity so that the total is 75.00.</p>
-        <details><summary>Hint</summary><p>Divide the target total by the unit price.</p></details>
-        <details><summary>Answer</summary><p>Set <code>count</code> to <code>6</code>.</p></details>
+        <p>Start with 5 stickers. Give one to a friend. What will the program print?</p>
+        <details><summary>Hint</summary><p>Change the starting value and use subtraction to give away a sticker.</p></details>
+        <details><summary>Answer</summary><p>Use <code>int stickers = 5;</code> and <code>stickers = stickers - 1;</code>. You start with 5 stickers and finish with 4.</p></details>
       </div>
-      <nav class="lesson-nav" aria-label="Variables, types and formatted output navigation">
-        <a rel="prev" href="#first-program">← Your first C program</a>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="types-output-quiz">
+        <h3 id="types-output-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What number is stored after <code>stickers = stickers + 2;</code> if stickers started at 4?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>2</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>6</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>4</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>6. C adds 2 to the old value of 4 and stores 6.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Variables and values navigation">
+        <a rel="prev" href="#first-errors">← Fix your first mistake</a>
+        <a rel="next" href="#more-types">Whole numbers, decimals and characters →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="more-types" aria-labelledby="more-types-title" tabindex="-1">
+      <h2 id="more-types-title">Whole numbers, decimals and characters</h2>
+      <p>Use <code>int</code> for a count such as 3 notebooks. Use <code>double</code> for numbers that may have a fractional part, such as a price of 2.50. Use <code>char</code> for a single character such as <code>'A'</code>. A character such as <code>'A'</code> uses single quotation marks. Text such as <code>"Team A"</code> uses double quotation marks.</p>
+      <p>In <code>printf</code>, <code>%d</code> prints an <code>int</code>, <code>%.2f</code> prints a <code>double</code> rounded to two digits after the decimal point, and <code>%c</code> prints a character. Write a value of the right type after the comma. The example uses <code>(int)team</code> to give <code>%c</code> the <code>int</code> it expects.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-more-types" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-more-types.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Team: A
+Notebooks: 3
+Price of one: 2.50
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change the team to B and the price to 3.75.</p>
+        <details><summary>Hint</summary><p>Keep single quotation marks around the new team letter. Write the new price as a number.</p></details>
+        <details><summary>Answer</summary><p>Use <code>char team = 'B';</code> and <code>double price = 3.75;</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="more-types-quiz">
+        <h3 id="more-types-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which declaration can hold the decimal value 2.50?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>char price = 'A';</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>int price = 2.50;</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>double price = 2.50;</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>double price = 2.50;</code>. <code>double</code> can hold a fractional part. The <code>int</code> declaration would store 2.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Whole numbers, decimals and characters navigation">
+        <a rel="prev" href="#types-output">← Variables and values</a>
         <a rel="next" href="#operators">Arithmetic and conversions →</a>
       </nav>
     </section>
 
     <section class="lesson" id="operators" aria-labelledby="operators-title" tabindex="-1">
       <h2 id="operators-title">Arithmetic and conversions</h2>
-      <p>When both operands of <code>/</code> have integer type, the quotient is truncated toward zero. The <code>%</code> operator gives the remainder for integer operands. Keep the divisor nonzero.</p>
-      <p>Cast an operand to <code>double</code> before division when you want a floating-point quotient. Use parentheses when the grouping matters. A signed integer result outside the type’s representable range has undefined behavior.</p>
+      <p>Suppose 5 friends share 17 whole cookies equally. Each friend gets 3 cookies, and 2 are left over. In C, <code>17 / 5</code> gives 3 and <code>17 % 5</code> gives 2. When both numbers are integers, C drops the fractional part of the quotient. The divisor must be nonzero.</p>
+      <p>If you can cut the cookies, the share is 3.4 cookies. Write <code>(double)total / groups</code> to convert the first number before dividing. This conversion is called a <strong>cast</strong>.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -134,9 +365,9 @@ Total: 50.00
           <span class="copy-status" role="status"></span>
         </div>
         <h4>Expected output</h4>
-        <pre><code>Whole quotient: 3
-Remainder: 2
-Mean: 3.40
+        <pre><code>Cookies each: 3
+Cookies left: 2
+Exact share: 3.40
 </code></pre>
       </div>
       <div class="practice">
@@ -145,15 +376,27 @@ Mean: 3.40
         <details><summary>Hint</summary><p>Evaluate the expression inside the inner parentheses first.</p></details>
         <details><summary>Answer</summary><p>Integer division produces <code>3</code>, which the cast converts to <code>3.0</code>.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="operators-quiz">
+        <h3 id="operators-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is <code>17 % 5</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>2</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>3</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>3.4</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>2. Three groups of 5 use 15. The remainder is 2.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Arithmetic and conversions navigation">
-        <a rel="prev" href="#types-output">← Variables, types and formatted output</a>
+        <a rel="prev" href="#more-types">← Whole numbers, decimals and characters</a>
         <a rel="next" href="#decisions">Decisions with if and else →</a>
       </nav>
     </section>
 
     <section class="lesson" id="decisions" aria-labelledby="decisions-title" tabindex="-1">
       <h2 id="decisions-title">Decisions with if and else</h2>
-      <p>Use <code>if</code> to execute a block when its condition is nonzero. An <code>else if</code> chain tests conditions in order and executes the first matching block. The final <code>else</code> handles the remaining cases.</p>
+      <p>A game can show a message based on the player’s score. Use <code>if</code> to ask a yes-or-no question such as <code>score &gt;= 75</code>. Use <code>else if</code> to ask another question when the first answer is no. The final <code>else</code> covers every score left.</p>
       <p><code>==</code> compares values, while <code>=</code> assigns a value. Use <code>&amp;&amp;</code> for a conjunction and <code>||</code> for a disjunction. They evaluate left to right and skip the second operand if the first already determines the result.</p>
       <div class="example">
         <div class="example-header">
@@ -176,6 +419,18 @@ Mean: 3.40
         <details><summary>Hint</summary><p>Pay attention to whether the lower boundary is included.</p></details>
         <details><summary>Answer</summary><p>The outputs are <code>Try again</code>, <code>Pass</code>, <code>Distinction</code> and <code>Invalid score</code>, respectively.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="decisions-quiz">
+        <h3 id="decisions-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>With a score of 72, which message does the example print?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Distinction</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Pass</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Try again</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Pass. 72 is below 75 and at least 40, so it reaches the Pass branch.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Decisions with if and else navigation">
         <a rel="prev" href="#operators">← Arithmetic and conversions</a>
         <a rel="next" href="#switch">Multiple choices with switch →</a>
@@ -207,6 +462,18 @@ Mean: 3.40
         <details><summary>Hint</summary><p>Add a case before <code>default</code> and test it.</p></details>
         <details><summary>Answer</summary><p>Add <code>case 'r': puts("Range"); break;</code> and assign <code>'r'</code> to <code>choice</code>.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="switch-quiz">
+        <h3 id="switch-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the job of <code>break</code> inside this switch?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Run the next case</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Start the switch again</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Leave the switch</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Leave the switch. <code>break</code> leaves the switch after the matching case runs.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Multiple choices with switch navigation">
         <a rel="prev" href="#decisions">← Decisions with if and else</a>
         <a rel="next" href="#loops">Loops with for and while →</a>
@@ -215,7 +482,7 @@ Mean: 3.40
 
     <section class="lesson" id="loops" aria-labelledby="loops-title" tabindex="-1">
       <h2 id="loops-title">Loops with for and while</h2>
-      <p>Use a <code>for</code> loop when a counter organizes the work. The initializer runs once. The condition is checked before each iteration and the update runs after the body. A <code>while</code> loop also checks before each iteration.</p>
+      <p>A <strong>loop</strong> repeats instructions. Think of adding one number at a time from 1 to 5. The <code>for</code> loop starts at 1, checks whether it has gone past 5, adds the current number, and then moves to the next number. A <code>while</code> loop also checks its condition before each repeat.</p>
       <p>A <code>do</code>–<code>while</code> loop tests after its body and therefore runs at least once. In this program, the counter in the <code>for</code> loop ranges from 1 through 5, inclusive.</p>
       <div class="example">
         <div class="example-header">
@@ -241,15 +508,118 @@ Mean: 3.40
         <details><summary>Hint</summary><p>Advance the counter by 2 each time.</p></details>
         <details><summary>Answer</summary><p>Use <code>for (int i = 2; i &lt;= 10; i += 2)</code>. The sum is 30.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="loops-quiz">
+        <h3 id="loops-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the last value added by the first loop?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>5</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>6</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>5. The condition <code>i &lt;= 5</code> includes 5.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Loops with for and while navigation">
         <a rel="prev" href="#switch">← Multiple choices with switch</a>
+        <a rel="next" href="#number-tables">Make a multiplication table →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="number-tables" aria-labelledby="number-tables-title" tabindex="-1">
+      <h2 id="number-tables-title">Make a multiplication table</h2>
+      <p>Let’s make a table with three rows and four columns. Each spot shows its row number multiplied by its column number. The number in row 2, column 3 is <code>2 * 3</code>, which is 6.</p>
+      <p>Put one loop inside another. The outer loop chooses a row. For that row, the inner loop goes through all four columns. The format <code>%3d</code> gives each number at least three character positions. If the number uses fewer than three, <code>printf</code> puts spaces on its left. After the inner loop finishes, <code>putchar('\n')</code> starts a new row.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-number-tables" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-number-tables.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>  1  2  3  4
+  2  4  6  8
+  3  6  9 12
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change the table to four rows and five columns. Check the bottom-right number.</p>
+        <details><summary>Hint</summary><p>Change the limit in each loop. The bottom-right number is the last row times the last column.</p></details>
+        <details><summary>Answer</summary><p>Set the row limit to 4 and the column limit to 5. The bottom-right number is <code>20</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="number-tables-quiz">
+        <h3 id="number-tables-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How many times does the inner loop run for each row of the original table?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>3 times</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4 times</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>12 times</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4 times. The columns are numbered 1, 2, 3, and 4 for each row.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Make a multiplication table navigation">
+        <a rel="prev" href="#loops">← Loops with for and while</a>
+        <a rel="next" href="#number-pyramid">Build a number pyramid →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="number-pyramid" aria-labelledby="number-pyramid-title" tabindex="-1">
+      <h2 id="number-pyramid-title">Build a number pyramid</h2>
+      <p>Print one row at a time. The first row has only <code>1</code>. The next row climbs from 1 to 2 and comes back down to 1. The third climbs to 3 and comes back down again.</p>
+      <p>Each row has three parts. First print enough spaces to move the row into the middle. Then print the numbers up to the row number. Finally, print back down from one below the row number so the biggest digit appears only once.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-number-pyramid" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-number-pyramid.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>   1
+  121
+ 12321
+1234321
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make a pyramid with five rows. Predict the first and last rows before you run it.</p>
+        <details><summary>Hint</summary><p>Change only <code>height</code>. Each row uses that value to figure out its spaces.</p></details>
+        <details><summary>Answer</summary><p>Set <code>height</code> to 5. The first row is four spaces followed by <code>1</code>. The last row is <code>123454321</code>. Keep the height at 9 or less so each number uses one digit.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="number-pyramid-quiz">
+        <h3 id="number-pyramid-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which digits does row 3 print, ignoring the spaces at the front?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>123321</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>123</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>12321</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>12321. It climbs from 1 to 3, then counts down through 2 and 1.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Build a number pyramid navigation">
+        <a rel="prev" href="#number-tables">← Make a multiplication table</a>
         <a rel="next" href="#arrays">Arrays and bounds →</a>
       </nav>
     </section>
 
     <section class="lesson" id="arrays" aria-labelledby="arrays-title" tabindex="-1">
       <h2 id="arrays-title">Arrays and bounds</h2>
-      <p>An array stores a fixed number of elements of the same type in order. Its first element has index 0. An array of length <var>n</var> can be indexed from 0 through <var>n</var> − 1. Access outside this range has undefined behavior.</p>
+      <p>Keep four game scores in one ordered list called an <strong>array</strong>. Every value in the list has the same type. Its position is called its <strong>index</strong>. The first score is <code>scores[0]</code> and the fourth is <code>scores[3]</code>. Stay within those positions. C gives no reliable result when you go outside the array.</p>
       <p>For an array object in scope, <code>sizeof scores / sizeof scores[0]</code> gives the number of elements. The result has type <code>size_t</code>. To declare a 2 × 3 array of integers, use <code>int grid[2][3];</code> and access its elements as <code>grid[row][column]</code>.</p>
       <div class="example">
         <div class="example-header">
@@ -272,15 +642,27 @@ Mean: 3.40
         <details><summary>Hint</summary><p>The loop already uses the length computed from the array.</p></details>
         <details><summary>Answer</summary><p>The new sum is 45, and the new mean is <code>9.00</code>.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="arrays-quiz">
+        <h3 id="arrays-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which expression reads the fourth score?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>scores[3]</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>scores[4]</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>scores[1]</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>scores[3]</code>. The first score is at index 0, so the fourth score is at index 3.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Arrays and bounds navigation">
-        <a rel="prev" href="#loops">← Loops with for and while</a>
+        <a rel="prev" href="#number-pyramid">← Build a number pyramid</a>
         <a rel="next" href="#strings">Strings and the null character →</a>
       </nav>
     </section>
 
     <section class="lesson" id="strings" aria-labelledby="strings-title" tabindex="-1">
       <h2 id="strings-title">Strings and the null character</h2>
-      <p>A C string is a sequence of characters terminated by the null character <code>'\0'</code>. A character array holding a string needs capacity for that final character.</p>
+      <p>Text such as <code>"cat"</code> is called a <strong>string</strong>. C stores it as the letters followed by a special end marker called the null character <code>'\0'</code>. A character array holding a string needs capacity for that final character.</p>
       <p><code>strlen</code> counts the bytes before the terminator. <code>sizeof</code> on the array gives its full capacity in bytes. Use <code>strcmp(a, b) == 0</code> to test string contents for equality. You can change the elements of the array initialized below. Attempting to modify a string literal itself has undefined behavior.</p>
       <div class="example">
         <div class="example-header">
@@ -304,6 +686,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>Update the changed letters and leave a terminator after the last one.</p></details>
         <details><summary>Answer</summary><p>Set <code>word[1] = 'o'; word[2] = 'a'; word[3] = 't'; word[4] = '\0';</code>. The new length is 4.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="strings-quiz">
+        <h3 id="strings-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How many array slots does the C string <code>bat</code> need at minimum?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>3</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>10</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4. It needs three letters and one slot for the end marker.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Strings and the null character navigation">
         <a rel="prev" href="#arrays">← Arrays and bounds</a>
         <a rel="next" href="#functions">Functions and parameters →</a>
@@ -312,7 +706,7 @@ Length: 3, capacity: 10
 
     <section class="lesson" id="functions" aria-labelledby="functions-title" tabindex="-1">
       <h2 id="functions-title">Functions and parameters</h2>
-      <p>A function can receive arguments and return a result. Provide a declaration before its first call, either by defining the function earlier or by using a prototype as below. Local variables declared inside a function body are scoped to their block.</p>
+      <p>A function can do one job for you. The function below takes the length and width of a rectangle and gives back its area. The line above <code>main</code> tells C the function’s name and the kinds of values it takes and returns. That line is called a <strong>prototype</strong>.</p>
       <p>C passes arguments by value. Each parameter receives a value derived from its argument. A function that accepts an array through a parameter such as <code>int a[]</code> actually receives a pointer. Pass the element count separately.</p>
       <div class="example">
         <div class="example-header">
@@ -335,6 +729,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>The formula is twice the sum of the side lengths.</p></details>
         <details><summary>Answer</summary><p>Use <code>return 2 * (length + width);</code> in a function with two <code>double</code> parameters. The perimeter is <code>13.00</code>.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="functions-quiz">
+        <h3 id="functions-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>rectangle_area(4.0, 2.5)</code> give back?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>6.5</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>13.0</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>10.0</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>10.0. The function multiplies 4.0 and 2.5.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Functions and parameters navigation">
         <a rel="prev" href="#strings">← Strings and the null character</a>
         <a rel="next" href="#pointers">Pointers and addresses →</a>
@@ -343,8 +749,8 @@ Length: 3, capacity: 10
 
     <section class="lesson" id="pointers" aria-labelledby="pointers-title" tabindex="-1">
       <h2 id="pointers-title">Pointers and addresses</h2>
-      <p>A pointer can hold the address of an object. <code>&amp;x</code> gets the address of <code>x</code>, and <code>*p</code> accesses the object to which <code>p</code> points. Use a pointer to let a function update an object owned by its caller.</p>
-      <p>Dereference only a pointer that points to a suitable, live object. A null pointer points to no object. A pointer argument is itself passed by value, so assigning to the parameter changes only the function’s local copy of the pointer.</p>
+      <p>A variable lives at a location in memory. A <strong>pointer</strong> can hold that location, called an address. Write <code>&amp;x</code> to get the address of <code>x</code>. If <code>p</code> holds that address, <code>*p</code> lets you read or change the value there. The example uses two addresses to swap two scores.</p>
+      <p>Dereference only a pointer that points to a suitable, live object. A null pointer has no object to point to. In the example, <code>*a = *b;</code> changes the score at the first address. Writing <code>a = b;</code> would only change which address the local pointer holds.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -366,6 +772,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>Both pointers would refer to the same object.</p></details>
         <details><summary>Answer</summary><p>The value of <code>left</code> would stay the same. Each assignment would write its original value.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="pointers-quiz">
+        <h3 id="pointers-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>&amp;left</code> give to the swap function?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The address of left</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>The value stored in left</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The address of right</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>The address of left. The address lets the function find and change left.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Pointers and addresses navigation">
         <a rel="prev" href="#functions">← Functions and parameters</a>
         <a rel="next" href="#input">Reading and validating input →</a>
@@ -400,6 +818,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>Enter one test line in Prepared input, or clear it and respond to the prompt in Output.</p></details>
         <details><summary>Answer</summary><p>The program accepts the first and prints <code>You entered -12</code>. It rejects the trailing <code>x</code> and rejects the empty line because no digits were read.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="input-quiz">
+        <h3 id="input-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Why does the input example reject <code>12x</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The number 12 is too large</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>An extra non-space character follows the number</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>It only accepts negative numbers</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>An extra non-space character follows the number. The parser reads 12 and then finds the extra letter x.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Reading and validating input navigation">
         <a rel="prev" href="#pointers">← Pointers and addresses</a>
         <a rel="next" href="#structures">Structures and records →</a>
@@ -408,8 +838,8 @@ Length: 3, capacity: 10
 
     <section class="lesson" id="structures" aria-labelledby="structures-title" tabindex="-1">
       <h2 id="structures-title">Structures and records</h2>
-      <p>A <code>struct</code> groups related members, which can have different types. Use <code>.</code> to access members of a structure object and <code>-&gt;</code> when using a pointer to that structure.</p>
-      <p>The example uses designated initializers to name the members. A structure can be assigned to another object of the same type, including when some members are arrays.</p>
+      <p>A point on a map has two coordinates. You can keep both together in a <strong>structure</strong>, written <code>struct</code> in C. Each named part is a <strong>member</strong>. Write <code>p.x</code> for the <code>x</code> part of <code>p</code>, or <code>point-&gt;x</code> if <code>point</code> is a pointer to it.</p>
+      <p>When you make the point, write <code>.x = 2.0</code> and <code>.y = 3.0</code> to give both parts their starting values. The names show which number goes with which part.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -431,6 +861,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>Subtract its current coordinates.</p></details>
         <details><summary>Answer</summary><p>Insert <code>translate(&amp;p, -p.x, -p.y);</code> before printing.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="structures-quiz">
+        <h3 id="structures-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How do you read the x coordinate of the structure variable <code>p</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>p[x]</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>x.p</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>p.x</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>p.x</code>. The dot selects a named member of a structure.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Structures and records navigation">
         <a rel="prev" href="#input">← Reading and validating input</a>
         <a rel="next" href="#memory">Dynamic memory with malloc and free →</a>
@@ -439,7 +881,7 @@ Length: 3, capacity: 10
 
     <section class="lesson" id="memory" aria-labelledby="memory-title" tabindex="-1">
       <h2 id="memory-title">Dynamic memory with malloc and free</h2>
-      <p>Use <code>malloc</code> to request storage whose lifetime you control. Use <code>sizeof *values</code> to calculate the size of one element. For a count supplied by the user, validate it and check that the multiplication fits in <code>size_t</code> before allocating.</p>
+      <p>Sometimes you only find out how many scores to store while your program is running. <code>malloc</code> asks for space in memory. Multiply the number of scores by the size of one score, given by <code>sizeof *values</code>. This example uses four scores. For a count entered by the user, check that it is valid and that the multiplication fits before you ask for space.</p>
       <p>Check for a null result before accessing the allocation. <code>malloc</code> leaves the storage uninitialized, so write values before reading them. Release the memory with <code>free</code> when finished and avoid using pointers to the freed storage.</p>
       <div class="example">
         <div class="example-header">
@@ -462,6 +904,18 @@ Length: 3, capacity: 10
         <details><summary>Hint</summary><p>Think about empty input and the largest value a <code>size_t</code> can hold.</p></details>
         <details><summary>Answer</summary><p>If the program needs at least one element, require <code>count &gt; 0</code>. Reject <code>count &gt; SIZE_MAX / sizeof *values</code> before multiplying. Include <code>&lt;stdint.h&gt;</code> for <code>SIZE_MAX</code>.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="memory-quiz">
+        <h3 id="memory-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What should you check immediately after calling <code>malloc</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Whether its result is null</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Whether the numbers are already sorted</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Whether the first number is zero</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Whether its result is null. A null result means the storage was not allocated.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Dynamic memory with malloc and free navigation">
         <a rel="prev" href="#structures">← Structures and records</a>
         <a rel="next" href="#files">Reading a text file →</a>
@@ -498,6 +952,18 @@ A second line.
         <details><summary>Hint</summary><p>Compare the file name with the one passed to <code>fopen</code>.</p></details>
         <details><summary>Answer</summary><p>Opening <code>greeting.txt</code> fails. Update the path in <code>fopen</code> to match the renamed file.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="files-quiz">
+        <h3 id="files-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does a null result from <code>fopen</code> tell you?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The file is empty</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Opening the file failed</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The file was printed</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Opening the file failed. The program needs a valid file pointer before it can read the file.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Reading a text file navigation">
         <a rel="prev" href="#memory">← Dynamic memory with malloc and free</a>
         <a rel="next" href="#debugging">Compiler diagnostics and debugging →</a>
@@ -529,6 +995,18 @@ A second line.
         <details><summary>Hint</summary><p>Write down the sequence of counter values.</p></details>
         <details><summary>Answer</summary><p>The loop sums 1, 2 and 3, yielding 6. With assertions enabled, the program stops at the failed check.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="debugging-quiz">
+        <h3 id="debugging-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does the example use <code>assert(sum == 10)</code> to check?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The length of the file name</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Whether the loop started at 1</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Whether the final sum is 10</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Whether the final sum is 10. With assertions enabled, the check fails if the sum is any value other than 10.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Compiler diagnostics and debugging navigation">
         <a rel="prev" href="#files">← Reading a text file</a>
         <a rel="next" href="#statistics">Project: summarize a data set →</a>
@@ -537,8 +1015,8 @@ A second line.
 
     <section class="lesson" id="statistics" aria-labelledby="statistics-title" tabindex="-1">
       <h2 id="statistics-title">Project: summarize a data set</h2>
-      <p>Combine arrays, loops, functions and a structure to compute the minimum, maximum and arithmetic mean of a small data set. Work through the sample by hand so you have an independent check.</p>
-      <p>The summary function expects a nonempty array and its length. Starting both extrema at the first data value handles a data set containing only negative numbers. A running sum works for this small example. Large or extreme data sets may require care with floating-point range and rounding.</p>
+      <p>Four players score 2, 6, 3, and 5 points. Find the lowest score, the highest score, and the average. To check the average by hand, add the four scores and divide by 4. Then see whether your program agrees.</p>
+      <p>The function needs at least one score. It starts with the first score as both the lowest and the highest, then checks every score in turn. It adds the scores as it goes. At the end it divides their total by the number of players.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -562,6 +1040,18 @@ Mean: 4.00
         <details><summary>Hint</summary><p>The range is the maximum minus the minimum.</p></details>
         <details><summary>Answer</summary><p>The range is <code>6.00</code>. The minimum, maximum and mean are −8.00, −2.00 and −5.00.</p></details>
       </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="statistics-quiz">
+        <h3 id="statistics-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the average of 2, 6, 3, and 5?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>5</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>16</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4. The total is 16. Divide by the four scores to get 4.</p></details>
+      </form>
       <nav class="lesson-nav" aria-label="Project: summarize a data set navigation">
         <a rel="prev" href="#debugging">← Compiler diagnostics and debugging</a>
         <a href="#reference">Language references →</a>
@@ -570,6 +1060,7 @@ Mean: 4.00
 
     <footer class="references" id="reference">
       <h2>Language references</h2>
+      <p>The course uses C17. Each practice tab opens with its own example and sample data. To keep your changes, use <strong>File → Save</strong> in that tab.</p>
       <ul>
         <li><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 draft N1570 (PDF)</a> — the C11 committee draft. Sections 6 and 7 cover the core language and standard library used in these lessons.</li>
         <li><a href="https://en.cppreference.com/w/c">C reference</a> — syntax, library functions, and the C versions that introduced them.</li>

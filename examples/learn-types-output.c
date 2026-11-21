@@ -2,11 +2,10 @@
 
 int main(void)
 {
-    int count = 4;
-    const double price = 12.50;
-    char section = 'A';
+    int stickers = 4;
+    printf("I have %d stickers.\n", stickers);
 
-    printf("Section %c: %d items\n", (int)section, count);
-    printf("Total: %.2f\n", count * price);
+    stickers = stickers + 2;
+    printf("Now I have %d stickers.\n", stickers);
     return 0;
 }

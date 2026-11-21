@@ -2,6 +2,8 @@
 
 int main(void)
 {
-    puts("Hello, C!");
+    // Print two messages.
+    puts("Ready?");
+    puts("Go!");
     return 0;
 }
