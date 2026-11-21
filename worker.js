@@ -5,6 +5,7 @@ importScripts('vendor/clang-wasm-toolchain.global.js');
 
 const T = self.clangWasmToolchain;
 let toolchainPromise = null;
+let cppReady = false;
 
 function getToolchain() {
   if (!toolchainPromise) {
@@ -65,12 +66,21 @@ function collect(dir, prefix, out) {
 async function runProgram(msg) {
   const tc = await getToolchain();
   self.postMessage({ type: 'ready' });
+  const language = msg.language === 'CPP' ? 'CPP' : 'C';
   return tc.lock(async () => {
+    if (language === 'CPP' && !cppReady) {
+      self.postMessage({ type: 'cpp-loading' });
+      await Promise.all([
+        tc.runtime.ensureCppSysroot(),
+        tc.runtime.getModule(tc.runtime.assetUrls.lld)
+      ]);
+      cppReady = true;
+    }
     const started = performance.now();
     const compiled = await tc.captureCompilerOutput(() =>
       tc.runtime.compileArtifact(msg.code, {
-        language: 'C',
-        fileName: 'main.c',
+        language,
+        fileName: language === 'CPP' ? 'main.cpp' : 'main.c',
         compileArgs: [...T.CLANG_DRIVER_DEFAULT_ARGS, ...msg.flags]
       })
     );

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#f4f6ff">
-<title>C Lab: an online C editor and compiler</title>
-<meta name="description" content="A C editor and compiler that runs entirely in your browser. Clang runs as WebAssembly on your own device, so nothing is uploaded.">
+<title>C Lab: an online C and C++ editor and compiler</title>
+<meta name="description" content="A C and C++ editor and compiler that runs entirely in your browser. Clang runs as WebAssembly on your own device, so nothing is uploaded.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="brand/favicon-v2-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="brand/favicon-v2.svg" type="image/svg+xml">
@@ -19,6 +19,7 @@
     <div class="brand"><img class="logo" src="brand/logo-header.svg" alt="CLab" height="30" width="89"><span class="by">by <a href="https://mainul.pages.dev/">Mainul Hossain</a></span></div>
     <div class="hdr">
       <a class="tutorial-link" id="tutorialLink" href="tutorial/">C Tutorial</a>
+      <button id="installApp" type="button">Install</button>
       <select class="theme-choice" data-theme-choice aria-label="Color theme" hidden>
         <option value="system">System</option>
         <option value="light">Light</option>
@@ -29,13 +30,14 @@
     </div>
   </header>
   <nav class="menubar" id="menubar" role="menubar" aria-label="Menu"></nav>
-  <input type="file" id="file" accept=".c,.h,.txt,text/plain" hidden>
+  <input type="file" id="file" accept=".c,.cpp,.cc,.cxx,.h,.txt,text/plain" hidden>
 
   <div class="prog" id="prog"><progress id="bar" max="1" value="0"></progress><span id="proglabel">Downloading the compiler</span></div>
 
   <main class="panes" id="panes">
     <section class="editor" id="pEditor" aria-label="Code editor">
       <div class="ph"><span class="ttl">main.c</span>
+        <select id="language" aria-label="Programming language"><option value="C">C</option><option value="CPP">C++</option></select>
         <span class="acts"><button type="button" id="undo" aria-label="Undo">Undo</button><button type="button" id="redo" aria-label="Redo">Redo</button><button type="button" class="max" data-max="editor" aria-label="Enlarge the editor" title="Enlarge or restore">&#x2922;</button></span></div>
       <div id="code"></div>
     </section>
@@ -107,15 +109,26 @@
   </nav>
 
   <footer class="bottom">
-    <span id="status" class="status">The compiler (about 29 MB) is downloaded once, when you first press Run, and your browser keeps it. Programs are compiled and run on your device and nothing is uploaded.</span>
+    <span id="status" class="status">The compiler downloads on your first run. C++ libraries download the first time you compile C++. Programs are compiled and run on your device and nothing is uploaded.</span>
     <span class="keys"><span id="pos">Ln 1, Col 1</span> &nbsp;|&nbsp; F10 or Ctrl+Enter compiles and runs</span>
   </footer>
 </div>
+<dialog id="dlgInstall" aria-labelledby="dInstallT">
+  <form method="dialog">
+    <div class="dhead"><h2 id="dInstallT">Install CLab</h2><button type="submit">Close</button></div>
+    <div class="dbody">
+      <p><strong>iPhone and iPad:</strong> In Safari, tap Share, then Add to Home Screen. Turn on Open as Web App if offered.</p>
+      <p><strong>Android:</strong> Open the browser menu and choose Install app or Add to Home screen, if available.</p>
+      <p>Run a program once in each language you want to use offline so CLab can save its compiler files.</p>
+    </div>
+  </form>
+</dialog>
 <dialog id="dlgOpts" aria-labelledby="dOptsT">
   <form method="dialog">
     <div class="dhead"><h2 id="dOptsT">Compiler options</h2><button type="button" class="dx" data-close aria-label="Close">&times;</button></div>
     <label class="drow">Optimisation <select id="opt"><option value="-O0">O0, none (fastest to compile)</option><option value="-O1" selected>O1, some</option><option value="-O2">O2, more</option></select></label>
-    <label class="drow">C standard <select id="std"><option>gnu11</option><option selected>gnu17</option><option>c17</option><option>gnu23</option></select></label>
+    <label class="drow" id="cStandard">C standard <select id="std"><option>gnu11</option><option selected>gnu17</option><option>c17</option><option>gnu23</option></select></label>
+    <label class="drow" id="cppStandard" hidden>C++ standard <select id="cppStd"><option>c++11</option><option selected>c++17</option><option>c++20</option><option>c++23</option></select></label>
     <label class="drow">Warnings <select id="warn"><option value="none">None</option><option value="all" selected>Common (-Wall)</option><option value="extra">Many (-Wall -Wextra)</option></select></label>
     <label class="drow">Arguments <input id="args" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="passed to main as argv[1], argv[2], ..."></label>
     <div class="dbtn"><button value="close" class="run">Done</button></div>
@@ -162,14 +175,14 @@
     <div class="hero">
       <img class="wordmark" src="brand/logo-wordmark.svg" alt="CLab: powered by Clang and WebAssembly, a browser-native offline C compiler" width="420" height="162">
       <div>
-        <p class="lead">C Lab is a C editor and compiler that runs entirely inside your web browser.</p>
+        <p class="lead">C Lab is a C and C++ editor and compiler that runs entirely inside your web browser.</p>
         <p>It was made by <a href="https://mainul.pages.dev/" target="_blank" rel="noopener">Mainul Hossain</a> for students learning C and numerical methods, so that a program can be written, compiled and run on any computer or phone without installing anything.</p>
       </div>
     </div>
     <section>
       <h3>How it works</h3>
       <ol class="steps">
-        <li><strong>The compiler is downloaded once.</strong> The first time you press Run, the browser fetches a real C compiler (about 29 MB) and keeps it, so later runs start at once, even offline.</li>
+        <li><strong>The compiler is downloaded once.</strong> The first time you press Run, the browser fetches a real C compiler (about 25 MB, plus 4 MB the first time you build C++) and keeps it, so later runs start at once, even offline.</li>
         <li><strong>Your program is compiled on your device.</strong> The compiler turns your C code into WebAssembly, a compact machine code that every modern browser can run safely.</li>
         <li><strong>The program runs in a sandbox.</strong> It gets its own private folder for files and cannot touch anything else on your computer. Nothing is uploaded to a server.</li>
       </ol>
@@ -193,7 +206,7 @@
     </section>
     <section>
       <h3>Compared with a desktop compiler</h3>
-      <p>The C language and library are the same as with GCC in Dev-C++ or Code::Blocks, so a correct program gives the same results. Programs run somewhat slower than a native program, which does not matter for practical classes. The main difference is that input is typed in advance rather than while the program runs; see Help.</p>
+      <p>The C language and library are the same as with GCC in Dev-C++ or Code::Blocks, so a correct program gives the same results. Programs run somewhat slower than a native program, which does not matter for practical classes. See Help for prepared input, live input and virtual files.</p>
     </section>
     <section>
       <h3>Credits and licences</h3>

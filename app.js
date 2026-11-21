@@ -38,6 +38,50 @@
     document.querySelector('#pEditor .ttl').textContent = fileName;
     store('compilec.name', fileName);
   }
+  var language = $('language');
+  var cppFile = /\.(cpp|cc|cxx)$/i;
+  function setLanguage(mode) {
+    language.value = mode === 'CPP' ? 'CPP' : 'C';
+    $('cStandard').hidden = language.value === 'CPP';
+    $('cppStandard').hidden = language.value !== 'CPP';
+  }
+  setLanguage(practice ? 'C' : load('compilec.language') || (cppFile.test(fileName) ? 'CPP' : 'C'));
+  if (load('compilec.cppStd')) $('cppStd').value = load('compilec.cppStd');
+
+  function sourceExtension() { return language.value === 'CPP' ? '.cpp' : '.c'; }
+  language.addEventListener('change', function () {
+    setLanguage(language.value);
+    fileName = fileName.replace(/\.(?:c|cpp|cc|cxx)$/i, '') + sourceExtension();
+    document.querySelector('#pEditor .ttl').textContent = fileName;
+    store('compilec.name', fileName);
+    saveSettings();
+  });
+
+  var installPrompt;
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    installPrompt = event;
+  });
+  var installed = matchMedia('(display-mode: standalone)');
+  $('installApp').hidden = installed.matches || navigator.standalone === true;
+  window.addEventListener('appinstalled', function () {
+    installPrompt = null;
+    $('installApp').hidden = true;
+  });
+  $('installApp').addEventListener('click', async function () {
+    if (!installPrompt) {
+      $('dlgInstall').showModal();
+      return;
+    }
+    var prompt = installPrompt;
+    installPrompt = null;
+    try {
+      await prompt.prompt();
+    } catch {
+      $('dlgInstall').showModal();
+    }
+  });
+
   function okToReplace() { return !dirty || window.confirm('Replace the program in the editor? Changes since you last saved will be lost.'); }
   stdin.value = load('compilec.stdin') ?? '';
   $('args').value = load('compilec.args') || '';
@@ -282,7 +326,12 @@
     Array.from(e.dataTransfer.files).forEach(function (f) {
       f.arrayBuffer().then(function (b) {
         var bytes = new Uint8Array(b);
-        if (/\.c$/i.test(f.name)) { editor.set(new TextDecoder().decode(bytes)); setStatus('Opened ' + f.name + '.'); }
+        if (/\.c$/i.test(f.name) || cppFile.test(f.name)) {
+          if (!okToReplace()) return;
+          setLanguage(cppFile.test(f.name) ? 'CPP' : 'C');
+          setProgram(new TextDecoder().decode(bytes), f.name);
+          setStatus('Opened ' + f.name + '.');
+        }
         else { addFile(f.name, bytes); renderFiles(); persistFiles(); setStatus('Added ' + f.name + ' to Files.'); }
       });
     });
@@ -356,6 +405,7 @@
     runBtn.disabled = on || openingPractice;
     stopBtn.disabled = !on;
     $('reloadLive').disabled = on;
+    language.disabled = on;
   }
   function finish() {
     inputSignal = inputBytes = null;
@@ -407,6 +457,8 @@
       loaded = true;
       prog.classList.remove('on');
       setStatus('Compiling and running...');
+    } else if (m.type === 'cpp-loading') {
+      setStatus('Loading the C++ standard library...');
     } else if (m.type === 'running') {
       setStatus('Running...');
     } else if (m.type === 'out') {
@@ -503,6 +555,8 @@
     store('compilec.args', $('args').value);
     store('compilec.opt', $('opt').value);
     store('compilec.std', $('std').value);
+    store('compilec.language', language.value);
+    store('compilec.cppStd', $('cppStd').value);
     store('compilec.warn', $('warn').value);
   }
 
@@ -535,15 +589,16 @@
     }
     worker.postMessage({
       type: 'run', code: editor.get(), input: stdin.value, args: splitArgs($('args').value),
-      compileOnly: compileOnly, inputBuffer: inputBuffer,
-      flags: [$('opt').value].concat(warnFlags(), ['-std=' + $('std').value]),
+      compileOnly: compileOnly, inputBuffer: inputBuffer, language: language.value,
+      flags: [$('opt').value].concat(warnFlags(), ['-std=' + $(language.value === 'CPP' ? 'cppStd' : 'std').value]),
       files: files.map(function (f) { return { name: f.name, bytes: f.bytes.slice().buffer }; })
     });
   }
 
   function stop() {
     if (!running) return;
-    startWorker();
+    if (worker) worker.terminate();
+    worker = null;
     loaded = false;
     finish();
     setStatus('Stopped. The output so far is kept above.');
@@ -571,7 +626,7 @@
     return new Response(stream.readable).arrayBuffer().then(function (b) { return new Uint8Array(b); });
   }
   function encodeShare() {
-    var data = new TextEncoder().encode(JSON.stringify({ c: editor.get(), i: stdin.value, a: $('args').value, o: $('opt').value, s: $('std').value }));
+    var data = new TextEncoder().encode(JSON.stringify({ c: editor.get(), i: stdin.value, a: $('args').value, o: $('opt').value, s: $('std').value, l: language.value, cpp: $('cppStd').value }));
     if (window.CompressionStream) return pipe(data, new CompressionStream('deflate-raw')).then(function (z) { return 'z' + toB64(z); });
     return Promise.resolve('p' + toB64(data));
   }
@@ -591,7 +646,9 @@
   }
   if (incomingShare) {
     decodeShare(location.hash.slice(3)).then(function (d) {
-      setProgram(String(d.c || ''), 'main.c'); stdin.value = d.i || ''; $('args').value = d.a || '';
+      setLanguage(d.l);
+      if (d.cpp && Array.from($('cppStd').options).some(function (o) { return o.value === d.cpp; })) $('cppStd').value = d.cpp;
+      setProgram(String(d.c || ''), 'main' + sourceExtension()); stdin.value = d.i || ''; $('args').value = d.a || '';
       if (d.o) $('opt').value = d.o;
       if (d.s) $('std').value = d.s;
       history.replaceState(null, '', location.pathname + location.search);
@@ -608,6 +665,7 @@
       return r.text();
     }).then(function (text) {
       if (openingPractice && !okToReplace()) return;
+      setLanguage('C');
       setProgram(text, e.id + '.c');
       stdin.value = e.input;
       (e.files || []).forEach(function (f) { addFile(f.name, new TextEncoder().encode(f.text)); });
@@ -622,7 +680,10 @@
   }
   function newProgram() {
     if (!okToReplace()) return;
-    setProgram(HELLO, 'main.c'); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
+    var starter = language.value === 'CPP'
+      ? '#include <iostream>\n\nint main() {\n    std::cout << "Hello, C++!\\n";\n}\n'
+      : HELLO;
+    setProgram(starter, 'main' + sourceExtension()); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
   }
   function saveC(askName) {
     var name = fileName;
@@ -630,7 +691,7 @@
       name = window.prompt('Save as', fileName);
       if (!name) return;
       name = cleanName(name);
-      if (!/\.[A-Za-z]+$/.test(name)) name += '.c';
+      if (!/\.[A-Za-z]+$/.test(name)) name += sourceExtension();
     }
     fileName = name;
     document.querySelector('#pEditor .ttl').textContent = name;
@@ -644,7 +705,7 @@
     this.value = '';
     if (!f || !okToReplace()) return;
     var rd = new FileReader();
-    rd.onload = function () { setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
+    rd.onload = function () { setLanguage(cppFile.test(f.name) ? 'CPP' : 'C'); setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
     rd.readAsText(f);
   });
   fetch('examples/examples.json').then(function (r) { return r.json(); }).then(function (list) {
@@ -665,7 +726,7 @@
   var MENUS = [
     { label: 'File', items: function () { return [
       { t: 'New program', f: newProgram },
-      { t: 'Open .c file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
+      { t: 'Open source file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
       { t: 'Save', k: 'Ctrl+S', f: function () { saveC(false); } },
       { t: 'Save as...', f: function () { saveC(true); } },
       '-',
@@ -807,7 +868,7 @@
     else if (mod && !e.shiftKey && !e.altKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); $('file').click(); }
   });
   $('dlgOpts').addEventListener('close', saveSettings);
-  [$('dlgOpts'), $('dlgHelp'), $('dlgAbout')].forEach(function (d) {
+  [$('dlgOpts'), $('dlgHelp'), $('dlgAbout'), $('dlgInstall')].forEach(function (d) {
     d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
     d.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { d.close(); }); });
     d.addEventListener('close', function () { var bd = d.querySelector('.dbody'); if (bd) bd.scrollTop = 0; });
