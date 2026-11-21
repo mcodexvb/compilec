@@ -1,33 +1,33 @@
 .tutorial {
-  --paper: #fbfaf7;
-  --ink: #202725;
-  --secondary: #505d56;
-  --rule: #d6dcd5;
-  --wash: #edf1eb;
-  --accent: #17624e;
+  --paper: #ffffff;
+  --ink: #182437;
+  --secondary: #4a5b70;
+  --rule: #d5dfed;
+  --wash: #eef3fa;
+  --accent: #194bb0;
   --accent-ink: #fff;
-  --code-bg: #f2f4ef;
-  --keyword: #4f3c94;
-  --string: #225e40;
-  --number: #8a431f;
+  --code-bg: #ffffff;
+  --keyword: #6840a5;
+  --string: #1b634b;
+  --number: #925020;
   color: var(--ink);
   background: var(--paper);
   height: auto;
   min-height: 100%;
   overscroll-behavior: auto;
-  font: 18px/1.58 "Libertinus Serif", Georgia, serif;
+  font: 16px/1.6 system-ui, sans-serif;
 }
 [data-theme="dark"] .tutorial {
-  --paper: #171d1b;
-  --ink: #e8ede7;
-  --secondary: #aab9b0;
-  --rule: #415048;
-  --wash: #27332d;
-  --accent: #a8dcbf;
-  --accent-ink: #10251c;
-  --code-bg: #202923;
+  --paper: #111b2c;
+  --ink: #ebf1fb;
+  --secondary: #b7c6dc;
+  --rule: #3a4c66;
+  --wash: #1c2c44;
+  --accent: #a8c8ff;
+  --accent-ink: #172645;
+  --code-bg: #111c30;
   --keyword: #d2beff;
-  --string: #b2d8a2;
+  --string: #afdeb4;
   --number: #f6bf91;
 }
 .tutorial a { color: var(--accent); text-underline-offset: .18em; }
@@ -43,7 +43,8 @@
 }
 .tutorial .skip-to-content:focus { transform: none; }
 .tutorial .top {
-  padding: .75rem max(1.25rem, calc((100% - 72rem) / 2));
+  padding: .7rem clamp(1rem, 3vw, 2rem);
+  border-top: .25rem solid var(--accent);
   background: var(--paper);
   border-color: var(--rule);
 }
@@ -53,92 +54,85 @@
   background: var(--paper);
   border-color: var(--rule);
 }
-.editor-link, .course-sidebar, .chapter-position, .example-header, .sample-io h4,
-.practice h3, .lesson-quiz h3, .lesson-nav, .tutorial button {
-  font: 500 .875rem/1.4 system-ui, sans-serif;
-}
+.editor-link, .course-sidebar, .example-header, .sample-io h4,
+.practice h3, .lesson-quiz h3, .lesson-nav, .tutorial button { font-size: .875rem; }
 .course-layout {
   display: grid;
-  grid-template-columns: minmax(12rem, 14rem) minmax(0, 46rem);
-  gap: clamp(2rem, 6vw, 6rem);
-  max-width: 74rem;
+  grid-template-columns: minmax(13rem, 16rem) minmax(0, 64rem);
+  max-width: 86rem;
   margin-inline: auto;
-  padding: clamp(1.2rem, 4vw, 3rem);
   align-items: start;
 }
 .course-sidebar {
   position: sticky;
-  top: 1.5rem;
-  max-height: calc(100dvh - 3rem);
+  top: 0;
+  min-height: calc(100dvh - 4rem);
+  max-height: 100dvh;
   overflow: auto;
-  padding-inline-end: 1rem;
+  padding: 1.35rem 0 1rem;
+  background: var(--wash);
   border-inline-end: 1px solid var(--rule);
   scrollbar-width: thin;
 }
 .course-contents > summary {
   font-weight: 700;
-  margin-bottom: .65rem;
+  margin: 0 1rem .65rem;
   cursor: pointer;
 }
 .course-sidebar h3 {
-  margin: 1.2rem 0 .3rem .55rem;
+  margin: 1.15rem 1rem .3rem;
   font: 650 .78rem/1.4 system-ui, sans-serif;
   color: var(--secondary);
 }
 .course-sidebar ul { list-style: none; padding: 0; margin: 0; }
 .course-sidebar a {
   display: block;
-  padding: .34rem .55rem;
+  padding: .35rem 1rem;
   color: var(--ink);
   text-decoration: none;
 }
-.course-sidebar a:hover { text-decoration: underline; }
+.course-sidebar a:hover { background: var(--paper); }
 .course-sidebar a[aria-current] {
-  background: var(--wash);
-  box-shadow: inset 2px 0 var(--accent);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
   font-weight: 650;
 }
+.course-sidebar a[aria-current]:focus-visible { outline-offset: -3px; outline-color: var(--accent-ink); }
 .course-sidebar .reference-link { margin-top: .65rem; }
-.course-main { min-width: 0; }
+.course-main { min-width: 0; padding: clamp(1.25rem, 4vw, 3rem); }
 .course-intro {
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.85rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.35rem;
   border-bottom: 1px solid var(--rule);
 }
 .course-intro h1 {
-  font: 600 clamp(2.6rem, 6vw, 4.3rem)/1.04 "Libertinus Serif", Georgia, serif;
+  font: 700 clamp(1.9rem, 5vw, 3.2rem)/1.12 system-ui, sans-serif;
   letter-spacing: -.035em;
   margin: 0;
 }
-.course-main p { max-width: 66ch; }
+.course-main p { max-width: 72ch; }
 .course-intro p { margin-block: .65rem 0; }
-.course-lead { color: var(--secondary); font-size: 1.17em; }
 .lesson, .references { padding-bottom: 2rem; scroll-margin-top: 1rem; }
 .lesson + .lesson { border-top: 1px solid var(--rule); padding-top: 1.7rem; }
 .lesson[hidden] + .lesson { border-top: 0; padding-top: 0; }
-.chapter-position { color: var(--secondary); margin: 0 0 .5rem; }
-.chapter-position span { margin-inline: .22em; }
 .lesson h2, .references h2 {
-  font: 600 clamp(1.85rem, 4.5vw, 2.75rem)/1.1 "Libertinus Serif", Georgia, serif;
+  font: 680 clamp(1.75rem, 4.5vw, 2.65rem)/1.12 system-ui, sans-serif;
   letter-spacing: -.022em;
   margin: 0 0 .8rem;
 }
 .lesson > p { margin-block: .8rem; }
 .lesson :not(pre) > code { overflow-wrap: anywhere; }
 .example {
-  margin: 1.4rem 0 1.6rem;
-  border: 1px solid var(--rule);
-  border-radius: .35rem;
-}
-.example-header, .source-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; }
-.example-header {
-  justify-content: space-between;
-  padding: .55rem .8rem;
+  margin: 1.25rem 0 1.45rem;
+  padding: clamp(.85rem, 2.5vw, 1.35rem);
+  border-radius: .55rem;
   background: var(--wash);
-  border-bottom: 1px solid var(--rule);
+  border: 1px solid var(--rule);
 }
-.example-header .source-link { font: .79rem/1.3 var(--code); overflow-wrap: anywhere; min-width: 0; }
+.example-header, .source-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem; }
+.example-header { justify-content: space-between; margin-bottom: .7rem; }
+.example-header strong { font-size: 1.15rem; }
+.source-actions { margin-top: .85rem; font-size: .875rem; }
 .tutorial .try-it {
   display: inline-block;
   padding: .42rem .68rem;
@@ -160,6 +154,8 @@
   margin: 0;
   tab-size: 4;
   font-size: .9rem;
+  border-radius: .25rem;
+  border: 1px solid var(--rule);
 }
 .example pre code { font-size: inherit; }
 .example .source:focus-visible { outline-offset: -3px; }
@@ -167,12 +163,12 @@
 .tok-string { color: var(--string); }
 .tok-number { color: var(--number); }
 .tok-comment { color: var(--secondary); }
-.sample-io { padding: .8rem 1rem; border-top: 1px solid var(--rule); }
+.sample-io { padding-top: .75rem; }
 .sample-io h4 { font-weight: 650; margin: 0 0 .2rem; color: var(--secondary); }
-.sample-io pre { background: transparent; padding: .15rem 0; }
+.sample-io pre { background: var(--code-bg); padding: .4rem .65rem; }
 .sample-io pre + h4 { margin-top: .75rem; }
 .practice, .lesson-quiz { padding: 1rem 0; border-top: 1px solid var(--rule); }
-.practice h3, .lesson-quiz h3 { font-weight: 700; margin: 0 0 .45rem; }
+.practice h3, .lesson-quiz h3 { font-size: 1.1rem; font-weight: 700; margin: 0 0 .45rem; }
 .practice p { margin: .45rem 0; }
 .lesson details summary { cursor: pointer; color: var(--accent); }
 .lesson details + details { margin-top: .15rem; }
@@ -191,6 +187,16 @@
   padding-top: 1rem;
   border-top: 1px solid var(--rule);
 }
+.lesson-nav a {
+  padding: .4rem .75rem;
+  border: 1px solid var(--rule);
+  border-radius: .3rem;
+  text-decoration: none;
+  font-weight: 650;
+}
+.lesson-nav a:hover { border-color: var(--accent); }
+.lesson-nav a:last-child { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.lesson-nav-top { border: 0; padding: 0; margin: .9rem 0 1.1rem; }
 .references li { margin-block: .5rem; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .lesson-diagram {
@@ -210,8 +216,8 @@
 .first-run-steps li + li { margin-top: .22rem; }
 
 @media (max-width: 48rem) {
-  .course-layout { grid-template-columns: minmax(0, 1fr); gap: 1.15rem; }
-  .course-sidebar { position: static; max-height: none; border: 1px solid var(--rule); padding: .65rem .8rem; }
+  .course-layout { grid-template-columns: minmax(0, 1fr); }
+  .course-sidebar { position: static; min-height: 0; max-height: none; border: 0; border-bottom: 1px solid var(--rule); padding: .65rem 1rem; }
   .course-sidebar nav { max-height: min(50vh, 22rem); overflow: auto; }
   .course-contents > summary { margin: 0; }
   .course-contents[open] > summary { margin-bottom: .5rem; }
@@ -219,6 +225,6 @@
 @media (max-width: 31rem) {
   .tutorial .top { padding-inline: .9rem; flex-wrap: wrap; }
   .tutorial .hdr { flex-wrap: wrap; }
-  .example-header { align-items: start; }
+  .example-header { align-items: center; }
   .run-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
