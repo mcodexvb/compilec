@@ -14,15 +14,17 @@ C Lab: an online C editor and compiler. Clang 22 runs inside the page as WebAsse
 - **Adjustable windows.** Drag the dividers (or focus one and use the arrow keys) to resize the editor, input and output panels; double-click a divider to reset it. Layout can be side by side or stacked, and any panel can be enlarged.
 - **Made for phones.** On a narrow screen the panels become pages (Code, Input, Output) with a tab bar, a row of symbol keys for typing C, and large touch targets.
 - Choice of optimisation level and C standard, opening and saving `.c` files, a share link that carries the code and input, and your last program is kept in the browser.
-- Installable and usable offline after the first visit.
+- Installable and usable offline after the first build in each language.
 
 ## How it works
 
-- The compiler (about 29 MB compressed) is fetched only when a visitor first presses Run, and is then cached by the browser (and by a service worker, so it also works offline).
+- A first C build downloads about 25 MB of compiler assets. Selecting C++ uses the same compiler and linker. Its extra headers and libraries (about 4 MB) download only on the first C++ build. The browser and service worker cache the files for later runs.
+- Use **Install** to add CLab to the home screen. On iPhone and iPad, Safari provides **Share → Add to Home Screen**. Build a program once in each language before using that language offline.
 - Compilation and execution happen in a Web Worker, so the page stays responsive. Output is streamed as the program prints. The Stop button ends a runaway program.
 - Programs run in a private in-memory folder: the files you add are placed there before the run and the files the program writes are read back afterwards. Nothing leaves the device.
-- Standard input is supplied from the Input box before the run (a program cannot wait for keyboard input while it runs). The 15 numerical-analysis programs from the DSCC-15 notes are included as examples, with three more that show files and tables, and `?example=07-bisection` opens one directly.
-- The compiler files (`clang/`, `vendor/`, about 29 MB) are committed, so the repository root is the whole site and needs no build step.
+- Leave **Prepared input** empty and a line editor appears under Output whenever the program requests input. **Send EOF** ends the input stream. For a repeatable run, supply the complete input before pressing Run. The 18 numerical and file examples still open directly, for example with `?example=07-bisection`.
+- The [C programming tutorial](tutorial/) starts with a first program and builds toward tables, number patterns, and a data summary project. Every C17 lesson includes a coding task and a short quiz. **Try it in CLab** opens a temporary practice workspace. Download a practice program to keep your edits.
+- The compiler files (`clang/` and `vendor/`) are committed, so the repository root is the whole site and needs no build step.
 
 ## Hosting
 
@@ -31,9 +33,11 @@ The site is plain static files at the repository root.
 - **GitHub Pages:** Settings, Pages, deploy from branch `main`, folder `/ (root)`.
 - **Cloudflare Pages:** connect the repository, leave the build command empty and set the build output directory to `/` (or `.`). Every file is below the 25 MiB Pages limit; the largest is the 15 MB `clang.wasm.gz`.
 
+Live standard input needs a browser with cross-origin isolation. Cloudflare Pages uses the supplied `_headers`. On GitHub Pages or another static host without those headers, reload once the service worker is ready. The Input panel provides a reload button when needed. Prepared input remains available if the browser cannot enable live input.
+
 To rebuild the editor bundle after changing `src/editor.js`: `npm install`, then `npm run build-editor`.
 
-To update the compiler later: `npm install`, then `npm run update-assets`, and commit the result.
+To update the compiler later (requires Python 3.9+): `npm install`, then `npm run update-assets`, and commit the result.
 
 ## Logo
 

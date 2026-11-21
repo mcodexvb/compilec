@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f6ff">
+<meta name="description" content="Learn C17 programming in CLab with runnable examples, exercises, and a data analysis project.">
+<title>C Programming Tutorial | CLab</title>
+<link rel="icon" href="../brand/favicon-v2.svg" type="image/svg+xml">
+<script src="../theme.js"></script>
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="tutorial.css">
+<script src="tutorial.js" defer></script>
+</head>
+<body class="tutorial">
+<a class="skip-to-content" href="#main">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../" aria-label="CLab editor"><img class="logo" src="../brand/logo-header.svg" alt="" width="89" height="30"></a>
+  <div class="hdr">
+    <a class="editor-link" href="../">Open editor</a>
+    <select class="theme-choice" data-theme-choice aria-label="Color theme" hidden>
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </div>
+</header>
+<div class="course-layout">
+  <aside class="course-sidebar">
+    <details class="course-contents" open>
+      <summary id="lesson-list">Course contents</summary>
+      <nav aria-labelledby="lesson-list">
+        <a href="#main">C Tutorial</a>
+      <h3>Start here</h3>
+      <ul>
+        <li><a href="#getting-started">Start here: run your first program</a></li>
+        <li><a href="#first-program">Read a C program line by line</a></li>
+        <li><a href="#printing">Print words and start new lines</a></li>
+        <li><a href="#first-errors">Fix your first mistake</a></li>
+      </ul>
+      <h3>Numbers, input and loops</h3>
+      <ul>
+        <li><a href="#types-output">Variables and values</a></li>
+        <li><a href="#more-types">Whole numbers, decimals and characters</a></li>
+        <li><a href="#operators">Arithmetic and conversions</a></li>
+        <li><a href="#decisions">Decisions with if and else</a></li>
+        <li><a href="#input">Read a number with scanf</a></li>
+        <li><a href="#switch">Multiple choices with switch</a></li>
+        <li><a href="#loops">Loops with for and while</a></li>
+        <li><a href="#number-tables">Make a multiplication table</a></li>
+        <li><a href="#number-pyramid">Build a number pyramid</a></li>
+      </ul>
+      <h3>Working with data</h3>
+      <ul>
+        <li><a href="#arrays">Arrays and bounds</a></li>
+        <li><a href="#strings">Strings and the null character</a></li>
+        <li><a href="#functions">Functions and parameters</a></li>
+        <li><a href="#pointers">Pointers and addresses</a></li>
+        <li><a href="#structures">Structures and records</a></li>
+      </ul>
+      <h3>Memory, files and practice</h3>
+      <ul>
+        <li><a href="#memory">Dynamic memory with malloc and free</a></li>
+        <li><a href="#files">Reading a text file</a></li>
+        <li><a href="#debugging">Compiler diagnostics and debugging</a></li>
+        <li><a href="#statistics">Project: summarize a data set</a></li>
+      </ul>
+        <a class="reference-link" href="#reference">References</a>
+      </nav>
+    </details>
+  </aside>
+  <main class="course-main" id="main" tabindex="-1">
+    <header class="course-intro">
+      <h1>C Tutorial</h1>
+      <p>Learn C by running short programs in your browser. Start with <code>printf</code> and work up to arrays, pointers, and files.</p>
+    </header>
+    <section class="lesson" id="getting-started" aria-labelledby="getting-started-title" tabindex="-1">
+      <h2 id="getting-started-title">Start here: run your first program</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a href="#main">Course overview</a>
+        <a rel="next" href="#first-program" aria-label="Next lesson: Read a C program line by line">Next →</a>
+      </nav>
+      <p>A C program is text you write for a computer to follow. That text is called <strong>source code</strong>. Open the example below to see the source in CLab’s editor.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    printf(<span class="tok-string">&quot;Hello!\n&quot;</span>);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Hello!
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-getting-started" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-getting-started.c" download="getting-started.c">Download source</a>
+        </div>
+      </figure>
+      <p>When you press <strong>Run</strong>, the compiler translates the source into a form your browser can execute. The output of this program is one line, <code>Hello!</code>.</p>
+      <figure class="lesson-diagram">
+        <figcaption>What happens when you press Run?</figcaption>
+        <ol class="run-flow">
+          <li><strong>Editor</strong><span>You write the C code.</span></li>
+          <li><strong>Compiler</strong><span>CLab turns the code into a program.</span></li>
+          <li><strong>Run</strong><span>CLab runs the program.</span></li>
+          <li><strong>Output</strong><span>You see what it printed.</span></li>
+        </ol>
+      </figure>
+      <ol class="first-run-steps">
+        <li>Select <strong>Try it in CLab</strong> to open the example in a new tab.</li>
+        <li>Press <strong>Run</strong>. The first run may take a little longer while CLab loads the compiler.</li>
+        <li>Look for <code>Hello!</code> in <strong>Output</strong>. On a phone, the Output tab opens when you run the program.</li>
+      </ol>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make the program say <code>Hello, Sam!</code> or use your own name.</p>
+        <details><summary>Hint</summary><p>Change the greeting inside the quotation marks. Keep <code>\n</code> at the end to start a new line.</p></details>
+        <details><summary>Answer</summary><p>Change the line to <code>printf("Hello, Sam!\n");</code> and press <strong>Run</strong> again.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="getting-started-quiz">
+        <h3 id="getting-started-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Where do you look for the message after pressing Run?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>In the Output panel</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>In the code editor</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>In the Prepared input box</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>In the Output panel. The Output panel shows what your program prints.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Start here: run your first program navigation">
+        <a href="#main">Course overview</a>
+        <a rel="next" href="#first-program" aria-label="Next lesson: Read a C program line by line">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="first-program" aria-labelledby="first-program-title" tabindex="-1">
+      <h2 id="first-program-title">Read a C program line by line</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#getting-started" aria-label="Previous lesson: Start here: run your first program">← Previous</a>
+        <a rel="next" href="#printing" aria-label="Next lesson: Print words and start new lines">Next →</a>
+      </nav>
+      <p>Execution starts in <code>main</code>. Its opening and closing braces surround the statements that run when the program starts. In this example, the two <code>printf</code> statements run in the order they’re written.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-comment">// Print two messages.</span>
+    printf(<span class="tok-string">&quot;Ready?\n&quot;</span>);
+    printf(<span class="tok-string">&quot;Go!\n&quot;</span>);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Ready?
+Go!
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-first-program" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-first-program.c" download="first-program.c">Download source</a>
+        </div>
+      </figure>
+      <p>The <code>#include &lt;stdio.h&gt;</code> line makes the declaration of <code>printf</code> available. The <code>//</code> line is a comment for readers. A semicolon ends each call and the <code>return</code> statement. Returning <code>0</code> reports that the program finished successfully.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Swap the two <code>printf</code> lines. Predict what will print first. Then change the comment and run again.</p>
+        <details><summary>Hint</summary><p>The instructions inside <code>main</code> here run in order. A comment begins with <code>//</code> and continues to the end of its line.</p></details>
+        <details><summary>Answer</summary><p>The program prints <code>Go!</code> first. The comment is for the reader, so changing it leaves the result the same.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="first-program-quiz">
+        <h3 id="first-program-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Where do the instructions inside main go?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Inside quotation marks</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Between the curly braces</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>After the final curly brace</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Between the curly braces. The curly braces surround the instructions in main.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Read a C program line by line navigation">
+        <a rel="prev" href="#getting-started" aria-label="Previous lesson: Start here: run your first program">← Previous</a>
+        <a rel="next" href="#printing" aria-label="Next lesson: Print words and start new lines">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="printing" aria-labelledby="printing-title" tabindex="-1">
+      <h2 id="printing-title">Print words and start new lines</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#first-program" aria-label="Previous lesson: Read a C program line by line">← Previous</a>
+        <a rel="next" href="#first-errors" aria-label="Next lesson: Fix your first mistake">Next →</a>
+      </nav>
+      <p><code>printf</code> leaves the cursor where its text ends. In the example, the first call prints <code>Red</code> followed by a space. The second call continues on the same line.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    printf(<span class="tok-string">&quot;Red &quot;</span>);
+    printf(<span class="tok-string">&quot;blue\n&quot;</span>);
+    printf(<span class="tok-string">&quot;Green\n&quot;</span>);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Red blue
+Green
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-printing" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-printing.c" download="printing.c">Download source</a>
+        </div>
+      </figure>
+      <p>Write <code>\n</code> inside the quotation marks to start a new line. That pair of characters stands for a single <em>newline</em>. The last call prints <code>Green</code> on the new line.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make <code>Red</code>, <code>Blue</code>, and <code>Green</code> appear on three separate lines.</p>
+        <details><summary>Hint</summary><p>Put a <code>\n</code> at the end of each message.</p></details>
+        <details><summary>Answer</summary><p>Use <code>printf("Red\n");</code>, <code>printf("Blue\n");</code>, and <code>printf("Green\n");</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="printing-quiz">
+        <h3 id="printing-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>\n</code> do inside a message?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>It prints the letter n</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>It adds one space</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>It starts a new line</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>It starts a new line. C treats the backslash and n together as a newline.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Print words and start new lines navigation">
+        <a rel="prev" href="#first-program" aria-label="Previous lesson: Read a C program line by line">← Previous</a>
+        <a rel="next" href="#first-errors" aria-label="Next lesson: Fix your first mistake">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="first-errors" aria-labelledby="first-errors-title" tabindex="-1">
+      <h2 id="first-errors-title">Fix your first mistake</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#printing" aria-label="Previous lesson: Print words and start new lines">← Previous</a>
+        <a rel="next" href="#types-output" aria-label="Next lesson: Variables and values">Next →</a>
+      </nav>
+      <p>Try breaking this short program on purpose. A missing semicolon is a <strong>syntax error</strong>, which means the compiler can’t make sense of how the code is written.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    printf(<span class="tok-string">&quot;Ready to play!\n&quot;</span>);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Ready to play!
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-first-errors" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-first-errors.c" download="first-errors.c">Download source</a>
+        </div>
+      </figure>
+      <p>Start with the first error in CLab’s <strong>Output</strong> panel. Inspect the line it points to and the line just above it. The compiler may only discover that a semicolon is missing when it reaches the next statement.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Remove the semicolon at the end of the <code>printf</code> line and press <strong>Run</strong>. Read the error. Put the semicolon back and run again.</p>
+        <details><summary>Hint</summary><p>Look for a message about an expected <code>;</code>. Check the end of the line that prints the message.</p></details>
+        <details><summary>Answer</summary><p>The line should end with <code>);</code>. With the semicolon back in place, CLab prints <code>Ready to play!</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="first-errors-quiz">
+        <h3 id="first-errors-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>You see an error about an expected <code>;</code>. What should you check first?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The end of the line near the error</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>The color of the text</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The size of the Output panel</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>The end of the line near the error. Look at the end of the line the compiler points to and the one just above it.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Fix your first mistake navigation">
+        <a rel="prev" href="#printing" aria-label="Previous lesson: Print words and start new lines">← Previous</a>
+        <a rel="next" href="#types-output" aria-label="Next lesson: Variables and values">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="types-output" aria-labelledby="types-output-title" tabindex="-1">
+      <h2 id="types-output-title">Variables and values</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#first-errors" aria-label="Previous lesson: Fix your first mistake">← Previous</a>
+        <a rel="next" href="#more-types" aria-label="Next lesson: Whole numbers, decimals and characters">Next →</a>
+      </nav>
+      <p>To keep track of four stickers, declare <code>int stickers = 4;</code>. The type <code>int</code> gives the variable a range of whole numbers it can store. The name is <code>stickers</code> and the initial value is <code>4</code>.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> stickers = <span class="tok-number">4</span>;
+    printf(<span class="tok-string">&quot;I have %d stickers.\n&quot;</span>, stickers);
+
+    stickers = stickers + <span class="tok-number">2</span>;
+    printf(<span class="tok-string">&quot;Now I have %d stickers.\n&quot;</span>, stickers);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>I have 4 stickers.
+Now I have 6 stickers.
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-types-output" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-types-output.c" download="types-output.c">Download source</a>
+        </div>
+      </figure>
+      <p>In <code>stickers = stickers + 2;</code>, C works out the right side first and stores the result on the left. In <code>printf</code>, <code>%d</code> marks where the integer value will appear.</p>
+      <figure class="lesson-diagram">
+        <figcaption>Read <code>int stickers = 4;</code> from left to right</figcaption>
+        <dl class="variable-parts">
+          <div><dt>Type</dt><dd><code>int</code></dd></div>
+          <div><dt>Name</dt><dd><code>stickers</code></dd></div>
+          <div><dt>Starting value</dt><dd><code>4</code></dd></div>
+        </dl>
+      </figure>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Start with 5 stickers. Give one to a friend. What will the program print?</p>
+        <details><summary>Hint</summary><p>Change the starting value and use subtraction to give away a sticker.</p></details>
+        <details><summary>Answer</summary><p>Use <code>int stickers = 5;</code> and <code>stickers = stickers - 1;</code>. You start with 5 stickers and finish with 4.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="types-output-quiz">
+        <h3 id="types-output-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What number is stored after <code>stickers = stickers + 2;</code> if stickers started at 4?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>2</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>6</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>4</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>6. C adds 2 to the old value of 4 and stores 6.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Variables and values navigation">
+        <a rel="prev" href="#first-errors" aria-label="Previous lesson: Fix your first mistake">← Previous</a>
+        <a rel="next" href="#more-types" aria-label="Next lesson: Whole numbers, decimals and characters">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="more-types" aria-labelledby="more-types-title" tabindex="-1">
+      <h2 id="more-types-title">Whole numbers, decimals and characters</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#types-output" aria-label="Previous lesson: Variables and values">← Previous</a>
+        <a rel="next" href="#operators" aria-label="Next lesson: Arithmetic and conversions">Next →</a>
+      </nav>
+      <p>A notebook count, a price, and a team letter need different types. The example uses <code>int</code> for a whole-number count, <code>double</code> for a number with a fractional part, and <code>char</code> for a letter. Write a character like <code>'A'</code> in single quotes and text like <code>"Team A"</code> in double quotes.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> notebooks = <span class="tok-number">3</span>;
+    <span class="tok-keyword">double</span> price = <span class="tok-number">2.50</span>;
+    <span class="tok-keyword">char</span> team = <span class="tok-string">&#x27;A&#x27;</span>;
+
+    printf(<span class="tok-string">&quot;Team: %c\n&quot;</span>, (<span class="tok-keyword">int</span>)team);
+    printf(<span class="tok-string">&quot;Notebooks: %d\n&quot;</span>, notebooks);
+    printf(<span class="tok-string">&quot;Price of one: %.2f\n&quot;</span>, price);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Team: A
+Notebooks: 3
+Price of one: 2.50
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-more-types" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-more-types.c" download="more-types.c">Download source</a>
+        </div>
+      </figure>
+      <p>Match the format to the value in <code>printf</code>. Use <code>%d</code> for <code>int</code>, <code>%.2f</code> for a <code>double</code> printed to two decimal places, and <code>%c</code> for a character. The cast <code>(int)team</code> supplies the <code>int</code> argument expected by <code>%c</code>.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change the team to B and the price to 3.75.</p>
+        <details><summary>Hint</summary><p>Keep single quotation marks around the new team letter. Write the new price as a number.</p></details>
+        <details><summary>Answer</summary><p>Use <code>char team = 'B';</code> and <code>double price = 3.75;</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="more-types-quiz">
+        <h3 id="more-types-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which declaration can hold the decimal value 2.50?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>char price = 'A';</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>int price = 2.50;</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>double price = 2.50;</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>double price = 2.50;</code>. <code>double</code> can hold a fractional part. The <code>int</code> declaration would store 2.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Whole numbers, decimals and characters navigation">
+        <a rel="prev" href="#types-output" aria-label="Previous lesson: Variables and values">← Previous</a>
+        <a rel="next" href="#operators" aria-label="Next lesson: Arithmetic and conversions">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="operators" aria-labelledby="operators-title" tabindex="-1">
+      <h2 id="operators-title">Arithmetic and conversions</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#more-types" aria-label="Previous lesson: Whole numbers, decimals and characters">← Previous</a>
+        <a rel="next" href="#decisions" aria-label="Next lesson: Decisions with if and else">Next →</a>
+      </nav>
+      <p>Share 17 cookies equally among five people. Each gets three whole cookies, with two left over. In C, <code>17 / 5</code> gives <code>3</code> and <code>17 % 5</code> gives <code>2</code>. When both operands are integers, the quotient is truncated toward zero. The divisor must be nonzero.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> total = <span class="tok-number">17</span>;
+    <span class="tok-keyword">int</span> groups = <span class="tok-number">5</span>;
+
+    printf(<span class="tok-string">&quot;Cookies each: %d\n&quot;</span>, total / groups);
+    printf(<span class="tok-string">&quot;Cookies left: %d\n&quot;</span>, total % groups);
+    printf(<span class="tok-string">&quot;Exact share: %.2f\n&quot;</span>, (<span class="tok-keyword">double</span>)total / groups);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Cookies each: 3
+Cookies left: 2
+Exact share: 3.40
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-operators" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-operators.c" download="operators.c">Download source</a>
+        </div>
+      </figure>
+      <p>If you can cut the cookies, the share is 3.4 each. Cast one operand to <code>double</code> <em>before</em> dividing to get a fractional result. Try casting after the division and see what changes.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Predict the result of <code>(double)(total / groups)</code>.</p>
+        <details><summary>Hint</summary><p>Evaluate the expression inside the inner parentheses first.</p></details>
+        <details><summary>Answer</summary><p>Integer division produces <code>3</code>, which the cast converts to <code>3.0</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="operators-quiz">
+        <h3 id="operators-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is <code>17 % 5</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>2</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>3</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>3.4</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>2. Three groups of 5 use 15. The remainder is 2.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Arithmetic and conversions navigation">
+        <a rel="prev" href="#more-types" aria-label="Previous lesson: Whole numbers, decimals and characters">← Previous</a>
+        <a rel="next" href="#decisions" aria-label="Next lesson: Decisions with if and else">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="decisions" aria-labelledby="decisions-title" tabindex="-1">
+      <h2 id="decisions-title">Decisions with if and else</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#operators" aria-label="Previous lesson: Arithmetic and conversions">← Previous</a>
+        <a rel="next" href="#input" aria-label="Next lesson: Read a number with scanf">Next →</a>
+      </nav>
+      <p>The program checks the score from top to bottom. A score outside 0–100 gets an error message. Otherwise, a score of at least 75 earns a distinction, and one of at least 40 earns a pass. The final <code>else</code> handles the remaining scores.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> score = <span class="tok-number">72</span>;
+
+    <span class="tok-keyword">if</span> (score &lt; <span class="tok-number">0</span> || score &gt; <span class="tok-number">100</span>) {
+        printf(<span class="tok-string">&quot;Invalid score\n&quot;</span>);
+    } <span class="tok-keyword">else</span> <span class="tok-keyword">if</span> (score &gt;= <span class="tok-number">75</span>) {
+        printf(<span class="tok-string">&quot;Distinction\n&quot;</span>);
+    } <span class="tok-keyword">else</span> <span class="tok-keyword">if</span> (score &gt;= <span class="tok-number">40</span>) {
+        printf(<span class="tok-string">&quot;Pass\n&quot;</span>);
+    } <span class="tok-keyword">else</span> {
+        printf(<span class="tok-string">&quot;Try again\n&quot;</span>);
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Pass
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-decisions" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-decisions.c" download="decisions.c">Download source</a>
+        </div>
+      </figure>
+      <p>Read <code>==</code> as “is equal to” and <code>=</code> as assignment. The operator <code>||</code> means “or” and <code>&amp;&amp;</code> means “and”. C evaluates the right operand only when it needs it to decide the result.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Test the program with 39, 40, 75 and 101.</p>
+        <details><summary>Hint</summary><p>Pay attention to whether the lower boundary is included.</p></details>
+        <details><summary>Answer</summary><p>The outputs are <code>Try again</code>, <code>Pass</code>, <code>Distinction</code> and <code>Invalid score</code>, respectively.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="decisions-quiz">
+        <h3 id="decisions-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>With a score of 72, which message does the example print?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Distinction</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Pass</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Try again</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Pass. 72 is below 75 and at least 40, so it reaches the Pass branch.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Decisions with if and else navigation">
+        <a rel="prev" href="#operators" aria-label="Previous lesson: Arithmetic and conversions">← Previous</a>
+        <a rel="next" href="#input" aria-label="Next lesson: Read a number with scanf">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="input" aria-labelledby="input-title" tabindex="-1">
+      <h2 id="input-title">Read a number with scanf</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#decisions" aria-label="Previous lesson: Decisions with if and else">← Previous</a>
+        <a rel="next" href="#switch" aria-label="Next lesson: Multiple choices with switch">Next →</a>
+      </nav>
+      <p><code>printf</code> displays the prompt. <code>scanf</code> reads the answer. In <code>scanf("%3d", &amp;number)</code>, <code>%d</code> reads a signed decimal integer, the field width <code>3</code> limits the number to three characters including any sign, and <code>&amp;number</code> gives the address where C should store it.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+<span class="tok-directive">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> number;
+
+    printf(<span class="tok-string">&quot;Enter a whole number: &quot;</span>);
+    fflush(stdout);
+    <span class="tok-keyword">if</span> (scanf(<span class="tok-string">&quot;%3d&quot;</span>, &amp;number) != <span class="tok-number">1</span>) {
+        printf(<span class="tok-string">&quot;Please enter a whole number.\n&quot;</span>);
+        <span class="tok-keyword">return</span> EXIT_FAILURE;
+    }
+
+    printf(<span class="tok-string">&quot;You entered %d\n&quot;</span>, number);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+        <h4>Sample input</h4>
+        <pre><code>42
+</code></pre>
+          <h4>Expected output</h4>
+          <pre><code>Enter a whole number: You entered 42
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-input" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-input.c" download="input.c">Download source</a>
+        </div>
+      </figure>
+      <p>Read <code>number</code> only if <code>scanf</code> returns <code>1</code>, which means one value was stored. The field width limits what is read, so extra characters can remain in the input. <code>fflush(stdout)</code> makes the prompt visible before the program waits for an answer.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Try <code>42</code>, <code>-12</code>, and <code>cat</code>. Then try <code>1234</code> and see what the three-character limit does.</p>
+        <details><summary>Hint</summary><p>Enter one test value in Prepared input, or clear it and type your answer in Output when asked.</p></details>
+        <details><summary>Answer</summary><p>The first two print 42 and -12. With <code>cat</code>, <code>scanf</code> stores nothing and the program prints an error. With <code>1234</code>, it reads the first three digits and prints 123.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="input-quiz">
+        <h3 id="input-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does this call to <code>scanf</code> give back when it successfully reads one number?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The number the user entered</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>1</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The number of digits the user typed</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>1. <code>scanf</code> stores the input in <code>number</code> and gives back 1 because it stored one value.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Read a number with scanf navigation">
+        <a rel="prev" href="#decisions" aria-label="Previous lesson: Decisions with if and else">← Previous</a>
+        <a rel="next" href="#switch" aria-label="Next lesson: Multiple choices with switch">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="switch" aria-labelledby="switch-title" tabindex="-1">
+      <h2 id="switch-title">Multiple choices with switch</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#input" aria-label="Previous lesson: Read a number with scanf">← Previous</a>
+        <a rel="next" href="#loops" aria-label="Next lesson: Loops with for and while">Next →</a>
+      </nav>
+      <p>A one-letter menu is a good fit for <code>switch</code>. It compares the value of <code>choice</code> with the listed cases. Each case label is an integer constant expression, such as the character constant <code>'s'</code>.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">char</span> choice = <span class="tok-string">&#x27;m&#x27;</span>;
+
+    <span class="tok-keyword">switch</span> (choice) {
+    <span class="tok-keyword">case</span> <span class="tok-string">&#x27;s&#x27;</span>:
+        printf(<span class="tok-string">&quot;Sum\n&quot;</span>);
+        <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">case</span> <span class="tok-string">&#x27;m&#x27;</span>:
+        printf(<span class="tok-string">&quot;Mean\n&quot;</span>);
+        <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">default</span>:
+        printf(<span class="tok-string">&quot;Unknown choice\n&quot;</span>);
+        <span class="tok-keyword">break</span>;
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Mean
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-switch" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-switch.c" download="switch.c">Download source</a>
+        </div>
+      </figure>
+      <p>A match starts execution at that label. The <code>break</code> ends the switch. If you leave it out, execution can continue into the next case. If there is no match, execution starts at <code>default</code> when that label is present.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a <code>'r'</code> choice that prints <code>Range</code>.</p>
+        <details><summary>Hint</summary><p>Add a case before <code>default</code> and test it.</p></details>
+        <details><summary>Answer</summary><p>Add <code>case 'r': printf("Range\n"); break;</code> and assign <code>'r'</code> to <code>choice</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="switch-quiz">
+        <h3 id="switch-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the job of <code>break</code> inside this switch?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Run the next case</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Start the switch again</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Leave the switch</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Leave the switch. <code>break</code> leaves the switch after the matching case runs.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Multiple choices with switch navigation">
+        <a rel="prev" href="#input" aria-label="Previous lesson: Read a number with scanf">← Previous</a>
+        <a rel="next" href="#loops" aria-label="Next lesson: Loops with for and while">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="loops" aria-labelledby="loops-title" tabindex="-1">
+      <h2 id="loops-title">Loops with for and while</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#switch" aria-label="Previous lesson: Multiple choices with switch">← Previous</a>
+        <a rel="next" href="#number-tables" aria-label="Next lesson: Make a multiplication table">Next →</a>
+      </nav>
+      <p>Trace the first loop with a pencil. It sets <code>i</code> to 1, checks <code>i &lt;= 5</code>, and adds <code>i</code> to the sum. The <code>++i</code> runs after the body, then the condition is checked again.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> sum = <span class="tok-number">0</span>;
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">1</span>; i &lt;= <span class="tok-number">5</span>; ++i) {
+        sum += i;
+    }
+    printf(<span class="tok-string">&quot;Sum: %d\n&quot;</span>, sum);
+
+    <span class="tok-keyword">int</span> remaining = <span class="tok-number">3</span>;
+    <span class="tok-keyword">while</span> (remaining &gt; <span class="tok-number">0</span>) {
+        printf(<span class="tok-string">&quot;%d\n&quot;</span>, remaining);
+        --remaining;
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Sum: 15
+3
+2
+1
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-loops" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-loops.c" download="loops.c">Download source</a>
+        </div>
+      </figure>
+      <p>The second loop counts down using <code>while</code>. Both loops test their conditions before running the body. A <code>do</code>–<code>while</code> loop places that test after the body, so its body runs at least once.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Sum the even integers from 2 through 10.</p>
+        <details><summary>Hint</summary><p>Advance the counter by 2 each time.</p></details>
+        <details><summary>Answer</summary><p>Use <code>for (int i = 2; i &lt;= 10; i += 2)</code>. The sum is 30.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="loops-quiz">
+        <h3 id="loops-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the last value added by the first loop?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>5</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>6</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>5. The condition <code>i &lt;= 5</code> includes 5.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Loops with for and while navigation">
+        <a rel="prev" href="#switch" aria-label="Previous lesson: Multiple choices with switch">← Previous</a>
+        <a rel="next" href="#number-tables" aria-label="Next lesson: Make a multiplication table">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="number-tables" aria-labelledby="number-tables-title" tabindex="-1">
+      <h2 id="number-tables-title">Make a multiplication table</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#loops" aria-label="Previous lesson: Loops with for and while">← Previous</a>
+        <a rel="next" href="#number-pyramid" aria-label="Next lesson: Build a number pyramid">Next →</a>
+      </nav>
+      <p>The entry in row 2, column 3 of a multiplication table is <code>2 * 3</code>. To print the table, let the outer loop pick a row. For each row, the inner loop visits columns 1 through 4.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> row = <span class="tok-number">1</span>; row &lt;= <span class="tok-number">3</span>; ++row) {
+        <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> column = <span class="tok-number">1</span>; column &lt;= <span class="tok-number">4</span>; ++column) {
+            printf(<span class="tok-string">&quot;%3d&quot;</span>, row * column);
+        }
+        putchar(<span class="tok-string">&#x27;\n&#x27;</span>);
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>  1  2  3  4
+  2  4  6  8
+  3  6  9 12
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-number-tables" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-number-tables.c" download="number-tables.c">Download source</a>
+        </div>
+      </figure>
+      <p><code>%3d</code> reserves at least three character positions for each number, so the columns line up in a monospaced font. Print the newline after the inner loop to put each row on its own line.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change the table to four rows and five columns. Check the bottom-right number.</p>
+        <details><summary>Hint</summary><p>Change the limit in each loop. The bottom-right number is the last row times the last column.</p></details>
+        <details><summary>Answer</summary><p>Set the row limit to 4 and the column limit to 5. The bottom-right number is <code>20</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="number-tables-quiz">
+        <h3 id="number-tables-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How many times does the inner loop run for each row of the original table?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>3 times</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4 times</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>12 times</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4 times. The columns are numbered 1, 2, 3, and 4 for each row.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Make a multiplication table navigation">
+        <a rel="prev" href="#loops" aria-label="Previous lesson: Loops with for and while">← Previous</a>
+        <a rel="next" href="#number-pyramid" aria-label="Next lesson: Build a number pyramid">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="number-pyramid" aria-labelledby="number-pyramid-title" tabindex="-1">
+      <h2 id="number-pyramid-title">Build a number pyramid</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#number-tables" aria-label="Previous lesson: Make a multiplication table">← Previous</a>
+        <a rel="next" href="#arrays" aria-label="Next lesson: Arrays and bounds">Next →</a>
+      </nav>
+      <p>Look at the third row of the pyramid. It prints some spaces, then <code>123</code>, then <code>21</code>. The biggest digit appears once, in the middle.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">const</span> <span class="tok-keyword">int</span> height = <span class="tok-number">4</span>;
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> row = <span class="tok-number">1</span>; row &lt;= height; ++row) {
+        <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> space = <span class="tok-number">0</span>; space &lt; height - row; ++space) {
+            putchar(<span class="tok-string">&#x27; &#x27;</span>);
+        }
+        <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> digit = <span class="tok-number">1</span>; digit &lt;= row; ++digit) {
+            printf(<span class="tok-string">&quot;%d&quot;</span>, digit);
+        }
+        <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> digit = row - <span class="tok-number">1</span>; digit &gt;= <span class="tok-number">1</span>; --digit) {
+            printf(<span class="tok-string">&quot;%d&quot;</span>, digit);
+        }
+        putchar(<span class="tok-string">&#x27;\n&#x27;</span>);
+    }
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>   1
+  121
+ 12321
+1234321
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-number-pyramid" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-number-pyramid.c" download="number-pyramid.c">Download source</a>
+        </div>
+      </figure>
+      <p>For row <code>row</code>, print <code>height - row</code> spaces. Count up from 1 through <code>row</code>, then down from <code>row - 1</code> through 1. The one-digit layout works for heights 1 through 9.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Make a pyramid with five rows. Predict the first and last rows before you run it.</p>
+        <details><summary>Hint</summary><p>Change only <code>height</code>. Each row uses that value to figure out its spaces.</p></details>
+        <details><summary>Answer</summary><p>Set <code>height</code> to 5. The first row is four spaces followed by <code>1</code>. The last row is <code>123454321</code>. Keep the height at 9 or less so each number uses one digit.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="number-pyramid-quiz">
+        <h3 id="number-pyramid-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which digits does row 3 print, ignoring the spaces at the front?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>123321</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>123</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>12321</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>12321. It climbs from 1 to 3, then counts down through 2 and 1.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Build a number pyramid navigation">
+        <a rel="prev" href="#number-tables" aria-label="Previous lesson: Make a multiplication table">← Previous</a>
+        <a rel="next" href="#arrays" aria-label="Next lesson: Arrays and bounds">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="arrays" aria-labelledby="arrays-title" tabindex="-1">
+      <h2 id="arrays-title">Arrays and bounds</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#number-pyramid" aria-label="Previous lesson: Build a number pyramid">← Previous</a>
+        <a rel="next" href="#strings" aria-label="Next lesson: Strings and the null character">Next →</a>
+      </nav>
+      <p>Store four game scores in an array when you want to process them together. The first score is <code>scores[0]</code> and the fourth is <code>scores[3]</code>. Access outside the bounds of an array has undefined behavior.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> scores[] = {<span class="tok-number">8</span>, <span class="tok-number">5</span>, <span class="tok-number">10</span>, <span class="tok-number">7</span>};
+    size_t count = <span class="tok-keyword">sizeof</span> scores / <span class="tok-keyword">sizeof</span> scores[<span class="tok-number">0</span>];
+    <span class="tok-keyword">int</span> sum = <span class="tok-number">0</span>;
+
+    <span class="tok-keyword">for</span> (size_t i = <span class="tok-number">0</span>; i &lt; count; ++i) {
+        sum += scores[i];
+    }
+    printf(<span class="tok-string">&quot;Mean of %zu scores: %.2f\n&quot;</span>, count, (<span class="tok-keyword">double</span>)sum / count);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Mean of 4 scores: 7.50
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-arrays" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-arrays.c" download="arrays.c">Download source</a>
+        </div>
+      </figure>
+      <p>Within the scope of the array declaration, divide the size of the whole array by the size of its first element to get the count. The result has type <code>size_t</code>. In a function that receives an array as a pointer, pass the count separately.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a fifth score of 15 and predict the mean.</p>
+        <details><summary>Hint</summary><p>The loop already uses the length computed from the array.</p></details>
+        <details><summary>Answer</summary><p>The new sum is 45, and the new mean is <code>9.00</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="arrays-quiz">
+        <h3 id="arrays-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>Which expression reads the fourth score?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>scores[3]</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>scores[4]</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>scores[1]</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>scores[3]</code>. The first score is at index 0, so the fourth score is at index 3.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Arrays and bounds navigation">
+        <a rel="prev" href="#number-pyramid" aria-label="Previous lesson: Build a number pyramid">← Previous</a>
+        <a rel="next" href="#strings" aria-label="Next lesson: Strings and the null character">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="strings" aria-labelledby="strings-title" tabindex="-1">
+      <h2 id="strings-title">Strings and the null character</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#arrays" aria-label="Previous lesson: Arrays and bounds">← Previous</a>
+        <a rel="next" href="#functions" aria-label="Next lesson: Functions and parameters">Next →</a>
+      </nav>
+      <p>C represents a string as a sequence of characters ending at the first null character, <code>'\0'</code>. The string <code>"cat"</code> takes four array positions because it needs space for that last character.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+<span class="tok-directive">#include &lt;string.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">char</span> word[<span class="tok-number">10</span>] = <span class="tok-string">&quot;cat&quot;</span>;
+
+    word[<span class="tok-number">0</span>] = <span class="tok-string">&#x27;b&#x27;</span>;
+    printf(<span class="tok-string">&quot;%s\n&quot;</span>, word);
+    printf(<span class="tok-string">&quot;Length: %zu, capacity: %zu\n&quot;</span>, strlen(word), <span class="tok-keyword">sizeof</span> word);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>bat
+Length: 3, capacity: 10
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-strings" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-strings.c" download="strings.c">Download source</a>
+        </div>
+      </figure>
+      <p><code>strlen</code> counts the bytes before the null character. <code>sizeof</code> gives the full size of the array in this example. For comparing strings, <code>strcmp(a, b) == 0</code> means that the two strings match.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change <code>bat</code> to <code>boat</code> using assignments.</p>
+        <details><summary>Hint</summary><p>Update the changed letters and leave a terminator after the last one.</p></details>
+        <details><summary>Answer</summary><p>Set <code>word[1] = 'o'; word[2] = 'a'; word[3] = 't'; word[4] = '\0';</code>. The new length is 4.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="strings-quiz">
+        <h3 id="strings-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How many array slots does the C string <code>bat</code> need at minimum?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>3</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>10</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4. It needs three letters and one slot for the end marker.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Strings and the null character navigation">
+        <a rel="prev" href="#arrays" aria-label="Previous lesson: Arrays and bounds">← Previous</a>
+        <a rel="next" href="#functions" aria-label="Next lesson: Functions and parameters">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="functions" aria-labelledby="functions-title" tabindex="-1">
+      <h2 id="functions-title">Functions and parameters</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#strings" aria-label="Previous lesson: Strings and the null character">← Previous</a>
+        <a rel="next" href="#pointers" aria-label="Next lesson: Pointers and addresses">Next →</a>
+      </nav>
+      <p>Put the rectangle area calculation in a function so the same formula can be used with different lengths and widths. The declaration above <code>main</code> gives the function’s name, parameter types, and return type.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">static</span> <span class="tok-keyword">double</span> rectangle_area(<span class="tok-keyword">double</span> length, <span class="tok-keyword">double</span> width);
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    printf(<span class="tok-string">&quot;Area: %.2f\n&quot;</span>, rectangle_area(<span class="tok-number">4.0</span>, <span class="tok-number">2.5</span>));
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+
+<span class="tok-keyword">static</span> <span class="tok-keyword">double</span> rectangle_area(<span class="tok-keyword">double</span> length, <span class="tok-keyword">double</span> width)
+{
+    <span class="tok-keyword">return</span> length * width;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Area: 10.00
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-functions" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-functions.c" download="functions.c">Download source</a>
+        </div>
+      </figure>
+      <p>The values passed to a function are its arguments. C uses those values to initialize the function’s parameters. This example runs the same steps for any two lengths the caller provides.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a perimeter function and print the perimeter.</p>
+        <details><summary>Hint</summary><p>The formula is twice the sum of the side lengths.</p></details>
+        <details><summary>Answer</summary><p>Use <code>return 2 * (length + width);</code> in a function with two <code>double</code> parameters. The perimeter is <code>13.00</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="functions-quiz">
+        <h3 id="functions-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>rectangle_area(4.0, 2.5)</code> give back?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>6.5</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>13.0</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>10.0</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>10.0. The function multiplies 4.0 and 2.5.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Functions and parameters navigation">
+        <a rel="prev" href="#strings" aria-label="Previous lesson: Strings and the null character">← Previous</a>
+        <a rel="next" href="#pointers" aria-label="Next lesson: Pointers and addresses">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="pointers" aria-labelledby="pointers-title" tabindex="-1">
+      <h2 id="pointers-title">Pointers and addresses</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#functions" aria-label="Previous lesson: Functions and parameters">← Previous</a>
+        <a rel="next" href="#structures" aria-label="Next lesson: Structures and records">Next →</a>
+      </nav>
+      <p>To swap two scores in <code>main</code>, pass their addresses to the swap function. <code>&amp;left</code> gets the address of <code>left</code>. A pointer such as <code>a</code> holds an address, and <code>*a</code> refers to the object there.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">static</span> <span class="tok-keyword">void</span> swap(<span class="tok-keyword">int</span> *a, <span class="tok-keyword">int</span> *b)
+{
+    <span class="tok-keyword">int</span> temporary = *a;
+    *a = *b;
+    *b = temporary;
+}
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> left = <span class="tok-number">12</span>;
+    <span class="tok-keyword">int</span> right = <span class="tok-number">7</span>;
+    swap(&amp;left, &amp;right);
+    printf(<span class="tok-string">&quot;%d %d\n&quot;</span>, left, right);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>7 12
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-pointers" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-pointers.c" download="pointers.c">Download source</a>
+        </div>
+      </figure>
+      <p>The assignment <code>*a = *b;</code> changes the original score. The temporary variable keeps the first score from being overwritten before the function can move it to the second position. Only dereference a pointer that points to a live object.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>What would calling <code>swap(&amp;left, &amp;left)</code> do?</p>
+        <details><summary>Hint</summary><p>Both pointers would refer to the same object.</p></details>
+        <details><summary>Answer</summary><p>The value of <code>left</code> would stay the same. Each assignment would write its original value.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="pointers-quiz">
+        <h3 id="pointers-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does <code>&amp;left</code> give to the swap function?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The address of left</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>The value stored in left</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The address of right</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>The address of left. The address lets the function find and change left.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Pointers and addresses navigation">
+        <a rel="prev" href="#functions" aria-label="Previous lesson: Functions and parameters">← Previous</a>
+        <a rel="next" href="#structures" aria-label="Next lesson: Structures and records">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="structures" aria-labelledby="structures-title" tabindex="-1">
+      <h2 id="structures-title">Structures and records</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#pointers" aria-label="Previous lesson: Pointers and addresses">← Previous</a>
+        <a rel="next" href="#memory" aria-label="Next lesson: Dynamic memory with malloc and free">Next →</a>
+      </nav>
+      <p>A point on a map has two coordinates. Use a <code>struct</code> to keep those coordinates together as named members. Write <code>p.x</code> to read the <code>x</code> member of the point.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">struct</span> Point {
+    <span class="tok-keyword">double</span> x;
+    <span class="tok-keyword">double</span> y;
+};
+
+<span class="tok-keyword">static</span> <span class="tok-keyword">void</span> translate(<span class="tok-keyword">struct</span> Point *point, <span class="tok-keyword">double</span> dx, <span class="tok-keyword">double</span> dy)
+{
+    point-&gt;x += dx;
+    point-&gt;y += dy;
+}
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">struct</span> Point p = {.x = <span class="tok-number">2.0</span>, .y = <span class="tok-number">3.0</span>};
+    translate(&amp;p, <span class="tok-number">1.5</span>, -<span class="tok-number">1.0</span>);
+    printf(<span class="tok-string">&quot;(%.1f, %.1f)\n&quot;</span>, p.x, p.y);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>(3.5, 2.0)
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-structures" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-structures.c" download="structures.c">Download source</a>
+        </div>
+      </figure>
+      <p>A designated initializer such as <code>.x = 2.0</code> names the member being initialized. For a pointer <code>point</code>, write <code>point-&gt;x</code> to reach that member through the pointer.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Move <code>p</code> to the origin with one more call.</p>
+        <details><summary>Hint</summary><p>Subtract its current coordinates.</p></details>
+        <details><summary>Answer</summary><p>Insert <code>translate(&amp;p, -p.x, -p.y);</code> before printing.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="structures-quiz">
+        <h3 id="structures-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>How do you read the x coordinate of the structure variable <code>p</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span><code>p[x]</code></span></label>
+            <label><input type="radio" name="choice" value="1" required> <span><code>x.p</code></span></label>
+            <label><input type="radio" name="choice" value="2" required> <span><code>p.x</code></span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p><code>p.x</code>. The dot selects a named member of a structure.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Structures and records navigation">
+        <a rel="prev" href="#pointers" aria-label="Previous lesson: Pointers and addresses">← Previous</a>
+        <a rel="next" href="#memory" aria-label="Next lesson: Dynamic memory with malloc and free">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="memory" aria-labelledby="memory-title" tabindex="-1">
+      <h2 id="memory-title">Dynamic memory with malloc and free</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#structures" aria-label="Previous lesson: Structures and records">← Previous</a>
+        <a rel="next" href="#files" aria-label="Next lesson: Reading a text file">Next →</a>
+      </nav>
+      <p>When the number of elements is known only at run time, <code>malloc</code> can reserve an appropriately sized block. The example multiplies the element count by <code>sizeof *values</code> to get its size in bytes. For counts supplied by the user, check the count and guard the multiplication against overflow.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+<span class="tok-directive">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">const</span> size_t count = <span class="tok-number">4</span>;
+    <span class="tok-keyword">int</span> *values = malloc(count * <span class="tok-keyword">sizeof</span> *values);
+    <span class="tok-keyword">if</span> (values == NULL) {
+        fputs(<span class="tok-string">&quot;Allocation failed.\n&quot;</span>, stderr);
+        <span class="tok-keyword">return</span> EXIT_FAILURE;
+    }
+
+    <span class="tok-keyword">for</span> (size_t i = <span class="tok-number">0</span>; i &lt; count; ++i) {
+        values[i] = (<span class="tok-keyword">int</span>)i * <span class="tok-number">10</span>;
+    }
+    printf(<span class="tok-string">&quot;Last value: %d\n&quot;</span>, values[count - <span class="tok-number">1</span>]);
+
+    free(values);
+    <span class="tok-keyword">return</span> EXIT_SUCCESS;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Last value: 30
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-memory" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-memory.c" download="memory.c">Download source</a>
+        </div>
+      </figure>
+      <p>Check <code>malloc</code> for a null result before using the allocation. Initialize the elements before reading them. Call <code>free</code> once when you finish and stop using the pointer afterward.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>What should you check before allocating <code>count</code> elements if <code>count</code> comes from input?</p>
+        <details><summary>Hint</summary><p>Think about empty input and the largest value a <code>size_t</code> can hold.</p></details>
+        <details><summary>Answer</summary><p>If the program needs at least one element, require <code>count &gt; 0</code>. Reject <code>count &gt; SIZE_MAX / sizeof *values</code> before multiplying. Include <code>&lt;stdint.h&gt;</code> for <code>SIZE_MAX</code>.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="memory-quiz">
+        <h3 id="memory-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What should you check immediately after calling <code>malloc</code>?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>Whether its result is null</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Whether the numbers are already sorted</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Whether the first number is zero</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Whether its result is null. A null result means the storage was not allocated.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Dynamic memory with malloc and free navigation">
+        <a rel="prev" href="#structures" aria-label="Previous lesson: Structures and records">← Previous</a>
+        <a rel="next" href="#files" aria-label="Next lesson: Reading a text file">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="files" aria-labelledby="files-title" tabindex="-1">
+      <h2 id="files-title">Reading a text file</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#memory" aria-label="Previous lesson: Dynamic memory with malloc and free">← Previous</a>
+        <a rel="next" href="#debugging" aria-label="Next lesson: Compiler diagnostics and debugging">Next →</a>
+      </nav>
+      <p>CLab supplies a sample input file for this example. <code>fopen</code> opens it in read mode and returns a pointer that the program uses to read it. A null return value means the open failed.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+<span class="tok-directive">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    FILE *file = fopen(<span class="tok-string">&quot;greeting.txt&quot;</span>, <span class="tok-string">&quot;r&quot;</span>);
+    <span class="tok-keyword">if</span> (file == NULL) {
+        perror(<span class="tok-string">&quot;greeting.txt&quot;</span>);
+        <span class="tok-keyword">return</span> EXIT_FAILURE;
+    }
+
+    <span class="tok-keyword">char</span> buffer[<span class="tok-number">64</span>];
+    <span class="tok-keyword">while</span> (fgets(buffer, <span class="tok-keyword">sizeof</span> buffer, file) != NULL) {
+        fputs(buffer, stdout);
+    }
+
+    <span class="tok-keyword">int</span> failed = ferror(file);
+    <span class="tok-keyword">if</span> (fclose(file) == EOF || failed) {
+        fputs(<span class="tok-string">&quot;Could not read and close the file successfully.\n&quot;</span>, stderr);
+        <span class="tok-keyword">return</span> EXIT_FAILURE;
+    }
+    <span class="tok-keyword">return</span> EXIT_SUCCESS;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+        <h4>Sample file <code>greeting.txt</code></h4>
+        <pre><code>Hello from a file!
+A second line.
+</code></pre>
+          <h4>Expected output</h4>
+          <pre><code>Hello from a file!
+A second line.
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-files" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-files.c" download="files.c">Download source</a>
+        </div>
+      </figure>
+      <p>Read while <code>fgets</code> succeeds. After the loop, check <code>ferror</code> to distinguish a read error from the end of the file, then close the file with <code>fclose</code>.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Rename the input file under Files and run again without editing the program.</p>
+        <details><summary>Hint</summary><p>Compare the file name with the one passed to <code>fopen</code>.</p></details>
+        <details><summary>Answer</summary><p>Opening <code>greeting.txt</code> fails. Update the path in <code>fopen</code> to match the renamed file.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="files-quiz">
+        <h3 id="files-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does a null result from <code>fopen</code> tell you?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The file is empty</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Opening the file failed</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The file was printed</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Opening the file failed. The program needs a valid file pointer before it can read the file.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Reading a text file navigation">
+        <a rel="prev" href="#memory" aria-label="Previous lesson: Dynamic memory with malloc and free">← Previous</a>
+        <a rel="next" href="#debugging" aria-label="Next lesson: Compiler diagnostics and debugging">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="debugging" aria-labelledby="debugging-title" tabindex="-1">
+      <h2 id="debugging-title">Compiler diagnostics and debugging</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#files" aria-label="Previous lesson: Reading a text file">← Previous</a>
+        <a rel="next" href="#statistics" aria-label="Next lesson: Project: summarize a data set">Next →</a>
+      </nav>
+      <p>Compiler warnings can point to suspicious code. Start with the first diagnostic and check the line it names. Test the program with a small input whose answer you can verify yourself.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;assert.h&gt;</span>
+<span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">int</span> sum = <span class="tok-number">0</span>;
+    <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">1</span>; i &lt;= <span class="tok-number">4</span>; ++i) {
+        sum += i;
+    }
+
+    assert(sum == <span class="tok-number">10</span>);
+    printf(<span class="tok-string">&quot;Sum: %d\n&quot;</span>, sum);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Sum: 10
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-debugging" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-debugging.c" download="debugging.c">Download source</a>
+        </div>
+      </figure>
+      <p>The assertion in this example records an assumption about the sum after the loop. With assertions enabled, the program stops if the assumption is false. For invalid user input, use a normal error-handling branch.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change <code>i &lt;= 4</code> to <code>i &lt; 4</code>. Predict the resulting sum and what happens to the assertion.</p>
+        <details><summary>Hint</summary><p>Write down the sequence of counter values.</p></details>
+        <details><summary>Answer</summary><p>The loop sums 1, 2 and 3, yielding 6. With assertions enabled, the program stops at the failed check.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="2" aria-labelledby="debugging-quiz">
+        <h3 id="debugging-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does the example use <code>assert(sum == 10)</code> to check?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The length of the file name</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>Whether the loop started at 1</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>Whether the final sum is 10</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>Whether the final sum is 10. With assertions enabled, the check fails if the sum is any value other than 10.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Compiler diagnostics and debugging navigation">
+        <a rel="prev" href="#files" aria-label="Previous lesson: Reading a text file">← Previous</a>
+        <a rel="next" href="#statistics" aria-label="Next lesson: Project: summarize a data set">Next →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="statistics" aria-labelledby="statistics-title" tabindex="-1">
+      <h2 id="statistics-title">Project: summarize a data set</h2>
+      <nav class="lesson-nav lesson-nav-top" aria-label="Chapter navigation">
+        <a rel="prev" href="#debugging" aria-label="Previous lesson: Compiler diagnostics and debugging">← Previous</a>
+        <a href="#reference">References →</a>
+      </nav>
+      <p>Four players scored 2, 6, 3, and 5 points. Before reading the program, calculate the lowest score, the highest score, and the average by hand.</p>
+      <figure class="example">
+        <figcaption class="example-header">
+          <strong>Example</strong>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+        </figcaption>
+        <pre class="source" tabindex="0" aria-label="C source"><code><span class="tok-directive">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">struct</span> Summary {
+    <span class="tok-keyword">double</span> min;
+    <span class="tok-keyword">double</span> max;
+    <span class="tok-keyword">double</span> mean;
+};
+
+<span class="tok-keyword">static</span> <span class="tok-keyword">struct</span> Summary summarize(<span class="tok-keyword">const</span> <span class="tok-keyword">double</span> values[], size_t count)
+{
+    <span class="tok-keyword">struct</span> Summary result = {.min = values[<span class="tok-number">0</span>], .max = values[<span class="tok-number">0</span>]};
+    <span class="tok-keyword">double</span> total = <span class="tok-number">0.0</span>;
+    <span class="tok-keyword">for</span> (size_t i = <span class="tok-number">0</span>; i &lt; count; ++i) {
+        <span class="tok-keyword">double</span> value = values[i];
+        <span class="tok-keyword">if</span> (value &lt; result.min) {
+            result.min = value;
+        }
+        <span class="tok-keyword">if</span> (value &gt; result.max) {
+            result.max = value;
+        }
+        total += value;
+    }
+    result.mean = total / count;
+    <span class="tok-keyword">return</span> result;
+}
+
+<span class="tok-keyword">int</span> main(<span class="tok-keyword">void</span>)
+{
+    <span class="tok-keyword">const</span> <span class="tok-keyword">double</span> values[] = {<span class="tok-number">2.0</span>, <span class="tok-number">6.0</span>, <span class="tok-number">3.0</span>, <span class="tok-number">5.0</span>};
+    <span class="tok-keyword">struct</span> Summary result = summarize(values, <span class="tok-keyword">sizeof</span> values / <span class="tok-keyword">sizeof</span> values[<span class="tok-number">0</span>]);
+
+    printf(<span class="tok-string">&quot;Minimum: %.2f\n&quot;</span>, result.min);
+    printf(<span class="tok-string">&quot;Maximum: %.2f\n&quot;</span>, result.max);
+    printf(<span class="tok-string">&quot;Mean: %.2f\n&quot;</span>, result.mean);
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span>;
+}
+</code></pre>
+        <span class="copy-status visually-hidden" role="status"></span>
+        <div class="sample-io">
+          <h4>Expected output</h4>
+          <pre><code>Minimum: 2.00
+Maximum: 6.00
+Mean: 4.00
+</code></pre>
+        </div>
+        <div class="source-actions">
+          <a class="try-it" href="../?example=learn-statistics" target="_blank" rel="noopener">Try it in CLab <span aria-hidden="true">↗</span><span class="visually-hidden">(opens a new tab)</span></a>
+          <a class="source-link" href="../examples/learn-statistics.c" download="statistics.c">Download source</a>
+        </div>
+      </figure>
+      <p>The function expects at least one score. It uses the first score as its initial minimum and maximum. The loop checks each score and adds it to the total. It returns the results together in a <code>struct</code>.</p>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a range line and test with <code>{-8.0, -2.0, -5.0}</code>.</p>
+        <details><summary>Hint</summary><p>The range is the maximum minus the minimum.</p></details>
+        <details><summary>Answer</summary><p>The range is <code>6.00</code>. The minimum, maximum and mean are −8.00, −2.00 and −5.00.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="0" aria-labelledby="statistics-quiz">
+        <h3 id="statistics-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What is the average of 2, 6, 3, and 5?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>4</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>5</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>16</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>4. The total is 16. Divide by the four scores to get 4.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Project: summarize a data set navigation">
+        <a rel="prev" href="#debugging" aria-label="Previous lesson: Compiler diagnostics and debugging">← Previous</a>
+        <a href="#reference">References →</a>
+      </nav>
+    </section>
+
+    <footer class="references" id="reference" tabindex="-1">
+      <h2>Language references</h2>
+      <p>The course uses C17. Each practice tab opens with its own example and sample data. To keep your changes, use <strong>File → Save</strong> in that tab.</p>
+      <ul>
+        <li><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 draft N1570 (PDF)</a> — the C11 committee draft. Sections 6 and 7 cover the core language and standard library used in these lessons.</li>
+        <li><a href="https://en.cppreference.com/w/c">C reference</a> — syntax, library functions, and the C versions that introduced them.</li>
+      </ul>
+      <p><a href="#main">Back to course overview</a></p>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

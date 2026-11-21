@@ -1,7 +1,7 @@
 {
   "runtime-manifest.v1.json": {
-    "bytes": 876,
-    "sha256": "1420808d0391ff2d8a2fdf2a9f6bbce8f728e06b1ed1651029ed80b226101444"
+    "bytes": 1088,
+    "sha256": "4138f3f38226909a8ec3dbc5cf6d9932f5c15d3bb04b6b5f5f10780a14f43f90"
   },
   "bin/memfs.wasm.gz": {
     "bytes": 38702,
@@ -26,5 +26,13 @@
   "objective-c/headers.json": {
     "bytes": 83231,
     "sha256": "64bf5a09feffa612e6f82cfc52f3d6a9c5e4fc3064c3824c24aeea59cb544d8e"
+  },
+  "bin/c-sysroot-a7898a66776e.tar.gz": {
+    "bytes": 1276115,
+    "sha256": "a7898a66776e7388342d3e93d31c9308851c5ab6210680bcca256bece84cdc88"
+  },
+  "bin/cpp-addon-cad83fbb2eef.tar.gz": {
+    "bytes": 4091841,
+    "sha256": "cad83fbb2eef2b65da6642be2f7f4982025457b2b7830e26f01957b0d3500fb4"
   }
 }

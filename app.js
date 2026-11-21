@@ -6,11 +6,17 @@
   var prog = $('prog'), bar = $('bar'), progLabel = $('proglabel');
   var mqMobile = window.matchMedia('(max-width:860px)');
   var worker = null, running = false, examples = [], loaded = false, currentExample = null;
+  var exampleId = new URLSearchParams(location.search).get('example');
+  var incomingShare = location.hash.startsWith('#s=');
+  var practice = /^learn-[a-z0-9-]+$/.test(exampleId || '');
+  var openingPractice = practice;
+  var canLiveInput = window.crossOriginIsolated && typeof SharedArrayBuffer === 'function';
+  var terminalForm = $('terminalInput'), terminalLine = $('terminalLine'), inputSignal = null, inputBytes = null;
 
-  var HELLO = '#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    printf("Enter a number: ");\n    scanf("%d", &n);\n    printf("Its square is %d\\n", n * n);\n    return 0;\n}\n';
+  var HELLO = '#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    printf("Enter an integer from -100 to 100: ");\n    fflush(stdout);\n    if (scanf("%4d", &n) != 1 || n < -100 || n > 100) {\n        fputs("Expected an integer from -100 to 100.\\n", stderr);\n        return 1;\n    }\n    printf("Its square is %d\\n", n * n);\n    return 0;\n}\n';
 
-  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function store(k, v) { if (!practice) { try { localStorage.setItem(k, v); } catch (e) {} } }
+  function load(k) { if (practice) return null; try { return localStorage.getItem(k); } catch (e) { return null; } }
   function loadJSON(k, d) { try { var v = JSON.parse(load(k)); return v == null ? d : v; } catch (e) { return d; } }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function setStatus(text, cls) { statusEl.textContent = text; statusEl.className = 'status' + (cls ? ' ' + cls : ''); }
@@ -32,12 +38,65 @@
     document.querySelector('#pEditor .ttl').textContent = fileName;
     store('compilec.name', fileName);
   }
+  var language = $('language');
+  var cppFile = /\.(cpp|cc|cxx)$/i;
+  function setLanguage(mode) {
+    language.value = mode === 'CPP' ? 'CPP' : 'C';
+    $('cStandard').hidden = language.value === 'CPP';
+    $('cppStandard').hidden = language.value !== 'CPP';
+  }
+  setLanguage(practice ? 'C' : load('compilec.language') || (cppFile.test(fileName) ? 'CPP' : 'C'));
+  if (load('compilec.cppStd')) $('cppStd').value = load('compilec.cppStd');
+
+  function sourceExtension() { return language.value === 'CPP' ? '.cpp' : '.c'; }
+  language.addEventListener('change', function () {
+    setLanguage(language.value);
+    fileName = fileName.replace(/\.(?:c|cpp|cc|cxx)$/i, '') + sourceExtension();
+    document.querySelector('#pEditor .ttl').textContent = fileName;
+    store('compilec.name', fileName);
+    saveSettings();
+  });
+
+  var installPrompt;
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    installPrompt = event;
+  });
+  var installed = matchMedia('(display-mode: standalone)');
+  $('installApp').hidden = installed.matches || navigator.standalone === true;
+  window.addEventListener('appinstalled', function () {
+    installPrompt = null;
+    $('installApp').hidden = true;
+  });
+  $('installApp').addEventListener('click', async function () {
+    if (!installPrompt) {
+      $('dlgInstall').showModal();
+      return;
+    }
+    var prompt = installPrompt;
+    installPrompt = null;
+    try {
+      await prompt.prompt();
+    } catch {
+      $('dlgInstall').showModal();
+    }
+  });
+
   function okToReplace() { return !dirty || window.confirm('Replace the program in the editor? Changes since you last saved will be lost.'); }
-  stdin.value = load('compilec.stdin') || '7\n';
+  stdin.value = load('compilec.stdin') ?? '';
   $('args').value = load('compilec.args') || '';
   if (load('compilec.opt')) $('opt').value = load('compilec.opt');
   if (load('compilec.std')) $('std').value = load('compilec.std');
   if (load('compilec.warn')) $('warn').value = load('compilec.warn');
+  if (canLiveInput) $('inputHelp').textContent = 'Leave blank to type in Output when the program asks for input.';
+  if (practice) {
+    runBtn.disabled = true;
+    $('std').value = 'c17';
+    $('warn').value = 'extra';
+    $('tutorialLink').href = 'tutorial/#' + exampleId.slice(6);
+    $('tutorialLink').textContent = 'Back to lesson';
+    setStatus('Opening tutorial example...');
+  }
   function setFont(px) {
     fontPx = clamp(px, 11, 28);
     document.documentElement.style.setProperty('--fs', fontPx + 'px');
@@ -267,7 +326,12 @@
     Array.from(e.dataTransfer.files).forEach(function (f) {
       f.arrayBuffer().then(function (b) {
         var bytes = new Uint8Array(b);
-        if (/\.c$/i.test(f.name)) { editor.set(new TextDecoder().decode(bytes)); setStatus('Opened ' + f.name + '.'); }
+        if (/\.c$/i.test(f.name) || cppFile.test(f.name)) {
+          if (!okToReplace()) return;
+          setLanguage(cppFile.test(f.name) ? 'CPP' : 'C');
+          setProgram(new TextDecoder().decode(bytes), f.name);
+          setStatus('Opened ' + f.name + '.');
+        }
         else { addFile(f.name, bytes); renderFiles(); persistFiles(); setStatus('Added ' + f.name + ' to Files.'); }
       });
     });
@@ -279,15 +343,15 @@
     outp.textContent = ''; out.std = ''; out.shown = 0; out.truncated = false;
     outFiles = []; $('outfiles').hidden = true; $('oflist').textContent = ''; $('ofview').hidden = true;
   }
-  function appendOut(text, err) {
-    if (!err && out.std.length < 8e6) out.std += text;
+  function appendOut(text, err, echo) {
+    if (!err && !echo && out.std.length < 8e6) out.std += text;
     var sc = $('tp-output'), atEnd = sc.scrollHeight - sc.scrollTop - sc.clientHeight < 60;
     if (out.shown > 1e6) {
       if (!out.truncated) { out.truncated = true; var t = document.createElement('span'); t.className = 'se'; t.textContent = '\n[Output is too long to show here. The program is still running.]'; outp.appendChild(t); }
       return;
     }
     out.shown += text.length;
-    if (err) { var s = document.createElement('span'); s.className = 'se'; s.textContent = text; outp.appendChild(s); }
+    if (err || echo) { var s = document.createElement('span'); s.className = err ? 'se' : 'input-echo'; s.textContent = text; outp.appendChild(s); }
     else outp.appendChild(document.createTextNode(text));
     if (atEnd) sc.scrollTop = sc.scrollHeight;
   }
@@ -336,8 +400,46 @@
   }
 
   /* ---------- running ---------- */
-  function setRunning(on) { running = on; runBtn.disabled = on; stopBtn.disabled = !on; }
-  function finish() { setRunning(false); prog.classList.remove('on'); }
+  function setRunning(on) {
+    running = on;
+    runBtn.disabled = on || openingPractice;
+    stopBtn.disabled = !on;
+    $('reloadLive').disabled = on;
+    language.disabled = on;
+  }
+  function finish() {
+    inputSignal = inputBytes = null;
+    terminalForm.hidden = true;
+    terminalLine.value = '';
+    setRunning(false);
+    prog.classList.remove('on');
+  }
+
+  function sendInput(eof) {
+    if (!inputSignal || terminalForm.hidden) return;
+    var line = terminalLine.value + '\n';
+    var encoded = eof ? null : new TextEncoder().encode(line);
+    if (encoded && encoded.length > inputBytes.length) {
+      setStatus('That input line exceeds the 16 KiB limit. Shorten it and send it again.', 'err');
+      return;
+    }
+    if (encoded) {
+      inputBytes.set(encoded);
+      appendOut(line, false, true);
+    }
+    terminalLine.value = '';
+    terminalForm.hidden = true;
+    setStatus('Running...');
+    Atomics.store(inputSignal, 0, eof ? -1 : encoded.length);
+    Atomics.notify(inputSignal, 0);
+  }
+  terminalForm.addEventListener('submit', function (e) { e.preventDefault(); sendInput(false); });
+  $('terminalEof').addEventListener('click', function () { sendInput(true); });
+  $('reloadLive').addEventListener('click', function () {
+    if (practice && !okToReplace()) return;
+    saveSettings();
+    location.reload();
+  });
 
   function startWorker() {
     if (worker) worker.terminate();
@@ -355,10 +457,19 @@
       loaded = true;
       prog.classList.remove('on');
       setStatus('Compiling and running...');
+    } else if (m.type === 'cpp-loading') {
+      setStatus('Loading the C++ standard library...');
     } else if (m.type === 'running') {
       setStatus('Running...');
     } else if (m.type === 'out') {
       appendOut(m.text, m.err);
+    } else if (m.type === 'input') {
+      if (!inputSignal) return;
+      if (mqMobile.matches) setPage('output', true);
+      terminalForm.hidden = false;
+      $('tp-output').scrollTop = $('tp-output').scrollHeight;
+      terminalLine.focus();
+      setStatus('Waiting for input.');
     } else if (m.type === 'result') {
       showResult(m.result);
       finish();
@@ -444,12 +555,14 @@
     store('compilec.args', $('args').value);
     store('compilec.opt', $('opt').value);
     store('compilec.std', $('std').value);
+    store('compilec.language', language.value);
+    store('compilec.cppStd', $('cppStd').value);
     store('compilec.warn', $('warn').value);
   }
 
   function run(compileOnly) {
     compileOnly = compileOnly === true;
-    if (running) return;
+    if (running || openingPractice) return;
     saveSettings();
     if (editing) { editing.bytes = new TextEncoder().encode($('fetext').value); }
     resetOutput();
@@ -466,17 +579,26 @@
     } else {
       setStatus('Compiling and running...');
     }
+    // A synchronous WASI read blocks this worker. Shared memory lets the page
+    // hand it a line or EOF without waiting for the worker's event loop.
+    var inputBuffer = null;
+    if (canLiveInput && !compileOnly && stdin.value === '') {
+      inputBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT + 16384);
+      inputSignal = new Int32Array(inputBuffer, 0, 1);
+      inputBytes = new Uint8Array(inputBuffer, Int32Array.BYTES_PER_ELEMENT);
+    }
     worker.postMessage({
       type: 'run', code: editor.get(), input: stdin.value, args: splitArgs($('args').value),
-      compileOnly: compileOnly,
-      flags: [$('opt').value].concat(warnFlags(), ['-std=' + $('std').value]),
+      compileOnly: compileOnly, inputBuffer: inputBuffer, language: language.value,
+      flags: [$('opt').value].concat(warnFlags(), ['-std=' + $(language.value === 'CPP' ? 'cppStd' : 'std').value]),
       files: files.map(function (f) { return { name: f.name, bytes: f.bytes.slice().buffer }; })
     });
   }
 
   function stop() {
     if (!running) return;
-    startWorker();
+    if (worker) worker.terminate();
+    worker = null;
     loaded = false;
     finish();
     setStatus('Stopped. The output so far is kept above.');
@@ -504,7 +626,7 @@
     return new Response(stream.readable).arrayBuffer().then(function (b) { return new Uint8Array(b); });
   }
   function encodeShare() {
-    var data = new TextEncoder().encode(JSON.stringify({ c: editor.get(), i: stdin.value, a: $('args').value, o: $('opt').value, s: $('std').value }));
+    var data = new TextEncoder().encode(JSON.stringify({ c: editor.get(), i: stdin.value, a: $('args').value, o: $('opt').value, s: $('std').value, l: language.value, cpp: $('cppStd').value }));
     if (window.CompressionStream) return pipe(data, new CompressionStream('deflate-raw')).then(function (z) { return 'z' + toB64(z); });
     return Promise.resolve('p' + toB64(data));
   }
@@ -522,9 +644,11 @@
       else window.prompt('Copy this link', url);
     });
   }
-  if (/^#s=/.test(location.hash)) {
+  if (incomingShare) {
     decodeShare(location.hash.slice(3)).then(function (d) {
-      setProgram(String(d.c || ''), 'main.c'); stdin.value = d.i || ''; $('args').value = d.a || '';
+      setLanguage(d.l);
+      if (d.cpp && Array.from($('cppStd').options).some(function (o) { return o.value === d.cpp; })) $('cppStd').value = d.cpp;
+      setProgram(String(d.c || ''), 'main' + sourceExtension()); stdin.value = d.i || ''; $('args').value = d.a || '';
       if (d.o) $('opt').value = d.o;
       if (d.s) $('std').value = d.s;
       history.replaceState(null, '', location.pathname + location.search);
@@ -535,19 +659,31 @@
   /* ---------- examples, open and save ---------- */
   function useExample(id) {
     var e = examples.filter(function (x) { return x.id === id; })[0];
-    if (!e) return;
-    fetch('examples/' + e.id + '.c').then(function (r) { return r.text(); }).then(function (text) {
+    if (!e) return Promise.reject(new Error('Example not found.'));
+    return fetch('examples/' + e.id + '.c').then(function (r) {
+      if (!r.ok) throw new Error('Example unavailable.');
+      return r.text();
+    }).then(function (text) {
+      if (openingPractice && !okToReplace()) return;
+      setLanguage('C');
       setProgram(text, e.id + '.c');
       stdin.value = e.input;
       (e.files || []).forEach(function (f) { addFile(f.name, new TextEncoder().encode(f.text)); });
       if (e.files) { renderFiles(); persistFiles(); }
       resetOutput(); clearProblems();
-      setStatus(e.files ? 'The input file ' + e.files.map(function (f) { return f.name; }).join(', ') + ' was added under Files.' : '');
+      if (practice) {
+        setStatus(e.files ? 'Practice tab. The sample file is under Files.' : 'Practice tab. Download your program to keep changes.');
+      } else {
+        setStatus(e.files ? 'The input file ' + e.files.map(function (f) { return f.name; }).join(', ') + ' was added under Files.' : '');
+      }
     });
   }
   function newProgram() {
     if (!okToReplace()) return;
-    setProgram(HELLO, 'main.c'); stdin.value = '7\n'; resetOutput(); clearProblems(); setStatus('');
+    var starter = language.value === 'CPP'
+      ? '#include <iostream>\n\nint main() {\n    std::cout << "Hello, C++!\\n";\n}\n'
+      : HELLO;
+    setProgram(starter, 'main' + sourceExtension()); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
   }
   function saveC(askName) {
     var name = fileName;
@@ -555,7 +691,7 @@
       name = window.prompt('Save as', fileName);
       if (!name) return;
       name = cleanName(name);
-      if (!/\.[A-Za-z]+$/.test(name)) name += '.c';
+      if (!/\.[A-Za-z]+$/.test(name)) name += sourceExtension();
     }
     fileName = name;
     document.querySelector('#pEditor .ttl').textContent = name;
@@ -569,14 +705,18 @@
     this.value = '';
     if (!f || !okToReplace()) return;
     var rd = new FileReader();
-    rd.onload = function () { setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
+    rd.onload = function () { setLanguage(cppFile.test(f.name) ? 'CPP' : 'C'); setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
     rd.readAsText(f);
   });
   fetch('examples/examples.json').then(function (r) { return r.json(); }).then(function (list) {
     examples = list;
-    var want = new URLSearchParams(location.search).get('example');
-    if (want && list.some(function (x) { return x.id === want; })) useExample(want);
-  }).catch(function () {});
+    if (exampleId && !incomingShare) return useExample(exampleId);
+  }).catch(function () {
+    if (exampleId) setStatus('Could not open that example.', 'err');
+  }).finally(function () {
+    openingPractice = false;
+    runBtn.disabled = running;
+  });
 
   /* ---------- menu bar ---------- */
   function clip(text) {
@@ -586,7 +726,7 @@
   var MENUS = [
     { label: 'File', items: function () { return [
       { t: 'New program', f: newProgram },
-      { t: 'Open .c file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
+      { t: 'Open source file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
       { t: 'Save', k: 'Ctrl+S', f: function () { saveC(false); } },
       { t: 'Save as...', f: function () { saveC(true); } },
       '-',
@@ -638,14 +778,18 @@
     ]; } },
     { label: 'Examples', items: function () {
       var list = [{ t: 'Blank program', f: newProgram }];
-      examples.forEach(function (x, i) { list.push({ t: (i + 1) + '. ' + x.title, f: function () { if (okToReplace()) useExample(x.id); } }); });
+      examples.filter(function (x) { return !x.id.startsWith('learn-'); }).forEach(function (x, i) {
+        list.push({ t: (i + 1) + '. ' + x.title, f: function () {
+          if (okToReplace()) useExample(x.id).catch(function () { setStatus('Could not open that example.', 'err'); });
+        } });
+      });
       return list;
     } },
     { label: 'Tools', items: function () { return [
       { t: 'Compiler options...', f: function () { $('dlgOpts').showModal(); } },
       '-',
       { t: 'Clear output', f: function () { resetOutput(); clearProblems(); setStatus(''); } },
-      { t: 'Clear saved program, files and settings', f: function () {
+      { t: 'Clear saved program, files and settings', disabled: practice, f: function () {
         if (!window.confirm('Remove the saved program, input files and settings from this browser?')) return;
         Object.keys(localStorage).forEach(function (k) { if (k.indexOf('compilec.') === 0) localStorage.removeItem(k); });
         location.href = location.pathname;
@@ -724,13 +868,22 @@
     else if (mod && !e.shiftKey && !e.altKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); $('file').click(); }
   });
   $('dlgOpts').addEventListener('close', saveSettings);
-  [$('dlgOpts'), $('dlgHelp'), $('dlgAbout')].forEach(function (d) {
+  [$('dlgOpts'), $('dlgHelp'), $('dlgAbout'), $('dlgInstall')].forEach(function (d) {
     d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
     d.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { d.close(); }); });
     d.addEventListener('close', function () { var bd = d.querySelector('.dbody'); if (bd) bd.scrollTop = 0; });
   });
 
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+      if (!canLiveInput && typeof Atomics.wait === 'function') {
+        var showReload = function () {
+          $('reloadLive').hidden = !navigator.serviceWorker.controller;
+        };
+        navigator.serviceWorker.addEventListener('controllerchange', showReload);
+        showReload();
+      }
+    });
   }
 })();

@@ -94,5 +94,121 @@
   "id": "18-write-csv-table",
   "title": "Writing a CSV table to a file",
   "input": ""
+ },
+ {
+  "id": "learn-getting-started",
+  "title": "Start here: run your first program",
+  "input": ""
+ },
+ {
+  "id": "learn-first-program",
+  "title": "Read a C program line by line",
+  "input": ""
+ },
+ {
+  "id": "learn-printing",
+  "title": "Print words and start new lines",
+  "input": ""
+ },
+ {
+  "id": "learn-first-errors",
+  "title": "Fix your first mistake",
+  "input": ""
+ },
+ {
+  "id": "learn-types-output",
+  "title": "Variables and values",
+  "input": ""
+ },
+ {
+  "id": "learn-more-types",
+  "title": "Whole numbers, decimals and characters",
+  "input": ""
+ },
+ {
+  "id": "learn-operators",
+  "title": "Arithmetic and conversions",
+  "input": ""
+ },
+ {
+  "id": "learn-decisions",
+  "title": "Decisions with if and else",
+  "input": ""
+ },
+ {
+  "id": "learn-input",
+  "title": "Read a number with scanf",
+  "input": "42\n"
+ },
+ {
+  "id": "learn-switch",
+  "title": "Multiple choices with switch",
+  "input": ""
+ },
+ {
+  "id": "learn-loops",
+  "title": "Loops with for and while",
+  "input": ""
+ },
+ {
+  "id": "learn-number-tables",
+  "title": "Make a multiplication table",
+  "input": ""
+ },
+ {
+  "id": "learn-number-pyramid",
+  "title": "Build a number pyramid",
+  "input": ""
+ },
+ {
+  "id": "learn-arrays",
+  "title": "Arrays and bounds",
+  "input": ""
+ },
+ {
+  "id": "learn-strings",
+  "title": "Strings and the null character",
+  "input": ""
+ },
+ {
+  "id": "learn-functions",
+  "title": "Functions and parameters",
+  "input": ""
+ },
+ {
+  "id": "learn-pointers",
+  "title": "Pointers and addresses",
+  "input": ""
+ },
+ {
+  "id": "learn-structures",
+  "title": "Structures and records",
+  "input": ""
+ },
+ {
+  "id": "learn-memory",
+  "title": "Dynamic memory with malloc and free",
+  "input": ""
+ },
+ {
+  "id": "learn-files",
+  "title": "Reading a text file",
+  "input": "",
+  "files": [
+   {
+    "name": "greeting.txt",
+    "text": "Hello from a file!\nA second line.\n"
+   }
+  ]
+ },
+ {
+  "id": "learn-debugging",
+  "title": "Compiler diagnostics and debugging",
+  "input": ""
+ },
+ {
+  "id": "learn-statistics",
+  "title": "Project: summarize a data set",
+  "input": ""
  }
 ]

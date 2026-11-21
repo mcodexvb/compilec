@@ -1,7 +1,8 @@
 {
   "name": "C Lab",
   "short_name": "C Lab",
-  "description": "Write, compile and run C programs in your browser, with input and output files and plots.",
+  "description": "Write, compile and run C and C++ programs in your browser, with input and output files and plots.",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

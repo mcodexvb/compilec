@@ -5,6 +5,7 @@ importScripts('vendor/clang-wasm-toolchain.global.js');
 
 const T = self.clangWasmToolchain;
 let toolchainPromise = null;
+let cppReady = false;
 
 function getToolchain() {
   if (!toolchainPromise) {
@@ -34,6 +35,22 @@ function emit(text, err) {
   if (buf.length > 4096 || Date.now() - lastFlush > 60) flush();
 }
 
+function liveInput(buffer) {
+  const signal = new Int32Array(buffer, 0, 1);
+  const bytes = new Uint8Array(buffer, Int32Array.BYTES_PER_ELEMENT);
+  return () => {
+    if (Atomics.load(signal, 0) === -1) return null;
+    flush();
+    self.postMessage({ type: 'input' });
+    Atomics.wait(signal, 0, 0);
+    const length = Atomics.load(signal, 0);
+    if (length === -1) return null;
+    const line = bytes.slice(0, length);
+    Atomics.store(signal, 0, 0);
+    return line;
+  };
+}
+
 // Collects every file in the program's folder (not /tmp) as { path, bytes }.
 function collect(dir, prefix, out) {
   for (const [name, node] of dir.contents) {
@@ -49,12 +66,21 @@ function collect(dir, prefix, out) {
 async function runProgram(msg) {
   const tc = await getToolchain();
   self.postMessage({ type: 'ready' });
+  const language = msg.language === 'CPP' ? 'CPP' : 'C';
   return tc.lock(async () => {
+    if (language === 'CPP' && !cppReady) {
+      self.postMessage({ type: 'cpp-loading' });
+      await Promise.all([
+        tc.runtime.ensureCppSysroot(),
+        tc.runtime.getModule(tc.runtime.assetUrls.lld)
+      ]);
+      cppReady = true;
+    }
     const started = performance.now();
     const compiled = await tc.captureCompilerOutput(() =>
       tc.runtime.compileArtifact(msg.code, {
-        language: 'C',
-        fileName: 'main.c',
+        language,
+        fileName: language === 'CPP' ? 'main.cpp' : 'main.c',
         compileArgs: [...T.CLANG_DRIVER_DEFAULT_ARGS, ...msg.flags]
       })
     );
@@ -77,7 +103,11 @@ async function runProgram(msg) {
       const r = await tc.execute(compiled.result, {
         args: msg.args || [],
         files,
-        stdin: () => { if (input === null) return null; const s = input; input = null; return s.length ? s : null; },
+        stdin: msg.inputBuffer ? liveInput(msg.inputBuffer) : () => {
+          const text = input;
+          input = null;
+          return text || null;
+        },
         stdout: (c) => emit(c, false),
         stderr: (c) => emit(c, true),
         extraImports: (ctx) => { host = ctx.host; return {}; }

@@ -16,7 +16,15 @@
       "argv0": "wasm-ld"
     },
     "sysroot": {
-      "asset": "bin/sysroot.tar.gz"
+      "asset": "bin/c-sysroot-a7898a66776e.tar.gz",
+      "profiles": {
+        "c": {
+          "asset": "bin/c-sysroot-a7898a66776e.tar.gz"
+        },
+        "cppAddon": {
+          "asset": "bin/cpp-addon-cad83fbb2eef.tar.gz"
+        }
+      }
     },
     "provenance": {
       "name": "clang",
