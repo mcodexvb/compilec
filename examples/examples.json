@@ -136,6 +136,11 @@
   "input": ""
  },
  {
+  "id": "learn-input",
+  "title": "Read a number with scanf",
+  "input": "42\n"
+ },
+ {
   "id": "learn-switch",
   "title": "Multiple choices with switch",
   "input": ""
@@ -174,11 +179,6 @@
   "id": "learn-pointers",
   "title": "Pointers and addresses",
   "input": ""
- },
- {
-  "id": "learn-input",
-  "title": "Reading and validating input",
-  "input": "42\n"
  },
  {
   "id": "learn-structures",

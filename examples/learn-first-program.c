@@ -3,7 +3,7 @@
 int main(void)
 {
     // Print two messages.
-    puts("Ready?");
-    puts("Go!");
+    printf("Ready?\n");
+    printf("Go!\n");
     return 0;
 }

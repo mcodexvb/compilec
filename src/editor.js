@@ -8,7 +8,6 @@ import { setDiagnostics } from '@codemirror/lint';
 import { oneDark } from '@codemirror/theme-one-dark';
 
 const themeSlot = new Compartment();
-const mq = window.matchMedia('(prefers-color-scheme: dark)');
 
 const baseTheme = EditorView.theme({
   '&': { height: '100%', fontSize: '14.5px', backgroundColor: 'var(--pane)', color: 'var(--fg)' },
@@ -18,7 +17,9 @@ const baseTheme = EditorView.theme({
   '&.cm-focused': { outline: '2px solid var(--acc)', outlineOffset: '-2px' }
 });
 
-function themeFor(dark) { return dark ? oneDark : []; }
+function currentTheme() {
+  return document.documentElement.dataset.theme === 'dark' ? oneDark : [];
+}
 
 const sizeSlot = new Compartment();
 const sizeTheme = (px) => EditorView.theme({ '&': { fontSize: px + 'px' } });
@@ -38,7 +39,7 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
         ]),
         EditorState.tabSize.of(4),
         baseTheme,
-        themeSlot.of(themeFor(mq.matches)),
+        themeSlot.of(currentTheme()),
         sizeSlot.of(sizeTheme(fontPx || 14.5)),
         EditorView.lineWrapping,
         EditorView.updateListener.of((u) => {
@@ -51,8 +52,8 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
       ]
     })
   });
-  mq.addEventListener('change', (e) => {
-    view.dispatch({ effects: themeSlot.reconfigure(themeFor(e.matches)) });
+  window.addEventListener('clabthemechange', () => {
+    view.dispatch({ effects: themeSlot.reconfigure(currentTheme()) });
   });
   return {
     get: () => view.state.doc.toString(),

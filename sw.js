@@ -1,7 +1,7 @@
 // Small files are refreshed from the network when possible. Compiler assets
 // stay in the existing cache so this update does not make users download them again.
 const VERSION = 'clab-v7';
-const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'worker.js', 'vendor/editor.js',
+const SHELL = ['./', 'index.html', 'style.css', 'theme.js', 'app.js', 'worker.js', 'vendor/editor.js',
   'vendor/clang-wasm-toolchain.global.js', 'manifest.webmanifest', 'icon.svg', 'brand/favicon-v2.svg',
   'brand/logo-header.svg', 'brand/logo-wordmark.svg', 'examples/examples.json', 'tutorial/',
   'tutorial/tutorial.css', 'tutorial/tutorial.js'];

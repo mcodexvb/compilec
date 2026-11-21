@@ -2,6 +2,6 @@
 
 int main(void)
 {
-    puts("Ready to play!");
+    printf("Ready to play!\n");
     return 0;
 }

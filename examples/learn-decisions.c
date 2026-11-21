@@ -5,13 +5,13 @@ int main(void)
     int score = 72;
 
     if (score < 0 || score > 100) {
-        puts("Invalid score");
+        printf("Invalid score\n");
     } else if (score >= 75) {
-        puts("Distinction");
+        printf("Distinction\n");
     } else if (score >= 40) {
-        puts("Pass");
+        printf("Pass\n");
     } else {
-        puts("Try again");
+        printf("Try again\n");
     }
     return 0;
 }

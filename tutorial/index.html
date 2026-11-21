@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f6ff">
 <meta name="description" content="Learn C17 programming in CLab with runnable examples, exercises, and a data analysis project.">
 <title>C Programming Tutorial | CLab</title>
 <link rel="icon" href="../brand/favicon-v2.svg" type="image/svg+xml">
+<script src="../theme.js"></script>
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="tutorial.css">
 <script src="tutorial.js" defer></script>
@@ -14,7 +16,14 @@
 <a class="skip-to-content" href="#main">Skip to content</a>
 <header class="top">
   <a class="brand" href="../" aria-label="CLab editor"><img class="logo" src="../brand/logo-header.svg" alt="" width="89" height="30"></a>
-  <a class="editor-link" href="../">Open editor</a>
+  <div class="hdr">
+    <a class="editor-link" href="../">Open editor</a>
+    <select class="theme-choice" data-theme-choice aria-label="Color theme" hidden>
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </div>
 </header>
 <div class="course-layout">
   <aside class="course-sidebar">
@@ -27,12 +36,13 @@
         <li><a href="#printing">Print words and start new lines</a></li>
         <li><a href="#first-errors">Fix your first mistake</a></li>
       </ul>
-      <h3>Numbers, decisions and loops</h3>
+      <h3>Numbers, input and loops</h3>
       <ul>
         <li><a href="#types-output">Variables and values</a></li>
         <li><a href="#more-types">Whole numbers, decimals and characters</a></li>
         <li><a href="#operators">Arithmetic and conversions</a></li>
         <li><a href="#decisions">Decisions with if and else</a></li>
+        <li><a href="#input">Read a number with scanf</a></li>
         <li><a href="#switch">Multiple choices with switch</a></li>
         <li><a href="#loops">Loops with for and while</a></li>
         <li><a href="#number-tables">Make a multiplication table</a></li>
@@ -44,7 +54,6 @@
         <li><a href="#strings">Strings and the null character</a></li>
         <li><a href="#functions">Functions and parameters</a></li>
         <li><a href="#pointers">Pointers and addresses</a></li>
-        <li><a href="#input">Reading and validating input</a></li>
         <li><a href="#structures">Structures and records</a></li>
       </ul>
       <h3>Memory, files and practice</h3>
@@ -100,8 +109,8 @@
       <div class="practice">
         <h3>Exercise</h3>
         <p>Make the program say <code>Hello, Sam!</code> or use your own name.</p>
-        <details><summary>Hint</summary><p>Change only the words between the two quotation marks. Keep the marks in place.</p></details>
-        <details><summary>Answer</summary><p>Change the line to <code>puts("Hello, Sam!");</code> and press <strong>Run</strong> again.</p></details>
+        <details><summary>Hint</summary><p>Change the greeting inside the quotation marks. Keep <code>\n</code> at the end to start a new line.</p></details>
+        <details><summary>Answer</summary><p>Change the line to <code>printf("Hello, Sam!\n");</code> and press <strong>Run</strong> again.</p></details>
       </div>
       <form class="lesson-quiz" data-correct="0" aria-labelledby="getting-started-quiz">
         <h3 id="getting-started-quiz">Quick quiz</h3>
@@ -124,7 +133,7 @@
     <section class="lesson" id="first-program" aria-labelledby="first-program-title" tabindex="-1">
       <h2 id="first-program-title">Read a C program line by line</h2>
       <p>A <strong>function</strong> is a named group of instructions. In the programs we run here, <code>main</code> is where the program starts. The line <code>int main(void)</code> starts that function. The curly braces <code>{</code> and <code>}</code> mark the start and end of its instructions.</p>
-      <p><code>#include &lt;stdio.h&gt;</code> gives the compiler information about tools for reading and writing, including <code>puts</code>. Each <code>puts</code> line prints the text in quotation marks and then starts a new line. A semicolon ends each <code>puts</code> and <code>return</code> statement. <code>return 0;</code> says the program finished successfully.</p>
+      <p><code>#include &lt;stdio.h&gt;</code> gives the compiler information about tools for reading and writing, including <code>printf</code>. Here <code>printf</code> prints a message. The <code>\n</code> at the end of each message starts a new line. A semicolon ends each <code>printf</code> and <code>return</code> statement. <code>return 0;</code> says the program finished successfully.</p>
       <div class="example">
         <div class="example-header">
           <h3>Example</h3>
@@ -143,7 +152,7 @@ Go!
       </div>
       <div class="practice">
         <h3>Exercise</h3>
-        <p>Swap the two <code>puts</code> lines. Predict what will print first. Then change the comment and run again.</p>
+        <p>Swap the two <code>printf</code> lines. Predict what will print first. Then change the comment and run again.</p>
         <details><summary>Hint</summary><p>The instructions inside <code>main</code> here run in order. A comment begins with <code>//</code> and continues to the end of its line.</p></details>
         <details><summary>Answer</summary><p>The program prints <code>Go!</code> first. The comment is for the reader, so changing it leaves the result the same.</p></details>
       </div>
@@ -230,7 +239,7 @@ Green
       </div>
       <div class="practice">
         <h3>Exercise</h3>
-        <p>Remove the semicolon at the end of the <code>puts</code> line and press <strong>Run</strong>. Read the error. Put the semicolon back and run again.</p>
+        <p>Remove the semicolon at the end of the <code>printf</code> line and press <strong>Run</strong>. Read the error. Put the semicolon back and run again.</p>
         <details><summary>Hint</summary><p>Look for a message about an expected <code>;</code>. Check the end of the line that prints the message.</p></details>
         <details><summary>Answer</summary><p>The line should end with <code>);</code>. With the semicolon back in place, CLab prints <code>Ready to play!</code>.</p></details>
       </div>
@@ -433,6 +442,52 @@ Exact share: 3.40
       </form>
       <nav class="lesson-nav" aria-label="Decisions with if and else navigation">
         <a rel="prev" href="#operators">← Arithmetic and conversions</a>
+        <a rel="next" href="#input">Read a number with scanf →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="input" aria-labelledby="input-title" tabindex="-1">
+      <h2 id="input-title">Read a number with scanf</h2>
+      <p>Use <code>printf</code> to ask a question and <code>scanf</code> to read the answer. In <code>scanf("%3d", &amp;number)</code>, <code>d</code> tells C to read a whole number. The <code>3</code> lets it read at most three characters of the number, including a plus or minus sign. <code>&amp;number</code> tells C where to store the answer.</p>
+      <p>This call to <code>scanf</code> gives back 1 when it stores a number. Check for 1 before using <code>number</code>. The call to <code>fflush(stdout)</code> makes the prompt appear before the program waits for input.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-input" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-input.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Sample input</h4>
+        <pre><code>42
+</code></pre>
+        <h4>Expected output</h4>
+        <pre><code>Enter a whole number: You entered 42
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Try <code>42</code>, <code>-12</code>, and <code>cat</code>. Then try <code>1234</code> and see what the three-character limit does.</p>
+        <details><summary>Hint</summary><p>Enter one test value in Prepared input, or clear it and type your answer in Output when asked.</p></details>
+        <details><summary>Answer</summary><p>The first two print 42 and -12. With <code>cat</code>, <code>scanf</code> stores nothing and the program prints an error. With <code>1234</code>, it reads the first three digits and prints 123.</p></details>
+      </div>
+      <form class="lesson-quiz" data-correct="1" aria-labelledby="input-quiz">
+        <h3 id="input-quiz">Quick quiz</h3>
+        <fieldset>
+          <legend>What does this call to <code>scanf</code> give back when it successfully reads one number?</legend>
+            <label><input type="radio" name="choice" value="0" required> <span>The number the user entered</span></label>
+            <label><input type="radio" name="choice" value="1" required> <span>1</span></label>
+            <label><input type="radio" name="choice" value="2" required> <span>The number of digits the user typed</span></label>
+        </fieldset>
+        <button type="submit" hidden>Check answer</button>
+        <span class="quiz-feedback" role="status"></span>
+        <details><summary>Show answer</summary><p>1. <code>scanf</code> stores the input in <code>number</code> and gives back 1 because it stored one value.</p></details>
+      </form>
+      <nav class="lesson-nav" aria-label="Read a number with scanf navigation">
+        <a rel="prev" href="#decisions">← Decisions with if and else</a>
         <a rel="next" href="#switch">Multiple choices with switch →</a>
       </nav>
     </section>
@@ -460,7 +515,7 @@ Exact share: 3.40
         <h3>Exercise</h3>
         <p>Add a <code>'r'</code> choice that prints <code>Range</code>.</p>
         <details><summary>Hint</summary><p>Add a case before <code>default</code> and test it.</p></details>
-        <details><summary>Answer</summary><p>Add <code>case 'r': puts("Range"); break;</code> and assign <code>'r'</code> to <code>choice</code>.</p></details>
+        <details><summary>Answer</summary><p>Add <code>case 'r': printf("Range\n"); break;</code> and assign <code>'r'</code> to <code>choice</code>.</p></details>
       </div>
       <form class="lesson-quiz" data-correct="2" aria-labelledby="switch-quiz">
         <h3 id="switch-quiz">Quick quiz</h3>
@@ -475,7 +530,7 @@ Exact share: 3.40
         <details><summary>Show answer</summary><p>Leave the switch. <code>break</code> leaves the switch after the matching case runs.</p></details>
       </form>
       <nav class="lesson-nav" aria-label="Multiple choices with switch navigation">
-        <a rel="prev" href="#decisions">← Decisions with if and else</a>
+        <a rel="prev" href="#input">← Read a number with scanf</a>
         <a rel="next" href="#loops">Loops with for and while →</a>
       </nav>
     </section>
@@ -786,52 +841,6 @@ Length: 3, capacity: 10
       </form>
       <nav class="lesson-nav" aria-label="Pointers and addresses navigation">
         <a rel="prev" href="#functions">← Functions and parameters</a>
-        <a rel="next" href="#input">Reading and validating input →</a>
-      </nav>
-    </section>
-
-    <section class="lesson" id="input" aria-labelledby="input-title" tabindex="-1">
-      <h2 id="input-title">Reading and validating input</h2>
-      <p>Use <code>fgets</code> to read a bounded piece of a line. It stores a newline if one fits and is read. Check the return value and decide how to handle incomplete lines. This example expects one complete line of at most 30 bytes before the newline.</p>
-      <p>Use <code>strtol</code> to parse a base-10 integer. Check that a digit was consumed, reject extra non-space characters, and check <code>errno</code> for <code>ERANGE</code> before using the result. Call <code>fflush(stdout)</code> so the prompt is visible before the read. Cast to <code>unsigned char</code> before passing a possibly negative <code>char</code> to <code>isspace</code>.</p>
-      <div class="example">
-        <div class="example-header">
-          <h3>Example</h3>
-          <a class="try-it" href="../?example=learn-input" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
-        </div>
-        <pre class="source" hidden><code></code></pre>
-        <div class="source-actions">
-          <a class="source-link" href="../examples/learn-input.c">Open C source</a>
-          <button type="button" class="copy-code" hidden>Copy code</button>
-          <span class="copy-status" role="status"></span>
-        </div>
-        <h4>Sample input</h4>
-        <pre><code>42
-</code></pre>
-        <h4>Expected output</h4>
-        <pre><code>Enter a whole number: You entered 42
-</code></pre>
-      </div>
-      <div class="practice">
-        <h3>Exercise</h3>
-        <p>Try the inputs <code>  -12  </code>, <code>12x</code> and an empty line.</p>
-        <details><summary>Hint</summary><p>Enter one test line in Prepared input, or clear it and respond to the prompt in Output.</p></details>
-        <details><summary>Answer</summary><p>The program accepts the first and prints <code>You entered -12</code>. It rejects the trailing <code>x</code> and rejects the empty line because no digits were read.</p></details>
-      </div>
-      <form class="lesson-quiz" data-correct="1" aria-labelledby="input-quiz">
-        <h3 id="input-quiz">Quick quiz</h3>
-        <fieldset>
-          <legend>Why does the input example reject <code>12x</code>?</legend>
-            <label><input type="radio" name="choice" value="0" required> <span>The number 12 is too large</span></label>
-            <label><input type="radio" name="choice" value="1" required> <span>An extra non-space character follows the number</span></label>
-            <label><input type="radio" name="choice" value="2" required> <span>It only accepts negative numbers</span></label>
-        </fieldset>
-        <button type="submit" hidden>Check answer</button>
-        <span class="quiz-feedback" role="status"></span>
-        <details><summary>Show answer</summary><p>An extra non-space character follows the number. The parser reads 12 and then finds the extra letter x.</p></details>
-      </form>
-      <nav class="lesson-nav" aria-label="Reading and validating input navigation">
-        <a rel="prev" href="#pointers">← Pointers and addresses</a>
         <a rel="next" href="#structures">Structures and records →</a>
       </nav>
     </section>
@@ -874,7 +883,7 @@ Length: 3, capacity: 10
         <details><summary>Show answer</summary><p><code>p.x</code>. The dot selects a named member of a structure.</p></details>
       </form>
       <nav class="lesson-nav" aria-label="Structures and records navigation">
-        <a rel="prev" href="#input">← Reading and validating input</a>
+        <a rel="prev" href="#pointers">← Pointers and addresses</a>
         <a rel="next" href="#memory">Dynamic memory with malloc and free →</a>
       </nav>
     </section>

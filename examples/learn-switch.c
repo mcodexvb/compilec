@@ -6,13 +6,13 @@ int main(void)
 
     switch (choice) {
     case 's':
-        puts("Sum");
+        printf("Sum\n");
         break;
     case 'm':
-        puts("Mean");
+        printf("Mean\n");
         break;
     default:
-        puts("Unknown choice");
+        printf("Unknown choice\n");
         break;
     }
     return 0;
