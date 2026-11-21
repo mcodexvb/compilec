@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Learn C17 programming in CLab with runnable examples, exercises, and a data analysis project.">
+<title>C Programming Tutorial | CLab</title>
+<link rel="icon" href="../brand/favicon-v2.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="tutorial.css">
+<script src="tutorial.js" defer></script>
+</head>
+<body class="tutorial">
+<a class="skip-to-content" href="#main">Skip to content</a>
+<header class="top">
+  <a class="brand" href="../" aria-label="CLab editor"><img class="logo" src="../brand/logo-header.svg" alt="" width="89" height="30"></a>
+  <a class="editor-link" href="../">Open editor</a>
+</header>
+<div class="course-layout">
+  <aside class="course-sidebar">
+    <nav aria-labelledby="lesson-list">
+      <h2 id="lesson-list">Lessons</h2>
+      <h3>Foundations</h3>
+      <ul>
+        <li><a href="#first-program">Your first C program</a></li>
+        <li><a href="#types-output">Variables, types and formatted output</a></li>
+        <li><a href="#operators">Arithmetic and conversions</a></li>
+        <li><a href="#decisions">Decisions with if and else</a></li>
+        <li><a href="#switch">Multiple choices with switch</a></li>
+        <li><a href="#loops">Loops with for and while</a></li>
+      </ul>
+      <h3>Working with data</h3>
+      <ul>
+        <li><a href="#arrays">Arrays and bounds</a></li>
+        <li><a href="#strings">Strings and the null character</a></li>
+        <li><a href="#functions">Functions and parameters</a></li>
+        <li><a href="#pointers">Pointers and addresses</a></li>
+        <li><a href="#input">Reading and validating input</a></li>
+        <li><a href="#structures">Structures and records</a></li>
+      </ul>
+      <h3>Memory, files and practice</h3>
+      <ul>
+        <li><a href="#memory">Dynamic memory with malloc and free</a></li>
+        <li><a href="#files">Reading a text file</a></li>
+        <li><a href="#debugging">Compiler diagnostics and debugging</a></li>
+        <li><a href="#statistics">Project: summarize a data set</a></li>
+      </ul>
+      <a class="reference-link" href="#reference">Language references</a>
+    </nav>
+  </aside>
+  <main class="course-main" id="main" tabindex="-1">
+    <header class="course-intro">
+      <h1>C Programming Tutorial</h1>
+      <p class="course-lead">Learn C one program at a time, from your first line of output to a project that summarizes a data set.</p>
+      <p>These lessons use ISO C17. Each example opens in a separate CLab practice tab with the sample input or files already loaded. Press <strong>Run</strong> to compare the result with the expected output. To keep changes from a practice tab, download the program with <strong>File → Save</strong>.</p>
+      <a class="try-it" href="#first-program">Start learning C</a>
+    </header>
+    <section class="lesson" id="first-program" aria-labelledby="first-program-title" tabindex="-1">
+      <h2 id="first-program-title">Your first C program</h2>
+      <p>In a hosted C program, execution starts in <code>main</code>. Write <code>int main(void)</code> for a program that takes no command-line parameters. The braces enclose the function body.</p>
+      <p><code>#include &lt;stdio.h&gt;</code> provides the declaration of <code>puts</code>. <code>puts</code> writes a string followed by a newline. <code>return 0;</code> reports successful completion. Comments such as <code>// A short note</code> explain the source and are ignored by the compiler.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-first-program" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-first-program.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Hello, C!
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Print your name on a second line.</p>
+        <details><summary>Hint</summary><p>Call <code>puts</code> twice.</p></details>
+        <details><summary>Answer</summary><p>Add <code>puts("My name is Ada.");</code> before <code>return 0;</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Your first C program navigation">
+        <a href="#main">↑ Course overview</a>
+        <a rel="next" href="#types-output">Variables, types and formatted output →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="types-output" aria-labelledby="types-output-title" tabindex="-1">
+      <h2 id="types-output-title">Variables, types and formatted output</h2>
+      <p>Choose a type when you declare a variable. Use <code>int</code> for whole numbers within its range, <code>double</code> for floating-point values, and <code>char</code> for a character such as <code>'A'</code>. Initialize local variables before reading their values.</p>
+      <p>In <code>printf</code>, <code>%d</code> expects an <code>int</code>, <code>%.2f</code> prints a <code>double</code> with two digits after the decimal point, and <code>%c</code> prints a character passed as an <code>int</code>. Match the format to the argument type. Use <code>\n</code> to end a line.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-types-output" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-types-output.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Section A: 4 items
+Total: 50.00
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change the quantity so that the total is 75.00.</p>
+        <details><summary>Hint</summary><p>Divide the target total by the unit price.</p></details>
+        <details><summary>Answer</summary><p>Set <code>count</code> to <code>6</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Variables, types and formatted output navigation">
+        <a rel="prev" href="#first-program">← Your first C program</a>
+        <a rel="next" href="#operators">Arithmetic and conversions →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="operators" aria-labelledby="operators-title" tabindex="-1">
+      <h2 id="operators-title">Arithmetic and conversions</h2>
+      <p>When both operands of <code>/</code> have integer type, the quotient is truncated toward zero. The <code>%</code> operator gives the remainder for integer operands. Keep the divisor nonzero.</p>
+      <p>Cast an operand to <code>double</code> before division when you want a floating-point quotient. Use parentheses when the grouping matters. A signed integer result outside the type’s representable range has undefined behavior.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-operators" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-operators.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Whole quotient: 3
+Remainder: 2
+Mean: 3.40
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Predict the result of <code>(double)(total / groups)</code>.</p>
+        <details><summary>Hint</summary><p>Evaluate the expression inside the inner parentheses first.</p></details>
+        <details><summary>Answer</summary><p>Integer division produces <code>3</code>, which the cast converts to <code>3.0</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Arithmetic and conversions navigation">
+        <a rel="prev" href="#types-output">← Variables, types and formatted output</a>
+        <a rel="next" href="#decisions">Decisions with if and else →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="decisions" aria-labelledby="decisions-title" tabindex="-1">
+      <h2 id="decisions-title">Decisions with if and else</h2>
+      <p>Use <code>if</code> to execute a block when its condition is nonzero. An <code>else if</code> chain tests conditions in order and executes the first matching block. The final <code>else</code> handles the remaining cases.</p>
+      <p><code>==</code> compares values, while <code>=</code> assigns a value. Use <code>&amp;&amp;</code> for a conjunction and <code>||</code> for a disjunction. They evaluate left to right and skip the second operand if the first already determines the result.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-decisions" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-decisions.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Pass
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Test the program with 39, 40, 75 and 101.</p>
+        <details><summary>Hint</summary><p>Pay attention to whether the lower boundary is included.</p></details>
+        <details><summary>Answer</summary><p>The outputs are <code>Try again</code>, <code>Pass</code>, <code>Distinction</code> and <code>Invalid score</code>, respectively.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Decisions with if and else navigation">
+        <a rel="prev" href="#operators">← Arithmetic and conversions</a>
+        <a rel="next" href="#switch">Multiple choices with switch →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="switch" aria-labelledby="switch-title" tabindex="-1">
+      <h2 id="switch-title">Multiple choices with switch</h2>
+      <p>Use <code>switch</code> to choose among cases for an integer-valued expression. Each <code>case</code> label uses an integer constant expression. Use <code>default</code> for unmatched values.</p>
+      <p>Execution starts at the matching label. A <code>break</code> exits the switch. Without it, execution can continue into the following case.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-switch" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-switch.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Mean
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a <code>'r'</code> choice that prints <code>Range</code>.</p>
+        <details><summary>Hint</summary><p>Add a case before <code>default</code> and test it.</p></details>
+        <details><summary>Answer</summary><p>Add <code>case 'r': puts("Range"); break;</code> and assign <code>'r'</code> to <code>choice</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Multiple choices with switch navigation">
+        <a rel="prev" href="#decisions">← Decisions with if and else</a>
+        <a rel="next" href="#loops">Loops with for and while →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="loops" aria-labelledby="loops-title" tabindex="-1">
+      <h2 id="loops-title">Loops with for and while</h2>
+      <p>Use a <code>for</code> loop when a counter organizes the work. The initializer runs once. The condition is checked before each iteration and the update runs after the body. A <code>while</code> loop also checks before each iteration.</p>
+      <p>A <code>do</code>–<code>while</code> loop tests after its body and therefore runs at least once. In this program, the counter in the <code>for</code> loop ranges from 1 through 5, inclusive.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-loops" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-loops.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Sum: 15
+3
+2
+1
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Sum the even integers from 2 through 10.</p>
+        <details><summary>Hint</summary><p>Advance the counter by 2 each time.</p></details>
+        <details><summary>Answer</summary><p>Use <code>for (int i = 2; i &lt;= 10; i += 2)</code>. The sum is 30.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Loops with for and while navigation">
+        <a rel="prev" href="#switch">← Multiple choices with switch</a>
+        <a rel="next" href="#arrays">Arrays and bounds →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="arrays" aria-labelledby="arrays-title" tabindex="-1">
+      <h2 id="arrays-title">Arrays and bounds</h2>
+      <p>An array stores a fixed number of elements of the same type in order. Its first element has index 0. An array of length <var>n</var> can be indexed from 0 through <var>n</var> − 1. Access outside this range has undefined behavior.</p>
+      <p>For an array object in scope, <code>sizeof scores / sizeof scores[0]</code> gives the number of elements. The result has type <code>size_t</code>. To declare a 2 × 3 array of integers, use <code>int grid[2][3];</code> and access its elements as <code>grid[row][column]</code>.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-arrays" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-arrays.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Mean of 4 scores: 7.50
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a fifth score of 15 and predict the mean.</p>
+        <details><summary>Hint</summary><p>The loop already uses the length computed from the array.</p></details>
+        <details><summary>Answer</summary><p>The new sum is 45, and the new mean is <code>9.00</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Arrays and bounds navigation">
+        <a rel="prev" href="#loops">← Loops with for and while</a>
+        <a rel="next" href="#strings">Strings and the null character →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="strings" aria-labelledby="strings-title" tabindex="-1">
+      <h2 id="strings-title">Strings and the null character</h2>
+      <p>A C string is a sequence of characters terminated by the null character <code>'\0'</code>. A character array holding a string needs capacity for that final character.</p>
+      <p><code>strlen</code> counts the bytes before the terminator. <code>sizeof</code> on the array gives its full capacity in bytes. Use <code>strcmp(a, b) == 0</code> to test string contents for equality. You can change the elements of the array initialized below. Attempting to modify a string literal itself has undefined behavior.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-strings" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-strings.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>bat
+Length: 3, capacity: 10
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change <code>bat</code> to <code>boat</code> using assignments.</p>
+        <details><summary>Hint</summary><p>Update the changed letters and leave a terminator after the last one.</p></details>
+        <details><summary>Answer</summary><p>Set <code>word[1] = 'o'; word[2] = 'a'; word[3] = 't'; word[4] = '\0';</code>. The new length is 4.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Strings and the null character navigation">
+        <a rel="prev" href="#arrays">← Arrays and bounds</a>
+        <a rel="next" href="#functions">Functions and parameters →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="functions" aria-labelledby="functions-title" tabindex="-1">
+      <h2 id="functions-title">Functions and parameters</h2>
+      <p>A function can receive arguments and return a result. Provide a declaration before its first call, either by defining the function earlier or by using a prototype as below. Local variables declared inside a function body are scoped to their block.</p>
+      <p>C passes arguments by value. Each parameter receives a value derived from its argument. A function that accepts an array through a parameter such as <code>int a[]</code> actually receives a pointer. Pass the element count separately.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-functions" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-functions.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Area: 10.00
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a perimeter function and print the perimeter.</p>
+        <details><summary>Hint</summary><p>The formula is twice the sum of the side lengths.</p></details>
+        <details><summary>Answer</summary><p>Use <code>return 2 * (length + width);</code> in a function with two <code>double</code> parameters. The perimeter is <code>13.00</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Functions and parameters navigation">
+        <a rel="prev" href="#strings">← Strings and the null character</a>
+        <a rel="next" href="#pointers">Pointers and addresses →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="pointers" aria-labelledby="pointers-title" tabindex="-1">
+      <h2 id="pointers-title">Pointers and addresses</h2>
+      <p>A pointer can hold the address of an object. <code>&amp;x</code> gets the address of <code>x</code>, and <code>*p</code> accesses the object to which <code>p</code> points. Use a pointer to let a function update an object owned by its caller.</p>
+      <p>Dereference only a pointer that points to a suitable, live object. A null pointer points to no object. A pointer argument is itself passed by value, so assigning to the parameter changes only the function’s local copy of the pointer.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-pointers" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-pointers.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>7 12
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>What would calling <code>swap(&amp;left, &amp;left)</code> do?</p>
+        <details><summary>Hint</summary><p>Both pointers would refer to the same object.</p></details>
+        <details><summary>Answer</summary><p>The value of <code>left</code> would stay the same. Each assignment would write its original value.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Pointers and addresses navigation">
+        <a rel="prev" href="#functions">← Functions and parameters</a>
+        <a rel="next" href="#input">Reading and validating input →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="input" aria-labelledby="input-title" tabindex="-1">
+      <h2 id="input-title">Reading and validating input</h2>
+      <p>Use <code>fgets</code> to read a bounded piece of a line. It stores a newline if one fits and is read. Check the return value and decide how to handle incomplete lines. This example expects one complete line of at most 30 bytes before the newline.</p>
+      <p>Use <code>strtol</code> to parse a base-10 integer. Check that a digit was consumed, reject extra non-space characters, and check <code>errno</code> for <code>ERANGE</code> before using the result. Call <code>fflush(stdout)</code> so the prompt is visible before the read. Cast to <code>unsigned char</code> before passing a possibly negative <code>char</code> to <code>isspace</code>.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-input" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-input.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Sample input</h4>
+        <pre><code>42
+</code></pre>
+        <h4>Expected output</h4>
+        <pre><code>Enter a whole number: You entered 42
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Try the inputs <code>  -12  </code>, <code>12x</code> and an empty line.</p>
+        <details><summary>Hint</summary><p>Enter one test line in Prepared input, or clear it and respond to the prompt in Output.</p></details>
+        <details><summary>Answer</summary><p>The program accepts the first and prints <code>You entered -12</code>. It rejects the trailing <code>x</code> and rejects the empty line because no digits were read.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Reading and validating input navigation">
+        <a rel="prev" href="#pointers">← Pointers and addresses</a>
+        <a rel="next" href="#structures">Structures and records →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="structures" aria-labelledby="structures-title" tabindex="-1">
+      <h2 id="structures-title">Structures and records</h2>
+      <p>A <code>struct</code> groups related members, which can have different types. Use <code>.</code> to access members of a structure object and <code>-&gt;</code> when using a pointer to that structure.</p>
+      <p>The example uses designated initializers to name the members. A structure can be assigned to another object of the same type, including when some members are arrays.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-structures" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-structures.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>(3.5, 2.0)
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Move <code>p</code> to the origin with one more call.</p>
+        <details><summary>Hint</summary><p>Subtract its current coordinates.</p></details>
+        <details><summary>Answer</summary><p>Insert <code>translate(&amp;p, -p.x, -p.y);</code> before printing.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Structures and records navigation">
+        <a rel="prev" href="#input">← Reading and validating input</a>
+        <a rel="next" href="#memory">Dynamic memory with malloc and free →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="memory" aria-labelledby="memory-title" tabindex="-1">
+      <h2 id="memory-title">Dynamic memory with malloc and free</h2>
+      <p>Use <code>malloc</code> to request storage whose lifetime you control. Use <code>sizeof *values</code> to calculate the size of one element. For a count supplied by the user, validate it and check that the multiplication fits in <code>size_t</code> before allocating.</p>
+      <p>Check for a null result before accessing the allocation. <code>malloc</code> leaves the storage uninitialized, so write values before reading them. Release the memory with <code>free</code> when finished and avoid using pointers to the freed storage.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-memory" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-memory.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Last value: 30
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>What should you check before allocating <code>count</code> elements if <code>count</code> comes from input?</p>
+        <details><summary>Hint</summary><p>Think about empty input and the largest value a <code>size_t</code> can hold.</p></details>
+        <details><summary>Answer</summary><p>If the program needs at least one element, require <code>count &gt; 0</code>. Reject <code>count &gt; SIZE_MAX / sizeof *values</code> before multiplying. Include <code>&lt;stdint.h&gt;</code> for <code>SIZE_MAX</code>.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Dynamic memory with malloc and free navigation">
+        <a rel="prev" href="#structures">← Structures and records</a>
+        <a rel="next" href="#files">Reading a text file →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="files" aria-labelledby="files-title" tabindex="-1">
+      <h2 id="files-title">Reading a text file</h2>
+      <p>Call <code>fopen</code> with mode <code>"r"</code> for reading an existing text file. A null result indicates that the file could not be opened. CLab places the sample file under Files before the program runs.</p>
+      <p>Read while <code>fgets</code> succeeds, then check <code>ferror</code>. Testing <code>feof</code> before reading cannot tell you whether the next read will succeed. Call <code>fclose</code> when finished and check its result, especially when writing a file.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-files" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-files.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Sample file <code>greeting.txt</code></h4>
+        <pre><code>Hello from a file!
+A second line.
+</code></pre>
+        <h4>Expected output</h4>
+        <pre><code>Hello from a file!
+A second line.
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Rename the input file under Files and run again without editing the program.</p>
+        <details><summary>Hint</summary><p>Compare the file name with the one passed to <code>fopen</code>.</p></details>
+        <details><summary>Answer</summary><p>Opening <code>greeting.txt</code> fails. Update the path in <code>fopen</code> to match the renamed file.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Reading a text file navigation">
+        <a rel="prev" href="#memory">← Dynamic memory with malloc and free</a>
+        <a rel="next" href="#debugging">Compiler diagnostics and debugging →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="debugging" aria-labelledby="debugging-title" tabindex="-1">
+      <h2 id="debugging-title">Compiler diagnostics and debugging</h2>
+      <p>Use compiler warnings and read the first diagnostic with its line number. When compiling locally, use <code>cc -std=c17 -Wall -Wextra -Wpedantic program.c -o program</code>. CLab offers compiler options under Tools and lists diagnostics in the output panel.</p>
+      <p>A valid program can still compute the wrong result. Test with small inputs whose answers you already know. The assertion below checks the final state and aborts if its condition is false, provided <code>NDEBUG</code> is undefined when <code>&lt;assert.h&gt;</code> is included. Use assertions for assumptions about the program, and ordinary error handling for invalid input.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-debugging" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-debugging.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Sum: 10
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Change <code>i &lt;= 4</code> to <code>i &lt; 4</code>. Predict the resulting sum and what happens to the assertion.</p>
+        <details><summary>Hint</summary><p>Write down the sequence of counter values.</p></details>
+        <details><summary>Answer</summary><p>The loop sums 1, 2 and 3, yielding 6. With assertions enabled, the program stops at the failed check.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Compiler diagnostics and debugging navigation">
+        <a rel="prev" href="#files">← Reading a text file</a>
+        <a rel="next" href="#statistics">Project: summarize a data set →</a>
+      </nav>
+    </section>
+
+    <section class="lesson" id="statistics" aria-labelledby="statistics-title" tabindex="-1">
+      <h2 id="statistics-title">Project: summarize a data set</h2>
+      <p>Combine arrays, loops, functions and a structure to compute the minimum, maximum and arithmetic mean of a small data set. Work through the sample by hand so you have an independent check.</p>
+      <p>The summary function expects a nonempty array and its length. Starting both extrema at the first data value handles a data set containing only negative numbers. A running sum works for this small example. Large or extreme data sets may require care with floating-point range and rounding.</p>
+      <div class="example">
+        <div class="example-header">
+          <h3>Example</h3>
+          <a class="try-it" href="../?example=learn-statistics" target="_blank" rel="noopener">Try it in CLab <span class="visually-hidden">(opens a new tab)</span></a>
+        </div>
+        <pre class="source" hidden><code></code></pre>
+        <div class="source-actions">
+          <a class="source-link" href="../examples/learn-statistics.c">Open C source</a>
+          <button type="button" class="copy-code" hidden>Copy code</button>
+          <span class="copy-status" role="status"></span>
+        </div>
+        <h4>Expected output</h4>
+        <pre><code>Minimum: 2.00
+Maximum: 6.00
+Mean: 4.00
+</code></pre>
+      </div>
+      <div class="practice">
+        <h3>Exercise</h3>
+        <p>Add a range line and test with <code>{-8.0, -2.0, -5.0}</code>.</p>
+        <details><summary>Hint</summary><p>The range is the maximum minus the minimum.</p></details>
+        <details><summary>Answer</summary><p>The range is <code>6.00</code>. The minimum, maximum and mean are −8.00, −2.00 and −5.00.</p></details>
+      </div>
+      <nav class="lesson-nav" aria-label="Project: summarize a data set navigation">
+        <a rel="prev" href="#debugging">← Compiler diagnostics and debugging</a>
+        <a href="#reference">Language references →</a>
+      </nav>
+    </section>
+
+    <footer class="references" id="reference">
+      <h2>Language references</h2>
+      <ul>
+        <li><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 draft N1570 (PDF)</a> — the C11 committee draft. Sections 6 and 7 cover the core language and standard library used in these lessons.</li>
+        <li><a href="https://en.cppreference.com/w/c">C reference</a> — syntax, library functions, and the C versions that introduced them.</li>
+      </ul>
+      <p><a href="#main">Back to course overview</a></p>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

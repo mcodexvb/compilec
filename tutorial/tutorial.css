@@ -1,0 +1,119 @@
+.tutorial {
+  height: auto;
+  min-height: 100%;
+  overscroll-behavior: auto;
+}
+
+.tutorial a { color: var(--acc); }
+.tutorial .skip-to-content {
+  position: absolute;
+  z-index: 1;
+  top: .5rem;
+  left: .5rem;
+  padding: .5rem;
+  background: var(--pane);
+  transform: translateY(-200%);
+}
+.tutorial .skip-to-content:focus { transform: none; }
+
+.tutorial .top { padding: .7rem max(1.25rem, calc((100% - 76rem) / 2)); }
+.editor-link, .lesson-nav, .course-sidebar, .example-header a, .source-actions {
+  font-family: system-ui, sans-serif;
+  font-size: .87rem;
+}
+
+.course-layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 55rem);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  max-width: 79rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.course-sidebar {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  padding: .15rem .85rem .75rem .2rem;
+}
+.course-sidebar h2 { margin: 0 0 .8rem; font-size: 1.05rem; }
+.course-sidebar h3 { margin: .9rem 0 .28rem; color: var(--mute); font-size: .82rem; }
+.course-sidebar ul { list-style: none; padding: 0; margin: 0; }
+.course-sidebar a {
+  display: block;
+  padding: .28rem .45rem;
+  border-radius: .25rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+.course-sidebar a:hover { text-decoration: underline; }
+.course-sidebar a[aria-current] { background: var(--pane); color: var(--acc); font-weight: 600; }
+.course-sidebar .reference-link { margin-top: .6rem; color: var(--acc); }
+
+.course-intro { padding-bottom: 2rem; }
+.course-intro h1 { font-size: clamp(2.3rem, 6vw, 3.9rem); line-height: 1.04; margin: 0; letter-spacing: -.035em; }
+.course-lead { font-size: clamp(1.15rem, 3vw, 1.5rem); color: var(--mute); }
+.course-main p { max-width: 68ch; }
+.course-intro .try-it { margin-top: .3rem; }
+
+.lesson { padding: 1.7rem 0 2rem; border-top: 1px solid var(--line); scroll-margin-top: 1rem; }
+.lesson h2, .references h2 { margin: 0 0 .65rem; font-size: clamp(1.55rem, 4vw, 2.1rem); line-height: 1.15; }
+.lesson h3 { margin: 0; font-size: 1.2rem; }
+.lesson :not(pre) > code { overflow-wrap: anywhere; }
+.example, .practice { border-radius: .55rem; padding: clamp(.85rem, 3vw, 1.25rem); margin-top: 1.3rem; }
+.example { border: 1px solid var(--line); background: var(--pane); }
+.example-header, .source-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem; }
+.example-header { justify-content: space-between; }
+.tutorial .try-it {
+  display: inline-block;
+  padding: .42rem .75rem;
+  border: 1px solid var(--acc);
+  border-radius: .3rem;
+  background: var(--acc);
+  color: var(--accfg);
+  font-weight: 600;
+  text-decoration: none;
+}
+.tutorial .try-it:hover { text-decoration: underline; }
+
+.example pre {
+  overflow: auto;
+  min-height: 0;
+  white-space: pre;
+  word-break: normal;
+  padding: .7rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+  background: var(--bg);
+  margin: .7rem 0;
+  tab-size: 4;
+}
+.example pre:last-child { margin-bottom: 0; }
+.example h4 { margin: .95rem 0 .3rem; font-size: .96rem; }
+.source-actions { margin-top: .7rem; }
+.copy-code { padding: .25rem .5rem; }
+.copy-status { color: var(--mute); }
+.practice { border: 1px solid var(--line); border-inline-start: .25rem solid var(--acc); }
+.practice p { margin: .6rem 0; }
+.practice details + details { margin-top: .3rem; }
+.practice summary { cursor: pointer; color: var(--acc); }
+.lesson-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem 1rem; margin-top: 1.25rem; }
+.references { border-top: 1px solid var(--line); padding-top: 1.7rem; }
+.references li { margin-block: .5rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 48rem) {
+  .course-layout { grid-template-columns: minmax(0, 1fr); }
+  .course-sidebar {
+    position: static;
+    max-height: 13rem;
+    padding: .7rem;
+    border: 1px solid var(--line);
+    border-radius: .5rem;
+    background: var(--pane);
+  }
+  .course-sidebar h2 { position: sticky; top: -.7rem; background: var(--pane); padding: .35rem 0; margin: 0; }
+}

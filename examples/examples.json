@@ -94,5 +94,91 @@
   "id": "18-write-csv-table",
   "title": "Writing a CSV table to a file",
   "input": ""
+ },
+ {
+  "id": "learn-first-program",
+  "title": "Your first C program",
+  "input": ""
+ },
+ {
+  "id": "learn-types-output",
+  "title": "Variables, types and formatted output",
+  "input": ""
+ },
+ {
+  "id": "learn-operators",
+  "title": "Arithmetic and conversions",
+  "input": ""
+ },
+ {
+  "id": "learn-decisions",
+  "title": "Decisions with if and else",
+  "input": ""
+ },
+ {
+  "id": "learn-switch",
+  "title": "Multiple choices with switch",
+  "input": ""
+ },
+ {
+  "id": "learn-loops",
+  "title": "Loops with for and while",
+  "input": ""
+ },
+ {
+  "id": "learn-arrays",
+  "title": "Arrays and bounds",
+  "input": ""
+ },
+ {
+  "id": "learn-strings",
+  "title": "Strings and the null character",
+  "input": ""
+ },
+ {
+  "id": "learn-functions",
+  "title": "Functions and parameters",
+  "input": ""
+ },
+ {
+  "id": "learn-pointers",
+  "title": "Pointers and addresses",
+  "input": ""
+ },
+ {
+  "id": "learn-input",
+  "title": "Reading and validating input",
+  "input": "42\n"
+ },
+ {
+  "id": "learn-structures",
+  "title": "Structures and records",
+  "input": ""
+ },
+ {
+  "id": "learn-memory",
+  "title": "Dynamic memory with malloc and free",
+  "input": ""
+ },
+ {
+  "id": "learn-files",
+  "title": "Reading a text file",
+  "input": "",
+  "files": [
+   {
+    "name": "greeting.txt",
+    "text": "Hello from a file!\nA second line.\n"
+   }
+  ]
+ },
+ {
+  "id": "learn-debugging",
+  "title": "Compiler diagnostics and debugging",
+  "input": ""
+ },
+ {
+  "id": "learn-statistics",
+  "title": "Project: summarize a data set",
+  "input": ""
  }
 ]

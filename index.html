@@ -17,6 +17,7 @@
   <header class="top">
     <div class="brand"><img class="logo" src="brand/logo-header.svg" alt="CLab" height="30" width="89"><span class="by">by <a href="https://mainul.pages.dev/">Mainul Hossain</a></span></div>
     <div class="hdr">
+      <a class="tutorial-link" id="tutorialLink" href="tutorial/">C Tutorial</a>
       <button class="run" id="run" type="button">Run</button>
       <button id="stop" type="button" disabled>Stop</button>
     </div>
@@ -43,8 +44,10 @@
           <span class="acts"><button type="button" class="max" data-max="in" aria-label="Enlarge the input panel" title="Enlarge or restore">&#x2922;</button></span>
         </div>
         <div class="tp" id="tp-stdin">
-          <label class="lbl" for="stdin">Typed in when the program calls scanf, getchar or fgets on stdin</label>
-          <textarea id="stdin" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+          <label class="lbl" for="stdin">Prepared input</label>
+          <p class="input-help" id="inputHelp">Enter the program's input before pressing Run.</p>
+          <button class="reload-live" type="button" id="reloadLive" hidden>Reload to enable live input</button>
+          <textarea id="stdin" aria-describedby="inputHelp" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
         </div>
         <div class="tp" id="tp-files" hidden>
           <div class="fbar">
@@ -77,6 +80,14 @@
             <pre id="ofview" hidden></pre>
           </div>
         </div>
+        <form class="terminal-input" id="terminalInput" hidden>
+          <label for="terminalLine">Input line</label>
+          <div>
+            <input type="text" id="terminalLine" spellcheck="false" autocapitalize="off" autocomplete="off">
+            <button type="submit">Send</button>
+            <button type="button" id="terminalEof">Send EOF</button>
+          </div>
+        </form>
       </div>
     </section>
   </main>
@@ -98,7 +109,7 @@
   <form method="dialog">
     <div class="dhead"><h2 id="dOptsT">Compiler options</h2><button type="button" class="dx" data-close aria-label="Close">&times;</button></div>
     <label class="drow">Optimisation <select id="opt"><option value="-O0">O0, none (fastest to compile)</option><option value="-O1" selected>O1, some</option><option value="-O2">O2, more</option></select></label>
-    <label class="drow">C standard <select id="std"><option>gnu11</option><option selected>gnu17</option><option>gnu23</option></select></label>
+    <label class="drow">C standard <select id="std"><option>gnu11</option><option selected>gnu17</option><option>c17</option><option>gnu23</option></select></label>
     <label class="drow">Warnings <select id="warn"><option value="none">None</option><option value="all" selected>Common (-Wall)</option><option value="extra">Many (-Wall -Wextra)</option></select></label>
     <label class="drow">Arguments <input id="args" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="passed to main as argv[1], argv[2], ..."></label>
     <div class="dbtn"><button value="close" class="run">Done</button></div>
@@ -110,7 +121,8 @@
     <section>
       <h3>Running a program</h3>
       <p>Write your program in the editor and press <strong>Run</strong> or F10. To check a program without running it, choose Execute, then Compile only (F9). Errors and warnings are underlined in the editor and listed above the output; click one to jump to its line.</p>
-      <p>Anything the program reads with <code>scanf</code>, <code>getchar</code> or <code>fgets</code> must be typed into the <strong>Input</strong> box before you press Run. The program reads it from there, because it cannot stop and wait for the keyboard while it runs. If the program asks for two numbers, type both, separated by a space or on separate lines.</p>
+      <p>Leave <strong>Prepared input</strong> empty to type in the Output panel when your program reads from standard input. Press Enter or select <strong>Send</strong> to submit a line. Use <strong>Send EOF</strong> when there is no more input. To display a prompt that has no newline, call <code>fflush(stdout)</code> before reading.</p>
+      <p>For a repeatable run, enter the complete input in <strong>Prepared input</strong> before pressing Run. This also works when live input is unavailable.</p>
     </section>
     <section>
       <h3>Files</h3>
@@ -134,7 +146,7 @@
     </section>
     <section>
       <h3>What does not work here</h3>
-      <p>Programs run in a sandbox inside the browser, so a few things that work on a desktop compiler are not available: <code>conio.h</code> and <code>graphics.h</code> (they belong to old Turbo C), <code>system()</code>, threads, networking, and reading the keyboard while the program runs. Everything in the standard C library, including <code>math.h</code>, <code>string.h</code>, <code>stdlib.h</code> and file input and output, works as usual.</p>
+      <p>The browser sandbox supports standard input and output, virtual files, and library functions such as those in <code>math.h</code>, <code>string.h</code> and <code>stdlib.h</code>. It does not provide desktop-specific features such as <code>conio.h</code>, <code>graphics.h</code>, shell commands, or raw keyboard input.</p>
     </section>
   </div>
 </dialog>

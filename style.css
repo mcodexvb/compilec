@@ -177,3 +177,14 @@ kbd{font:.82rem var(--code);padding:1px 6px;border:1px solid var(--line);border-
 .dbtn{display:flex;justify-content:flex-end;margin-top:14px}
 @media (max-width:560px){.parts,.keys2{grid-template-columns:1fr;gap:2px}.parts dd,.keys2 dd{margin-bottom:8px}.hero{flex-direction:column}.dbody{padding:4px 18px 20px}}
 @media (max-width:860px){.menubar>button{min-height:40px;padding:6px 14px}.mpop button{min-height:42px}}
+
+/* Course entry and live standard input */
+.tutorial-link{color:var(--acc);font-weight:600}
+.input-help{font-size:.86rem;color:var(--mute);margin:0 12px 5px}
+.reload-live{align-self:flex-start;font-size:.86rem;margin:0 12px 5px}
+.terminal-input{flex:none;border-top:1px solid var(--line);padding:6px 10px;background:var(--pane)}
+.terminal-input label{display:block;font-size:.86rem;color:var(--mute);margin-bottom:3px}
+.terminal-input div{display:flex;align-items:stretch;gap:5px}
+.terminal-input input{flex:1;font-family:var(--code)}
+.terminal-input button{padding-inline:8px;white-space:nowrap}
+.input-echo{color:var(--acc)}

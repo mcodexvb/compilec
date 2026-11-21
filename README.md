@@ -21,7 +21,8 @@ C Lab: an online C editor and compiler. Clang 22 runs inside the page as WebAsse
 - The compiler (about 29 MB compressed) is fetched only when a visitor first presses Run, and is then cached by the browser (and by a service worker, so it also works offline).
 - Compilation and execution happen in a Web Worker, so the page stays responsive. Output is streamed as the program prints. The Stop button ends a runaway program.
 - Programs run in a private in-memory folder: the files you add are placed there before the run and the files the program writes are read back afterwards. Nothing leaves the device.
-- Standard input is supplied from the Input box before the run (a program cannot wait for keyboard input while it runs). The 15 numerical-analysis programs from the DSCC-15 notes are included as examples, with three more that show files and tables, and `?example=07-bisection` opens one directly.
+- Leave **Prepared input** empty and a line editor appears under Output whenever the program requests input. **Send EOF** ends the input stream. For a repeatable run, supply the complete input before pressing Run. The 18 numerical and file examples still open directly, for example with `?example=07-bisection`.
+- The [C programming tutorial](tutorial/) covers C17 with examples, exercises and a data summary project. **Try it in CLab** opens a temporary practice workspace. Download a practice program to keep your edits.
 - The compiler files (`clang/`, `vendor/`, about 29 MB) are committed, so the repository root is the whole site and needs no build step.
 
 ## Hosting
@@ -30,6 +31,8 @@ The site is plain static files at the repository root.
 
 - **GitHub Pages:** Settings, Pages, deploy from branch `main`, folder `/ (root)`.
 - **Cloudflare Pages:** connect the repository, leave the build command empty and set the build output directory to `/` (or `.`). Every file is below the 25 MiB Pages limit; the largest is the 15 MB `clang.wasm.gz`.
+
+Live standard input needs a browser with cross-origin isolation. Cloudflare Pages uses the supplied `_headers`. On GitHub Pages or another static host without those headers, reload once the service worker is ready. The Input panel provides a reload button when needed. Prepared input remains available if the browser cannot enable live input.
 
 To rebuild the editor bundle after changing `src/editor.js`: `npm install`, then `npm run build-editor`.
 
