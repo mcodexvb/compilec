@@ -77,8 +77,16 @@ async function runProgram(msg) {
       cppReady = true;
     }
     const started = performance.now();
+    // A real terminal shows a prompt such as "Enter n: " before the program waits for input, because
+    // the C library empties stdout before reading from a terminal. Here stdout is not a terminal, so a
+    // partial line would stay hidden in the program's buffer. Making stdout unbuffered fixes that. It is
+    // only added when the program includes stdio.h itself, so a missing include is still reported, and
+    // "#line 1" keeps every line number in the messages unchanged.
+    const source = language === 'C' && /^\s*#\s*include\s*<stdio\.h>/m.test(msg.code)
+      ? '#include <stdio.h>\n__attribute__((constructor)) static void clab_unbuffered_stdout(void) { setvbuf(stdout, NULL, _IONBF, 0); }\n#line 1\n' + msg.code
+      : msg.code;
     const compiled = await tc.captureCompilerOutput(() =>
-      tc.runtime.compileArtifact(msg.code, {
+      tc.runtime.compileArtifact(source, {
         language,
         fileName: language === 'CPP' ? 'main.cpp' : 'main.c',
         compileArgs: [...T.CLANG_DRIVER_DEFAULT_ARGS, ...msg.flags]

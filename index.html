@@ -89,12 +89,8 @@
           </div>
         </div>
         <form class="terminal-input" id="terminalInput" hidden>
-          <label for="terminalLine">Input line</label>
-          <div>
-            <input type="text" id="terminalLine" spellcheck="false" autocapitalize="off" autocomplete="off">
-            <button type="submit">Send</button>
-            <button type="button" id="terminalEof">Send EOF</button>
-          </div>
+          <span class="ti-hint">Type in the output above and press Enter.</span>
+          <button type="button" id="terminalEof" title="Same as Ctrl+D">Send EOF</button>
         </form>
       </div>
     </section>

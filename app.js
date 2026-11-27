@@ -11,7 +11,7 @@
   var practice = /^learn-[a-z0-9-]+$/.test(exampleId || '');
   var openingPractice = practice;
   var canLiveInput = window.crossOriginIsolated && typeof SharedArrayBuffer === 'function';
-  var terminalForm = $('terminalInput'), terminalLine = $('terminalLine'), inputSignal = null, inputBytes = null;
+  var terminalForm = $('terminalInput'), inputSignal = null, inputBytes = null, inlineForm = null, inlineField = null;
 
   var HELLO = '#include <stdio.h>\n\nint main(void)\n{\n    int n;\n    printf("Enter an integer from -100 to 100: ");\n    fflush(stdout);\n    if (scanf("%4d", &n) != 1 || n < -100 || n > 100) {\n        fputs("Expected an integer from -100 to 100.\\n", stderr);\n        return 1;\n    }\n    printf("Its square is %d\\n", n * n);\n    return 0;\n}\n';
 
@@ -410,30 +410,61 @@
   function finish() {
     inputSignal = inputBytes = null;
     terminalForm.hidden = true;
-    terminalLine.value = '';
+    removeInline();
     setRunning(false);
     prog.classList.remove('on');
   }
 
+  // The input box sits inline at the end of the output, like the cursor in a terminal.
+  function removeInline() {
+    if (inlineForm && inlineForm.parentNode) inlineForm.parentNode.removeChild(inlineForm);
+    inlineForm = inlineField = null;
+  }
+  function showInline() {
+    removeInline();
+    inlineForm = document.createElement('form');
+    inlineForm.className = 'inline-in';
+    inlineField = document.createElement('input');
+    inlineField.type = 'text';
+    inlineField.size = 1;
+    inlineField.setAttribute('aria-label', 'Program input. Press Enter to send it.');
+    inlineField.spellcheck = false;
+    inlineField.autocomplete = 'off';
+    inlineField.autocapitalize = 'off';
+    inlineField.addEventListener('input', function () { inlineField.size = Math.max(1, inlineField.value.length + 1); });
+    inlineField.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.key === 'D')) { e.preventDefault(); sendInput(true); }
+    });
+    inlineForm.appendChild(inlineField);
+    inlineForm.addEventListener('submit', function (e) { e.preventDefault(); sendInput(false); });
+    outp.appendChild(inlineForm);
+    outp.addEventListener('click', focusInline);
+  }
+  function focusInline(e) {
+    if (inlineField && !(window.getSelection && String(window.getSelection()))) inlineField.focus();
+  }
+
   function sendInput(eof) {
-    if (!inputSignal || terminalForm.hidden) return;
-    var line = terminalLine.value + '\n';
+    if (!inputSignal || !inlineField) return;
+    var line = inlineField.value + '\n';
     var encoded = eof ? null : new TextEncoder().encode(line);
     if (encoded && encoded.length > inputBytes.length) {
       setStatus('That input line exceeds the 16 KiB limit. Shorten it and send it again.', 'err');
       return;
     }
+    removeInline();
     if (encoded) {
       inputBytes.set(encoded);
       appendOut(line, false, true);
+    } else {
+      appendOut('^D\n', false, true);
     }
-    terminalLine.value = '';
     terminalForm.hidden = true;
     setStatus('Running...');
     Atomics.store(inputSignal, 0, eof ? -1 : encoded.length);
     Atomics.notify(inputSignal, 0);
   }
-  terminalForm.addEventListener('submit', function (e) { e.preventDefault(); sendInput(false); });
+  terminalForm.addEventListener('submit', function (e) { e.preventDefault(); });
   $('terminalEof').addEventListener('click', function () { sendInput(true); });
   $('reloadLive').addEventListener('click', function () {
     if (practice && !okToReplace()) return;
@@ -467,9 +498,10 @@
       if (!inputSignal) return;
       if (mqMobile.matches) setPage('output', true);
       terminalForm.hidden = false;
+      showInline();
       $('tp-output').scrollTop = $('tp-output').scrollHeight;
-      terminalLine.focus();
-      setStatus('Waiting for input.');
+      inlineField.focus();
+      setStatus('Waiting for input. Type in the output and press Enter.');
     } else if (m.type === 'result') {
       showResult(m.result);
       finish();
