@@ -943,6 +943,7 @@
     { label: 'Examples', items: function () {
       var list = [{ t: 'Blank program (new tab)', f: newProgram }];
       var add = function (group, label) {
+        if (!group.length) return;
         if (label) list.push('-', { t: label, disabled: true });
         group.forEach(function (x, i) {
           list.push({ t: (i + 1) + '. ' + x.title, f: function () {

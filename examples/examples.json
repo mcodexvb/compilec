@@ -430,5 +430,45 @@
   "id": "fun-08-guess-my-number",
   "title": "The computer guesses your number",
   "input": "l\nh\nc\n"
+ },
+ {
+  "id": "fun-09-monte-carlo-pi",
+  "title": "Estimating pi with random darts",
+  "input": ""
+ },
+ {
+  "id": "fun-10-ulam-spiral",
+  "title": "The Ulam spiral of the primes",
+  "input": ""
+ },
+ {
+  "id": "fun-11-logistic-bifurcation",
+  "title": "Bifurcation diagram of the logistic map",
+  "input": ""
+ },
+ {
+  "id": "fun-12-predator-prey",
+  "title": "Predators and prey (Lotka-Volterra)",
+  "input": ""
+ },
+ {
+  "id": "fun-13-eight-queens",
+  "title": "The eight queens puzzle",
+  "input": ""
+ },
+ {
+  "id": "fun-14-digits-of-pi",
+  "title": "The first 100 digits of pi",
+  "input": ""
+ },
+ {
+  "id": "fun-15-collatz",
+  "title": "The 3n + 1 (Collatz) problem",
+  "input": ""
+ },
+ {
+  "id": "fun-16-roman-numerals",
+  "title": "Roman numerals",
+  "input": "1994\n2026\n49\n3999\n0\n"
  }
 ]
