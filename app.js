@@ -715,10 +715,8 @@
   }
   function newProgram() {
     if (!okToReplace()) return;
-    var starter = language.value === 'CPP'
-      ? '#include <iostream>\n\nint main() {\n    std::cout << "Hello, C++!\\n";\n}\n'
-      : HELLO;
-    setProgram(starter, 'main' + sourceExtension()); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
+    setProgram('', 'main' + sourceExtension()); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
+    editor.focus();
   }
   function saveC(askName) {
     var name = fileName;
