@@ -40,7 +40,9 @@
     dirty = false;
     document.querySelector('#pEditor .ttl').textContent = fileName;
     store('compilec.name', fileName);
+    if (progs[activeTab]) { progs[activeTab].dirty = false; renderTabs(); }
   }
+  var progs = [], activeTab = 0, MAXTABS = 12;
   var language = $('language');
   var cppFile = /\.(cpp|cc|cxx)$/i;
   function setLanguage(mode) {
@@ -57,6 +59,7 @@
     fileName = fileName.replace(/\.(?:c|cpp|cc|cxx)$/i, '') + sourceExtension();
     document.querySelector('#pEditor .ttl').textContent = fileName;
     store('compilec.name', fileName);
+    renderTabs();
     saveSettings();
   });
 
@@ -92,6 +95,130 @@
   if (load('compilec.std')) $('std').value = load('compilec.std');
   if (load('compilec.warn')) $('warn').value = load('compilec.warn');
   if (canLiveInput) $('inputHelp').textContent = 'Leave blank to type in Output when the program asks for input.';
+
+  /* ---------- progs: several programs, each with its own input ---------- */
+  var tabbar = $('tabbar');
+  function captureTab() {
+    var t = progs[activeTab];
+    if (!t) return;
+    t.name = fileName; t.code = editor.get(); t.input = stdin.value; t.lang = language.value; t.dirty = dirty; t.state = editor.getState();
+  }
+  function persistTabs() {
+    if (practice || !progs.length) return;
+    captureTab();
+    store('compilec.tabs', JSON.stringify({ a: activeTab, t: progs.map(function (t) { return { n: t.name, c: t.code, i: t.input, l: t.lang, d: t.dirty }; }) }));
+  }
+  function uniqueName(name) {
+    var taken = progs.map(function (t, i) { return i === activeTab ? fileName : t.name; });
+    if (taken.indexOf(name) < 0) return name;
+    var m = /^(.*?)(\.[A-Za-z]+)?$/.exec(name), k = 2;
+    while (taken.indexOf(m[1] + k + (m[2] || '')) >= 0) k++;
+    return m[1] + k + (m[2] || '');
+  }
+  function loadTab(i) {
+    activeTab = i;
+    var t = progs[i];
+    fileName = t.name; setLanguage(t.lang || 'C'); stdin.value = t.input || '';
+    editor.setState(t.state || null, t.code);
+    dirty = !!t.dirty;
+    document.querySelector('#pEditor .ttl').textContent = fileName;
+    store('compilec.name', fileName);
+    resetOutput(); clearProblems(); renderTabs(); persistTabs();
+  }
+  function showTab(i) {
+    if (i === activeTab || !progs[i]) return;
+    if (running) { setStatus('Stop the program before switching progs.'); return; }
+    captureTab(); loadTab(i); editor.focus();
+  }
+  function newTab(text, name, lang) {
+    if (practice) return false;
+    if (running) { setStatus('Stop the program before opening a new tab.'); return false; }
+    if (progs.length >= MAXTABS) { setStatus('At most ' + MAXTABS + ' progs. Close one first.'); return false; }
+    captureTab();
+    var l = lang || language.value;
+    progs.push({ name: uniqueName(name || ('main' + (l === 'CPP' ? '.cpp' : '.c'))), code: text || '', input: '', lang: l, dirty: false, state: null });
+    loadTab(progs.length - 1); editor.focus();
+    return true;
+  }
+  // Open a program: reuse the current tab if it holds nothing of the user's, otherwise open a new tab.
+  function openProgram(text, name, lang) {
+    lang = lang === 'CPP' ? 'CPP' : 'C';
+    if (!practice) {
+      for (var k = 0; k < progs.length; k++) {
+        var nm = k === activeTab ? fileName : progs[k].name, cd = k === activeTab ? editor.get() : progs[k].code;
+        if (nm === name && cd === text) { if (k !== activeTab) showTab(k); return; }
+      }
+    }
+    if (practice || !dirty || progs.length >= MAXTABS || running) { setLanguage(lang); setProgram(text, name); return; }
+    newTab(text, name, lang);
+  }
+  function closeTab(i) {
+    if (progs.length < 2) return;
+    if (running && i === activeTab) { setStatus('Stop the program before closing its tab.'); return; }
+    if (i === activeTab) captureTab();
+    var t = progs[i], nm = i === activeTab ? fileName : t.name;
+    if (t.dirty && String(t.code).trim() && !window.confirm('Close ' + nm + '? Its code is kept only in this browser and will be lost.')) return;
+    if (i !== activeTab) captureTab();
+    progs.splice(i, 1);
+    if (i < activeTab) { activeTab--; renderTabs(); persistTabs(); }
+    else if (i === activeTab) loadTab(Math.min(i, progs.length - 1));
+    else { renderTabs(); persistTabs(); }
+  }
+  function renameTab(i) {
+    var cur = i === activeTab ? fileName : progs[i].name;
+    var name = window.prompt('Rename this tab', cur);
+    if (!name) return;
+    name = cleanName(name);
+    if (!name) return;
+    if (!/\.[A-Za-z]+$/.test(name)) name += (cppFile.test(cur) ? '.cpp' : '.c');
+    var lang = cppFile.test(name) ? 'CPP' : 'C';
+    if (i === activeTab) { fileName = name; setLanguage(lang); document.querySelector('#pEditor .ttl').textContent = name; store('compilec.name', name); }
+    else { progs[i].name = name; progs[i].lang = lang; }
+    renderTabs(); persistTabs();
+  }
+  function renderTabs() {
+    if (!tabbar) return;
+    tabbar.hidden = practice;
+    if (practice) return;
+    tabbar.textContent = '';
+    progs.forEach(function (t, i) {
+      var on = i === activeTab, nm = on ? fileName : t.name;
+      var box = document.createElement('div');
+      box.className = 'tab' + (on ? ' on' : '');
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tl'; b.textContent = nm; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.title = nm + ' (double-click to rename)';
+      b.addEventListener('click', function () { showTab(i); });
+      b.addEventListener('dblclick', function () { renameTab(i); });
+      box.appendChild(b);
+      if (progs.length > 1) {
+        var x = document.createElement('button');
+        x.type = 'button'; x.className = 'tx'; x.textContent = '×'; x.setAttribute('aria-label', 'Close ' + nm); x.title = 'Close ' + nm;
+        x.addEventListener('click', function () { closeTab(i); });
+        box.appendChild(x);
+      }
+      tabbar.appendChild(box);
+    });
+    var plus = document.createElement('button');
+    plus.type = 'button'; plus.className = 'plus'; plus.textContent = '+'; plus.setAttribute('aria-label', 'New tab'); plus.title = 'New tab';
+    plus.addEventListener('click', function () { newTab('', ''); });
+    tabbar.appendChild(plus);
+    var cur = tabbar.querySelector('.tab.on');
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+  progs = [{ name: fileName, code: editor.get(), input: stdin.value, lang: language.value, dirty: false, state: null }];
+  if (!practice) {
+    var savedTabs = loadJSON('compilec.tabs', null);
+    if (savedTabs && savedTabs.t && savedTabs.t.length) {
+      progs = savedTabs.t.slice(0, MAXTABS).map(function (x) { return { name: x.n || 'main.c', code: String(x.c || ''), input: String(x.i || ''), lang: x.l === 'CPP' ? 'CPP' : 'C', dirty: !!x.d, state: null }; });
+      activeTab = clamp(savedTabs.a | 0, 0, progs.length - 1);
+      var t0 = progs[activeTab];
+      fileName = t0.name; setLanguage(t0.lang); stdin.value = t0.input; editor.setState(null, t0.code); dirty = t0.dirty;
+      document.querySelector('#pEditor .ttl').textContent = fileName;
+    }
+  }
+  renderTabs();
+
   if (practice) {
     runBtn.disabled = true;
     $('std').value = 'c17';
@@ -330,9 +457,8 @@
       f.arrayBuffer().then(function (b) {
         var bytes = new Uint8Array(b);
         if (/\.c$/i.test(f.name) || cppFile.test(f.name)) {
-          if (!okToReplace()) return;
-          setLanguage(cppFile.test(f.name) ? 'CPP' : 'C');
-          setProgram(new TextDecoder().decode(bytes), f.name);
+          if (practice && !okToReplace()) return;
+          openProgram(new TextDecoder().decode(bytes), f.name, cppFile.test(f.name) ? 'CPP' : 'C');
           setStatus('Opened ' + f.name + '.');
         }
         else { addFile(f.name, bytes); renderFiles(); persistFiles(); setStatus('Added ' + f.name + ' to Files.'); }
@@ -585,6 +711,7 @@
   }
 
   function saveSettings() {
+    persistTabs();
     store('compilec.code', editor.get());
     store('compilec.stdin', stdin.value);
     store('compilec.args', $('args').value);
@@ -682,9 +809,9 @@
   }
   if (incomingShare) {
     decodeShare(location.hash.slice(3)).then(function (d) {
-      setLanguage(d.l);
+      var shareLang = d.l === 'CPP' ? 'CPP' : 'C';
       if (d.cpp && Array.from($('cppStd').options).some(function (o) { return o.value === d.cpp; })) $('cppStd').value = d.cpp;
-      setProgram(String(d.c || ''), 'main' + sourceExtension()); stdin.value = d.i || ''; $('args').value = d.a || '';
+      openProgram(String(d.c || ''), 'main' + (shareLang === 'CPP' ? '.cpp' : '.c'), shareLang); stdin.value = d.i || ''; $('args').value = d.a || '';
       if (d.o) $('opt').value = d.o;
       if (d.s) $('std').value = d.s;
       history.replaceState(null, '', location.pathname + location.search);
@@ -701,8 +828,7 @@
       return r.text();
     }).then(function (text) {
       if (openingPractice && !okToReplace()) return;
-      setLanguage('C');
-      setProgram(text, e.id + '.c');
+      openProgram(text, e.id + '.c', 'C');
       stdin.value = e.input;
       (e.files || []).forEach(function (f) { addFile(f.name, new TextEncoder().encode(f.text)); });
       if (e.files) { renderFiles(); persistFiles(); }
@@ -715,6 +841,7 @@
     });
   }
   function newProgram() {
+    if (!practice) { newTab('', ''); setStatus(''); return; }
     if (!okToReplace()) return;
     setProgram('', 'main' + sourceExtension()); stdin.value = ''; resetOutput(); clearProblems(); setStatus('');
     editor.focus();
@@ -730,6 +857,7 @@
     fileName = name;
     document.querySelector('#pEditor .ttl').textContent = name;
     store('compilec.name', name);
+    renderTabs();
     download(name, new TextEncoder().encode(editor.get()), 'text/plain');
     dirty = false;
     setStatus('Saved ' + name + ' to your downloads.');
@@ -737,9 +865,9 @@
   $('file').addEventListener('change', function () {
     var f = this.files[0];
     this.value = '';
-    if (!f || !okToReplace()) return;
+    if (!f || (practice && !okToReplace())) return;
     var rd = new FileReader();
-    rd.onload = function () { setLanguage(cppFile.test(f.name) ? 'CPP' : 'C'); setProgram(String(rd.result), f.name); clearProblems(); setStatus('Opened ' + f.name + '.'); };
+    rd.onload = function () { openProgram(String(rd.result), f.name, cppFile.test(f.name) ? 'CPP' : 'C'); clearProblems(); setStatus('Opened ' + f.name + '.'); };
     rd.readAsText(f);
   });
   fetch('examples/examples.json').then(function (r) { return r.json(); }).then(function (list) {
@@ -759,7 +887,7 @@
   }
   var MENUS = [
     { label: 'File', items: function () { return [
-      { t: 'New program', f: newProgram },
+      { t: 'New tab', f: newProgram },
       { t: 'Open source file...', k: 'Ctrl+O', f: function () { $('file').click(); } },
       { t: 'Save', k: 'Ctrl+S', f: function () { saveC(false); } },
       { t: 'Save as...', f: function () { saveC(true); } },
@@ -813,12 +941,12 @@
       { t: 'Stop', f: stop, disabled: !running }
     ]; } },
     { label: 'Examples', items: function () {
-      var list = [{ t: 'Blank program', f: newProgram }];
+      var list = [{ t: 'Blank program (new tab)', f: newProgram }];
       var add = function (group, label) {
         if (label) list.push('-', { t: label, disabled: true });
         group.forEach(function (x, i) {
           list.push({ t: (i + 1) + '. ' + x.title, f: function () {
-            if (okToReplace()) useExample(x.id).catch(function () { setStatus('Could not open that example.', 'err'); });
+            if (!practice || okToReplace()) useExample(x.id).catch(function () { setStatus('Could not open that example.', 'err'); });
           } });
         });
       };

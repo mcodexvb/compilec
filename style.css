@@ -265,3 +265,16 @@ kbd{font:.82rem var(--code);padding:1px 6px;border:1px solid var(--line);border-
 .inline-in input{font:inherit;color:var(--acc);background:transparent;border:0;border-bottom:1px dotted var(--acc);outline:0;padding:0;margin:0;min-width:1ch;max-width:100%;border-radius:0;caret-color:var(--acc)}
 .inline-in input:focus{border-bottom-style:solid}
 .input-echo{color:var(--acc)}
+
+/* ---------- tabs ---------- */
+.tabbar{display:flex;align-items:flex-end;gap:2px;overflow-x:auto;padding:4px 8px 0;background:var(--control);border-bottom:1px solid var(--line);scrollbar-width:thin;flex:0 0 auto}
+.tabbar[hidden]{display:none}
+.tabbar .tab{display:flex;align-items:center;flex:0 0 auto;border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0;background:transparent;color:var(--mute)}
+.tabbar .tab.on{background:var(--pane);color:var(--fg);box-shadow:inset 0 2px 0 var(--acc)}
+.tabbar .tl,.tabbar .tx,.tabbar .plus{background:none;border:0;color:inherit;font:inherit;font-size:.82rem;cursor:pointer;line-height:1.2}
+.tabbar .tl{padding:6px 4px 6px 10px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--code)}
+.tabbar .tx{padding:4px 8px 4px 4px;font-size:1rem;opacity:.65}
+.tabbar .tx:hover,.tabbar .plus:hover{opacity:1;color:var(--acc)}
+.tabbar .plus{padding:5px 10px;font-size:1.05rem;opacity:.8;align-self:center}
+.tabbar .tl:focus-visible,.tabbar .tx:focus-visible,.tabbar .plus:focus-visible{outline:2px solid var(--acc);outline-offset:-2px;border-radius:4px}
+@media (max-width:760px){.tabbar .tl{padding:9px 4px 9px 10px}.tabbar .tx{padding:8px 10px 8px 4px}.tabbar .plus{padding:8px 12px}}

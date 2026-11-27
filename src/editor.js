@@ -28,14 +28,11 @@ const sizeTheme = (px) => EditorView.theme({ '&': { fontSize: px + 'px' } });
 
 export function createEditor(parent, doc, onRun, fontPx, hooks) {
   hooks = hooks || {};
-  const view = new EditorView({
-    parent,
-    state: EditorState.create({
-      doc,
-      extensions: [
+  let curPx = fontPx || 14.5, curAc = hooks.autocomplete !== false;
+  const exts = [
         basicSetup,
         cpp(),
-        acSlot.of(hooks.autocomplete === false ? [] : autocompleteExtension(hooks.isCpp)),
+        acSlot.of(curAc ? autocompleteExtension(hooks.isCpp) : []),
         keymap.of([
           { key: 'Mod-Enter', run: () => { onRun(); return true; } },
           indentWithTab
@@ -43,7 +40,7 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
         EditorState.tabSize.of(4),
         baseTheme,
         themeSlot.of(currentTheme()),
-        sizeSlot.of(sizeTheme(fontPx || 14.5)),
+        sizeSlot.of(sizeTheme(curPx)),
         EditorView.lineWrapping,
         EditorView.updateListener.of((u) => {
           if (u.docChanged && hooks.change) hooks.change();
@@ -52,9 +49,9 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
             hooks.cursor(ln.number, h - ln.from + 1);
           }
         })
-      ]
-    })
-  });
+  ];
+  const mk = (d) => EditorState.create({ doc: d, extensions: exts });
+  const view = new EditorView({ parent, state: mk(doc) });
   window.addEventListener('clabthemechange', () => {
     view.dispatch({ effects: themeSlot.reconfigure(currentTheme()) });
   });
@@ -65,6 +62,12 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
       view.dispatch(setDiagnostics(view.state, []));
     },
     focus: () => view.focus(),
+    getState: () => view.state,
+    // Switch to another document (a tab). A saved state keeps its undo history.
+    setState: (st, text) => {
+      view.setState(st || mk(text || ''));
+      view.dispatch({ effects: [themeSlot.reconfigure(currentTheme()), sizeSlot.reconfigure(sizeTheme(curPx)), acSlot.reconfigure(curAc ? autocompleteExtension(hooks.isCpp) : [])] });
+    },
     insert: (text) => {
       const r = view.state.selection.main;
       view.dispatch({ changes: { from: r.from, to: r.to, insert: text }, selection: { anchor: r.from + text.length }, scrollIntoView: true });
@@ -79,8 +82,8 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
     indent: () => { selectAll(view); indentSelection(view); view.focus(); },
     undo: () => { undo(view); view.focus(); },
     redo: () => { redo(view); view.focus(); },
-    autocomplete: (on) => view.dispatch({ effects: acSlot.reconfigure(on ? autocompleteExtension(hooks.isCpp) : []) }),
-    fontSize: (px) => view.dispatch({ effects: sizeSlot.reconfigure(sizeTheme(px)) }),
+    autocomplete: (on) => { curAc = on; view.dispatch({ effects: acSlot.reconfigure(on ? autocompleteExtension(hooks.isCpp) : []) }); },
+    fontSize: (px) => { curPx = px; view.dispatch({ effects: sizeSlot.reconfigure(sizeTheme(px)) }); },
     markers: (list) => {
       const doc = view.state.doc;
       const ds = [];
