@@ -950,7 +950,8 @@
           } });
         });
       };
-      add(examples.filter(function (x) { return !x.id.startsWith('learn-') && !x.id.startsWith('prob-'); }));
+      add(examples.filter(function (x) { return !/^(learn|prob|fun)-/.test(x.id); }));
+      add(examples.filter(function (x) { return x.id.startsWith('fun-'); }), 'Programs to enjoy');
       add(examples.filter(function (x) { return x.id.startsWith('prob-'); }), 'Sample problems');
       return list;
     } },

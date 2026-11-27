@@ -390,5 +390,45 @@
   "id": "learn-library",
   "title": "A tour of the standard library",
   "input": ""
+ },
+ {
+  "id": "fun-01-mandelbrot",
+  "title": "The Mandelbrot set in text",
+  "input": ""
+ },
+ {
+  "id": "fun-02-game-of-life",
+  "title": "Game of Life: a glider walks",
+  "input": ""
+ },
+ {
+  "id": "fun-03-sierpinski",
+  "title": "Sierpinski's triangle from Pascal's triangle",
+  "input": ""
+ },
+ {
+  "id": "fun-04-lorenz-butterfly",
+  "title": "The Lorenz butterfly",
+  "input": ""
+ },
+ {
+  "id": "fun-05-dice-histogram",
+  "title": "Two dice: a histogram of 6000 throws",
+  "input": ""
+ },
+ {
+  "id": "fun-06-spiral-matrix",
+  "title": "Spiral matrix",
+  "input": "6\n"
+ },
+ {
+  "id": "fun-07-caesar-cipher",
+  "title": "Caesar cipher",
+  "input": "Hello, World!\n3\n"
+ },
+ {
+  "id": "fun-08-guess-my-number",
+  "title": "The computer guesses your number",
+  "input": "l\nh\nc\n"
  }
 ]
