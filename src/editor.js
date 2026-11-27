@@ -6,6 +6,7 @@ import { openSearchPanel, gotoLine } from '@codemirror/search';
 import { cpp } from '@codemirror/lang-cpp';
 import { setDiagnostics } from '@codemirror/lint';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { autocompleteExtension } from './autocomplete.js';
 
 const themeSlot = new Compartment();
 
@@ -22,6 +23,7 @@ function currentTheme() {
 }
 
 const sizeSlot = new Compartment();
+const acSlot = new Compartment();
 const sizeTheme = (px) => EditorView.theme({ '&': { fontSize: px + 'px' } });
 
 export function createEditor(parent, doc, onRun, fontPx, hooks) {
@@ -33,6 +35,7 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
       extensions: [
         basicSetup,
         cpp(),
+        acSlot.of(hooks.autocomplete === false ? [] : autocompleteExtension(hooks.isCpp)),
         keymap.of([
           { key: 'Mod-Enter', run: () => { onRun(); return true; } },
           indentWithTab
@@ -76,6 +79,7 @@ export function createEditor(parent, doc, onRun, fontPx, hooks) {
     indent: () => { selectAll(view); indentSelection(view); view.focus(); },
     undo: () => { undo(view); view.focus(); },
     redo: () => { redo(view); view.focus(); },
+    autocomplete: (on) => view.dispatch({ effects: acSlot.reconfigure(on ? autocompleteExtension(hooks.isCpp) : []) }),
     fontSize: (px) => view.dispatch({ effects: sizeSlot.reconfigure(sizeTheme(px)) }),
     markers: (list) => {
       const doc = view.state.doc;

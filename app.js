@@ -25,9 +25,12 @@
   /* ---------- editor, text size ---------- */
   var fontPx = +load('compilec.fs') || (mqMobile.matches ? 16 : 14.5);
   document.documentElement.style.setProperty('--fs', fontPx + 'px');
+  var acOn = load('compilec.ac') !== '0';
   var dirty = false, fileName = load('compilec.name') || 'main.c';
   var editor = CEditor.createEditor($('code'), load('compilec.code') || HELLO, function () { run(false); }, fontPx, {
     change: function () { dirty = true; },
+    autocomplete: load('compilec.ac') !== '0',
+    isCpp: function () { return language.value === 'CPP'; },
     cursor: function (l, c) { var p = document.getElementById('pos'); if (p) p.textContent = 'Ln ' + l + ', Col ' + c; }
   });
   document.querySelector('#pEditor .ttl').textContent = fileName;
@@ -780,7 +783,9 @@
       { t: 'Select all', k: 'Ctrl+A', f: function () { editor.selectAll(); } },
       '-',
       { t: 'Comment or uncomment lines', k: 'Ctrl+/', f: function () { editor.comment(); } },
-      { t: 'Auto-indent the program', f: function () { editor.indent(); } }
+      { t: 'Auto-indent the program', f: function () { editor.indent(); } },
+      '-',
+      { t: 'Autocomplete suggestions', k: 'Ctrl+Space', checked: acOn, f: function () { acOn = !acOn; store('compilec.ac', acOn ? '1' : '0'); editor.autocomplete(acOn); setStatus('Autocomplete is ' + (acOn ? 'on' : 'off') + '.'); } }
     ]; } },
     { label: 'Search', items: function () { return [
       { t: 'Find and replace...', k: 'Ctrl+F', f: function () { if (mqMobile.matches) setPage('code'); editor.find(); } },
