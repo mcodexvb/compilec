@@ -617,13 +617,14 @@
     // A synchronous WASI read blocks this worker. Shared memory lets the page
     // hand it a line or EOF without waiting for the worker's event loop.
     var inputBuffer = null;
-    if (canLiveInput && !compileOnly && stdin.value === '') {
+    var liveMode = canLiveInput && !compileOnly && stdin.value.trim() === '';
+    if (liveMode) {
       inputBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT + 16384);
       inputSignal = new Int32Array(inputBuffer, 0, 1);
       inputBytes = new Uint8Array(inputBuffer, Int32Array.BYTES_PER_ELEMENT);
     }
     worker.postMessage({
-      type: 'run', code: editor.get(), input: stdin.value, args: splitArgs($('args').value),
+      type: 'run', code: editor.get(), input: liveMode ? '' : stdin.value, args: splitArgs($('args').value),
       compileOnly: compileOnly, inputBuffer: inputBuffer, language: language.value,
       flags: [$('opt').value].concat(warnFlags(), ['-std=' + $(language.value === 'CPP' ? 'cppStd' : 'std').value]),
       files: files.map(function (f) { return { name: f.name, bytes: f.bytes.slice().buffer }; })
