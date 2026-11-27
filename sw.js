@@ -10,7 +10,7 @@ self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then(async (cache) => {
     await cache.addAll(SHELL);
     const examples = await (await cache.match('examples/examples.json')).json();
-    await cache.addAll(examples.filter((e) => e.id.startsWith('learn-')).map((e) => 'examples/' + e.id + '.c'));
+    await cache.addAll(examples.filter((e) => /^(learn|prob)-/.test(e.id)).map((e) => 'examples/' + e.id + '.c'));
     await self.skipWaiting();
   }));
 });

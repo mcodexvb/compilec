@@ -96,6 +96,131 @@
   "input": ""
  },
  {
+  "id": "prob-01-first-15-naturals",
+  "title": "Display the first 15 natural numbers",
+  "input": ""
+ },
+ {
+  "id": "prob-02-sum-first-10",
+  "title": "Sum of the first 10 natural numbers",
+  "input": ""
+ },
+ {
+  "id": "prob-03-average-of-10",
+  "title": "Average of 10 numbers read from the keyboard",
+  "input": "12 7.5 9 14 3 8.5 10 6 11 4\n"
+ },
+ {
+  "id": "prob-04-sum-first-15-even",
+  "title": "Sum of the first 15 even natural numbers",
+  "input": ""
+ },
+ {
+  "id": "prob-05-factorial-recursion",
+  "title": "Factorial using recursion",
+  "input": "10\n"
+ },
+ {
+  "id": "prob-06-number-pyramid",
+  "title": "Pyramid of numbers increasing by 1",
+  "input": "5\n"
+ },
+ {
+  "id": "prob-07-box-shape",
+  "title": "Cube, rectangular or semi-rectangular box",
+  "input": "3 5 3\n"
+ },
+ {
+  "id": "prob-08-am-gm-hm",
+  "title": "AM, GM and HM of a set of numbers",
+  "input": "5\n2 4 8 16 32\n"
+ },
+ {
+  "id": "prob-09-multiplication-table",
+  "title": "Multiplication table",
+  "input": "7\n"
+ },
+ {
+  "id": "prob-10-max-min",
+  "title": "Maximum and minimum of an array",
+  "input": "8\n34 -7 52 18 0 91 -23 66\n"
+ },
+ {
+  "id": "prob-11-sort-ascending",
+  "title": "Sort an array in ascending order",
+  "input": "8\n34 -7 52 18 0 91 -23 66\n"
+ },
+ {
+  "id": "prob-12-sort-names",
+  "title": "Sort names alphabetically",
+  "input": "5\nRahim Anika Sayan Bhaskar Nandini\n"
+ },
+ {
+  "id": "prob-13-matrix-addition",
+  "title": "Addition of two matrices",
+  "input": "2 3\n1 2 3\n4 5 6\n7 8 9\n1 0 -1\n"
+ },
+ {
+  "id": "prob-14-matrix-transpose",
+  "title": "Transpose of a matrix",
+  "input": "2 3\n1 2 3\n4 5 6\n"
+ },
+ {
+  "id": "prob-15-matrix-product",
+  "title": "Product of two matrices",
+  "input": "2 3\n3 2\n1 2 3\n4 5 6\n7 8\n9 10\n11 12\n"
+ },
+ {
+  "id": "prob-16-anagram",
+  "title": "Check whether two strings are anagrams",
+  "input": "Dormitory\nDirty room\n"
+ },
+ {
+  "id": "prob-17-armstrong-perfect",
+  "title": "Armstrong and perfect numbers",
+  "input": "153\n"
+ },
+ {
+  "id": "prob-18-prime-check",
+  "title": "Check whether a number is prime",
+  "input": "97\n"
+ },
+ {
+  "id": "prob-19-series-sum",
+  "title": "Summing a series (e^x)",
+  "input": "1.5 0.00000001\n"
+ },
+ {
+  "id": "prob-20-pi-series",
+  "title": "Approximate value of pi",
+  "input": "1000\n"
+ },
+ {
+  "id": "prob-21-area-under-curve",
+  "title": "Area under a curve",
+  "input": "0 3 6\n"
+ },
+ {
+  "id": "prob-22-quadratic",
+  "title": "Solve a quadratic equation",
+  "input": "2 -7 3\n"
+ },
+ {
+  "id": "prob-23-two-linear-equations",
+  "title": "Solve two linear equations in two unknowns",
+  "input": "2 3 8\n1 -1 -1\n"
+ },
+ {
+  "id": "prob-24-distance-between-lines",
+  "title": "Shortest distance between two lines in space",
+  "input": "1 2 3 2 3 4\n2 4 5 3 4 5\n"
+ },
+ {
+  "id": "prob-25-compound-interest",
+  "title": "Investment report with compound interest",
+  "input": "10000 8 5 4\n"
+ },
+ {
   "id": "learn-getting-started",
   "title": "Start here: run your first program",
   "input": ""
@@ -209,6 +334,61 @@
  {
   "id": "learn-statistics",
   "title": "Project: summarize a data set",
+  "input": ""
+ },
+ {
+  "id": "learn-overview",
+  "title": "How a computer runs your program",
+  "input": ""
+ },
+ {
+  "id": "learn-constants",
+  "title": "Constants, character codes and enumerations",
+  "input": ""
+ },
+ {
+  "id": "learn-logic",
+  "title": "Relational, logical and assignment operators",
+  "input": ""
+ },
+ {
+  "id": "learn-nested-if",
+  "title": "Nested if and the else-if ladder",
+  "input": ""
+ },
+ {
+  "id": "learn-break-continue",
+  "title": "do-while, break and continue",
+  "input": ""
+ },
+ {
+  "id": "learn-matrices",
+  "title": "Two-dimensional arrays",
+  "input": ""
+ },
+ {
+  "id": "learn-string-functions",
+  "title": "String functions from string.h",
+  "input": ""
+ },
+ {
+  "id": "learn-scope",
+  "title": "Scope of variables and call by value",
+  "input": ""
+ },
+ {
+  "id": "learn-array-args",
+  "title": "Passing arrays to functions",
+  "input": ""
+ },
+ {
+  "id": "learn-recursion",
+  "title": "Recursive functions",
+  "input": ""
+ },
+ {
+  "id": "learn-library",
+  "title": "A tour of the standard library",
   "input": ""
  }
 ]

@@ -778,11 +778,16 @@
     ]; } },
     { label: 'Examples', items: function () {
       var list = [{ t: 'Blank program', f: newProgram }];
-      examples.filter(function (x) { return !x.id.startsWith('learn-'); }).forEach(function (x, i) {
-        list.push({ t: (i + 1) + '. ' + x.title, f: function () {
-          if (okToReplace()) useExample(x.id).catch(function () { setStatus('Could not open that example.', 'err'); });
-        } });
-      });
+      var add = function (group, label) {
+        if (label) list.push('-', { t: label, disabled: true });
+        group.forEach(function (x, i) {
+          list.push({ t: (i + 1) + '. ' + x.title, f: function () {
+            if (okToReplace()) useExample(x.id).catch(function () { setStatus('Could not open that example.', 'err'); });
+          } });
+        });
+      };
+      add(examples.filter(function (x) { return !x.id.startsWith('learn-') && !x.id.startsWith('prob-'); }));
+      add(examples.filter(function (x) { return x.id.startsWith('prob-'); }), 'Sample problems');
       return list;
     } },
     { label: 'Tools', items: function () { return [
